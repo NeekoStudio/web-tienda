@@ -9,8 +9,9 @@
 <style>
   :root{
     --bg: #000000;
-    --card: #09070d;
-    --card-border: #171320;
+    --card: #131118;
+    --card-border: #2c2733;
+    --surface: #1c1922;
     --text: #f2f0f6;
     --muted: #b8b0c9;
     --purple: #8b5cf6;
@@ -81,7 +82,7 @@
   .check-card label{display:block; font-size:14.5px; color:var(--text); font-weight:600; margin-bottom:12px;}
   .check-card form{display:flex; gap:8px;}
   .check-card input{
-    flex:1; background:var(--bg); border:1px solid var(--card-border); color:var(--text);
+    flex:1; background:var(--surface); border:1px solid var(--card-border); color:var(--text);
     font-family:'Inter', sans-serif; font-size:14.5px; padding:12px 15px; border-radius:12px;
     outline:none; transition:border-color .15s;
   }
@@ -96,7 +97,7 @@
   .btn-check:active{transform:scale(0.98);}
   .readout{margin-top:16px; display:none; gap:10px; flex-wrap:wrap;}
   .readout.show{display:flex;}
-  .pill{flex:1; min-width:110px; background:var(--bg); border-radius:12px; padding:11px 13px;}
+  .pill{flex:1; min-width:110px; background:var(--surface); border-radius:12px; padding:11px 13px;}
   .pill .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;}
   .pill .v{font-size:14.5px; font-weight:700; margin-top:3px;}
   .v.active{color:var(--text);}
@@ -112,9 +113,9 @@
   .ext-list{display:flex; flex-direction:column; gap:10px;}
   .ext-row{
     display:flex; align-items:center; gap:14px;
-    background:var(--bg); border:1px solid var(--card-border); border-radius:16px; padding:14px 16px;
+    background:var(--surface); border:1px solid var(--card-border); border-radius:16px; padding:14px 16px;
   }
-  .ext-icon{width:44px; height:44px; border-radius:12px; flex-shrink:0; overflow:hidden; background:var(--bg);}
+  .ext-icon{width:44px; height:44px; border-radius:12px; flex-shrink:0; overflow:hidden; background:var(--surface);}
   .ext-icon img{width:100%; height:100%; object-fit:cover; display:block;}
   .ext-info{flex:1; min-width:0;}
   .ext-info h3{font-family:'Sora', sans-serif; font-size:14.5px; font-weight:700;}
@@ -129,7 +130,7 @@
 
   /* Precios */
   .plans-row{display:flex; gap:10px; margin-bottom:18px;}
-  .plan{flex:1; background:var(--bg); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s;}
+  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s;}
   .plan.featured{border-color:var(--fuchsia);}
   .plan .badge{font-size:10px; font-weight:700; color:var(--muted); letter-spacing:0.03em; display:block; margin-bottom:8px;}
   .plan.featured .badge{color:var(--fuchsia);}
@@ -163,7 +164,7 @@
   .modal h3{font-family:'Sora', sans-serif; font-size:17px; margin-bottom:6px;}
   .modal p{color:var(--muted); font-size:13px; margin-bottom:18px;}
   .modal input, .modal textarea{
-    width:100%; background:var(--bg); border:1px solid var(--card-border); color:var(--text);
+    width:100%; background:var(--surface); border:1px solid var(--card-border); color:var(--text);
     font-family:'Inter', sans-serif; font-size:14px; padding:11px 13px; border-radius:10px;
     outline:none; margin-bottom:10px; resize:vertical;
   }
