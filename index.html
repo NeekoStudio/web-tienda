@@ -108,11 +108,8 @@
     display:flex; align-items:center; gap:14px;
     background:var(--bg); border:1px solid var(--card-border); border-radius:16px; padding:14px 16px;
   }
-  .ext-icon{width:44px; height:44px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
-  .ext-icon svg{width:22px; height:22px;}
-  .ext-icon.i1{background:linear-gradient(135deg, var(--pink), var(--lilac));}
-  .ext-icon.i2{background:linear-gradient(135deg, var(--blue), var(--lilac));}
-  .ext-icon.i3{background:linear-gradient(135deg, var(--lilac), var(--pink));}
+  .ext-icon{width:44px; height:44px; border-radius:12px; flex-shrink:0; overflow:hidden; background:var(--bg);}
+  .ext-icon img{width:100%; height:100%; object-fit:cover; display:block;}
   .ext-info{flex:1; min-width:0;}
   .ext-info h3{font-family:'Sora', sans-serif; font-size:14.5px; font-weight:700;}
   .ext-info p{color:var(--muted); font-size:12.5px; margin-top:3px; line-height:1.4;}
@@ -235,7 +232,7 @@
 
         <div class="ext-row">
           <div class="ext-icon i1">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="1.8"/><circle cx="8.5" cy="10" r="1.5" fill="white"/><path d="M3 16l4.5-4.5a1.5 1.5 0 0 1 2 0L14 16" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M13 16l2.5-2.5a1.5 1.5 0 0 1 2 0L21 16.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <img src="icons/buscastock.png" alt="BuscaStock Pro">
           </div>
           <div class="ext-info">
             <h3>BuscaStock Pro</h3>
@@ -246,7 +243,7 @@
 
         <div class="ext-row">
           <div class="ext-icon i2">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" stroke="white" stroke-width="1.8"/><path d="M10 9.5l5 2.5-5 2.5v-5z" fill="white"/></svg>
+            <img src="icons/tubedata.png" alt="TubeData">
           </div>
           <div class="ext-info">
             <h3>TubeData</h3>
@@ -257,7 +254,7 @@
 
         <div class="ext-row">
           <div class="ext-icon i3">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5h13a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H7.5A3.5 3.5 0 0 1 4 16V5.5z" stroke="white" stroke-width="1.7"/><path d="M7.5 9h6M7.5 12.5h4" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <img src="icons/twitternews.png" alt="TwitterNews">
           </div>
           <div class="ext-info">
             <h3>TwitterNews</h3>
