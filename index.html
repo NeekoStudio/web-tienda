@@ -8,16 +8,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0a0a0f;
-    --card: #14141c;
-    --card-border: #24242f;
-    --text: #f2f2f5;
-    --muted: #8d8d9c;
-    --coral: #ff6b57;
-    --coral-soft: #331f1a;
-    --mint: #5eead4;
-    --violet: #a78bfa;
-    --blue: #60a5fa;
+    --bg: #171320;
+    --card: #211a2c;
+    --card-border: #362a48;
+    --text: #f6f2fb;
+    --muted: #ab9cc4;
+    --pink: #ff8fd4;
+    --lilac: #b48cf7;
+    --blue: #7cd4fb;
+    --pink-soft: #3a2438;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:smooth;}
@@ -31,52 +30,46 @@
     position:relative;
     overflow-x:hidden;
   }
-  .stars{
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-  }
+  .stars{position:fixed; inset:0; z-index:0; pointer-events:none;}
   .stars span{
     position:absolute; width:2px; height:2px; border-radius:50%;
-    background:#ffffff; opacity:0.5;
-    animation:twinkle 4s ease-in-out infinite;
+    background:#ffffff; opacity:0.5; animation:twinkle 4s ease-in-out infinite;
   }
   @keyframes twinkle{0%,100%{opacity:0.15;} 50%{opacity:0.75;}}
 
-  .wrap{
-    position:relative; z-index:1;
-    max-width:620px; margin:0 auto; padding:56px 20px 80px;
-  }
-
+  .wrap{position:relative; z-index:1; max-width:620px; margin:0 auto; padding:56px 20px 80px;}
   .stack{display:flex; flex-direction:column; gap:16px;}
+  .card{background:var(--card); border:1px solid var(--card-border); border-radius:20px; padding:24px;}
 
-  .card{
-    background:var(--card);
-    border:1px solid var(--card-border);
-    border-radius:20px;
-    padding:24px;
-  }
-
-  /* Cabecera tipo perfil */
-  .profile{
-    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
-  }
+  /* Perfil */
+  .profile{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
   .profile-id{display:flex; align-items:center; gap:14px;}
   .avatar{
     width:52px; height:52px; border-radius:16px;
-    background:linear-gradient(135deg, var(--coral), var(--violet));
+    background:linear-gradient(135deg, var(--pink), var(--lilac));
     display:flex; align-items:center; justify-content:center;
-    font-family:'Sora', sans-serif; font-weight:700; font-size:20px;
-    flex-shrink:0;
+    flex-shrink:0; border:1.5px dashed rgba(255,255,255,0.35);
   }
+  .avatar svg{width:22px; height:22px; opacity:0.85;}
   .profile-id h1{font-family:'Sora', sans-serif; font-size:18px; font-weight:700;}
   .profile-id p{color:var(--muted); font-size:13.5px; margin-top:2px;}
-  .profile-actions{display:flex; gap:8px;}
+  .profile-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .lang-select{
+    background:#1c1626; border:1px solid var(--card-border); color:var(--text);
+    font-size:13px; font-weight:600; padding:8px 12px; border-radius:100px;
+    outline:none; cursor:pointer;
+  }
   .chip-btn{
     display:inline-flex; align-items:center; gap:6px;
-    background:#1c1c26; border:1px solid var(--card-border); color:var(--text);
-    font-size:13px; font-weight:600; padding:8px 14px; border-radius:100px;
-    text-decoration:none; transition:background .15s;
+    border:none; color:#22102e;
+    font-size:13px; font-weight:700; padding:9px 15px; border-radius:100px;
+    text-decoration:none; cursor:pointer; transition:filter .15s;
   }
-  .chip-btn:hover{background:#22222e;}
+  .chip-support{background:linear-gradient(135deg, var(--pink), var(--lilac));}
+  .chip-ghost{
+    background:#1c1626; border:1px solid var(--card-border); color:var(--text); font-weight:600;
+  }
+  .chip-btn:hover{filter:brightness(1.08);}
 
   /* Comprobar suscripción */
   .check-card label{display:block; font-size:14px; color:var(--muted); margin-bottom:12px;}
@@ -86,12 +79,12 @@
     font-family:'Inter', sans-serif; font-size:14.5px; padding:12px 15px; border-radius:12px;
     outline:none; transition:border-color .15s;
   }
-  .check-card input:focus{border-color:var(--coral);}
-  .check-card input::placeholder{color:#55556a;}
+  .check-card input:focus{border-color:var(--lilac);}
+  .check-card input::placeholder{color:#5f5675;}
   .btn-check{
-    background:var(--coral); color:#2a0f08; border:none; font-weight:700; font-size:14.5px;
-    padding:12px 20px; border-radius:12px; cursor:pointer; transition:filter .15s, transform .15s;
-    white-space:nowrap;
+    background:linear-gradient(135deg, var(--pink), var(--lilac)); color:#22102e; border:none;
+    font-weight:700; font-size:14.5px; padding:12px 20px; border-radius:12px; cursor:pointer;
+    transition:filter .15s, transform .15s; white-space:nowrap;
   }
   .btn-check:hover{filter:brightness(1.08);}
   .btn-check:active{transform:scale(0.98);}
@@ -100,32 +93,26 @@
   .pill{flex:1; min-width:110px; background:var(--bg); border-radius:12px; padding:11px 13px;}
   .pill .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;}
   .pill .v{font-size:14.5px; font-weight:700; margin-top:3px;}
-  .v.active{color:var(--mint);}
-  .v.inactive{color:var(--coral);}
-  .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--mint); margin-right:6px;}
+  .v.active{color:var(--blue);}
+  .v.inactive{color:var(--pink);}
+  .dotmark{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--blue); margin-right:6px;}
   .hint{color:var(--muted); font-size:12.5px; margin-top:14px;}
-  .hint a{color:var(--coral); text-decoration:none; font-weight:600;}
+  .hint a{color:var(--pink); text-decoration:none; font-weight:600;}
   .hint a:hover{text-decoration:underline;}
 
-  /* Lista de extensiones */
-  .card-title{
-    font-family:'Sora', sans-serif; font-size:15px; font-weight:700;
-    color:var(--mint); margin-bottom:16px;
-  }
+  .card-title{font-family:'Sora', sans-serif; font-size:15px; font-weight:700; color:var(--blue); margin-bottom:16px;}
+
+  /* Lista extensiones */
   .ext-list{display:flex; flex-direction:column; gap:10px;}
   .ext-row{
     display:flex; align-items:center; gap:14px;
-    background:var(--bg); border:1px solid var(--card-border); border-radius:16px;
-    padding:14px 16px;
+    background:var(--bg); border:1px solid var(--card-border); border-radius:16px; padding:14px 16px;
   }
-  .ext-icon{
-    width:44px; height:44px; border-radius:12px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .ext-icon{width:44px; height:44px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center;}
   .ext-icon svg{width:22px; height:22px;}
-  .ext-icon.i1{background:linear-gradient(135deg, #ff6b57, #ff9d7a);}
-  .ext-icon.i2{background:linear-gradient(135deg, #5eead4, #22c3a6);}
-  .ext-icon.i3{background:linear-gradient(135deg, #a78bfa, #7c5cf0);}
+  .ext-icon.i1{background:linear-gradient(135deg, var(--pink), var(--lilac));}
+  .ext-icon.i2{background:linear-gradient(135deg, var(--blue), var(--lilac));}
+  .ext-icon.i3{background:linear-gradient(135deg, var(--lilac), var(--pink));}
   .ext-info{flex:1; min-width:0;}
   .ext-info h3{font-family:'Sora', sans-serif; font-size:14.5px; font-weight:700;}
   .ext-info p{color:var(--muted); font-size:12.5px; margin-top:3px; line-height:1.4;}
@@ -135,42 +122,67 @@
     text-decoration:none; white-space:nowrap; transition:opacity .15s;
   }
   .ext-cta:hover{opacity:0.85;}
-  .ext-cta.soon{
-    background:transparent; color:var(--muted); border:1px dashed var(--card-border);
-  }
+  .ext-cta.soon{background:transparent; color:var(--muted); border:1px dashed var(--card-border);}
 
   /* Precios */
   .plans-row{display:flex; gap:10px; margin-bottom:18px;}
-  .plan{
-    flex:1; background:var(--bg); border:1px solid var(--card-border); border-radius:14px;
-    padding:16px 12px; text-align:center; transition:border-color .2s;
-  }
-  .plan.featured{border-color:var(--coral);}
-  .plan .badge{font-size:10px; font-weight:700; color:var(--coral); letter-spacing:0.03em; display:block; margin-bottom:8px;}
+  .plan{flex:1; background:var(--bg); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s;}
+  .plan.featured{border-color:var(--lilac);}
+  .plan .badge{font-size:10px; font-weight:700; color:var(--lilac); letter-spacing:0.03em; display:block; margin-bottom:8px;}
   .plan .price{font-family:'Sora', sans-serif; font-size:24px; font-weight:800;}
   .plan .per{color:var(--muted); font-size:11.5px;}
   .btn-primary{
-    display:block; text-align:center; background:var(--coral); color:#2a0f08;
-    font-weight:700; font-size:15px; padding:14px; border-radius:14px; text-decoration:none;
-    transition:filter .15s;
+    display:block; text-align:center; background:linear-gradient(135deg, var(--pink), var(--lilac)); color:#22102e;
+    font-weight:700; font-size:15px; padding:14px; border-radius:14px; text-decoration:none; transition:filter .15s;
   }
   .btn-primary:hover{filter:brightness(1.08);}
 
-  /* Conectar - botones de colores */
-  .connect-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
-  .connect-btn{
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    padding:20px 12px; border-radius:16px; text-decoration:none;
-    color:#fff; font-size:13px; font-weight:700; text-align:center;
-    transition:transform .15s;
+  /* Contacto */
+  .support-text{color:var(--muted); font-size:13.5px; margin-bottom:16px; line-height:1.5;}
+  .btn-contact{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    background:linear-gradient(135deg, var(--pink), var(--lilac)); color:#22102e; border:none;
+    font-size:14.5px; font-weight:700; padding:14px; border-radius:14px; cursor:pointer; transition:filter .15s;
   }
-  .connect-btn:hover{transform:translateY(-2px);}
-  .connect-btn svg{width:22px; height:22px;}
-  .cb-mail{background:linear-gradient(135deg, #ff6b57, #ff9d7a); grid-column:1 / -1;}
-  .cb-web{background:linear-gradient(135deg, #60a5fa, #3b82f6);}
-  .cb-github{background:linear-gradient(135deg, #6b7280, #374151);}
+  .btn-contact:hover{filter:brightness(1.08);}
 
-  footer{text-align:center; color:var(--muted); font-size:12.5px; margin-top:24px;}
+  /* Modal de contacto */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,8,14,0.75); z-index:10;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{
+    background:var(--card); border:1px solid var(--card-border); border-radius:20px;
+    padding:26px; max-width:420px; width:100%;
+  }
+  .modal h3{font-family:'Sora', sans-serif; font-size:17px; margin-bottom:6px;}
+  .modal p{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .modal input, .modal textarea{
+    width:100%; background:var(--bg); border:1px solid var(--card-border); color:var(--text);
+    font-family:'Inter', sans-serif; font-size:14px; padding:11px 13px; border-radius:10px;
+    outline:none; margin-bottom:10px; resize:vertical;
+  }
+  .modal input:focus, .modal textarea:focus{border-color:var(--lilac);}
+  .modal-actions{display:flex; gap:8px; margin-top:6px;}
+  .modal-actions button{flex:1; padding:11px; border-radius:10px; font-weight:700; font-size:13.5px; cursor:pointer; border:none;}
+  .modal-cancel{background:#1c1626; color:var(--text);}
+  .modal-send{background:linear-gradient(135deg, var(--pink), var(--lilac)); color:#22102e;}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid var(--card-border);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-q{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:14px 2px; cursor:pointer; font-size:14px; font-weight:600;
+  }
+  .faq-q .arrow{transition:transform .2s; color:var(--muted); flex-shrink:0;}
+  .faq-item.open .faq-q .arrow{transform:rotate(180deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .faq-item.open .faq-a{max-height:200px;}
+  .faq-a p{color:var(--muted); font-size:13px; padding:0 2px 14px; line-height:1.55;}
+
+  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:24px; opacity:0.7;}
 </style>
 </head>
 <body>
@@ -183,35 +195,42 @@
     <!-- Perfil -->
     <div class="card profile">
       <div class="profile-id">
-        <div class="avatar">P</div>
+        <div class="avatar" title="Aquí irá tu imagen">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" stroke="white" stroke-width="1.6"/><circle cx="9" cy="9" r="1.6" fill="white"/><path d="M4 17l5-5a2 2 0 0 1 2.8 0L18 18" stroke="white" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </div>
         <div>
-          <h1>Panel de Extensiones</h1>
-          <p>3 extensiones &middot; 1 sola suscripción</p>
+          <h1 data-i18n="brand_name">Panel de Extensiones</h1>
+          <p data-i18n="brand_sub">3 extensiones &middot; 1 sola suscripción</p>
         </div>
       </div>
       <div class="profile-actions">
-        <a class="chip-btn" href="mailto:aidastudioautomation@hotmail.com">Soporte</a>
+        <select class="lang-select" id="langSelect">
+          <option value="es">ES</option>
+          <option value="en">EN</option>
+        </select>
+        <a class="chip-btn chip-support" href="#" id="supportBtn" data-i18n="support_btn">Soporte</a>
+        <a class="chip-btn chip-ghost" href="#" data-i18n="changelog_btn">Registro de cambios</a>
       </div>
     </div>
 
     <!-- Comprobar suscripción -->
     <div class="card check-card">
-      <label>¿Ya eres cliente? Comprueba tu suscripción</label>
+      <label data-i18n="check_label">¿Ya eres cliente? Comprueba tu suscripción</label>
       <form id="checkForm">
         <input type="email" id="emailInput" placeholder="tu@email.com" required>
-        <button type="submit" class="btn-check" id="checkBtn">Comprobar</button>
+        <button type="submit" class="btn-check" id="checkBtn" data-i18n="check_btn">Comprobar</button>
       </form>
       <div class="readout" id="readout">
-        <div class="pill"><div class="k">Estado</div><div class="v" id="rEstado">&mdash;</div></div>
-        <div class="pill"><div class="k">Plan</div><div class="v" id="rPlan" style="color:var(--text)">&mdash;</div></div>
-        <div class="pill"><div class="k">Renueva</div><div class="v" id="rRenueva" style="color:var(--text); font-size:13px;">&mdash;</div></div>
+        <div class="pill"><div class="k" data-i18n="r_estado">Estado</div><div class="v" id="rEstado">&mdash;</div></div>
+        <div class="pill"><div class="k" data-i18n="r_plan">Plan</div><div class="v" id="rPlan" style="color:var(--text)">&mdash;</div></div>
+        <div class="pill"><div class="k" data-i18n="r_renueva">Renueva</div><div class="v" id="rRenueva" style="color:var(--text); font-size:13px;">&mdash;</div></div>
       </div>
-      <p class="hint" id="hint">Escribe el email con el que compraste (o vas a comprar).</p>
+      <p class="hint" id="hint" data-i18n="check_hint">Escribe el email con el que compraste (o vas a comprar).</p>
     </div>
 
     <!-- Lista de extensiones -->
     <div class="card">
-      <div class="card-title">Extensiones incluidas</div>
+      <div class="card-title" data-i18n="ext_title">Extensiones incluidas</div>
       <div class="ext-list">
 
         <div class="ext-row">
@@ -219,10 +238,10 @@
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="1.8"/><circle cx="8.5" cy="10" r="1.5" fill="white"/><path d="M3 16l4.5-4.5a1.5 1.5 0 0 1 2 0L14 16" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M13 16l2.5-2.5a1.5 1.5 0 0 1 2 0L21 16.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
           </div>
           <div class="ext-info">
-            <h3>Descarga de Stock Pro</h3>
-            <p>Imágenes y vídeos libres de derechos desde Pexels y Pixabay, en bloque.</p>
+            <h3>BuscaStock Pro</h3>
+            <p data-i18n="ext1_desc">Descarga imágenes y vídeos libres de derechos desde Pexels y Pixabay, en bloque y en segundos.</p>
           </div>
-          <span class="ext-cta soon">Pronto</span>
+          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
         </div>
 
         <div class="ext-row">
@@ -231,9 +250,9 @@
           </div>
           <div class="ext-info">
             <h3>Descarga Metadatos de YouTube</h3>
-            <p>Vídeos, transcripciones y miniaturas de cualquier canal, en lote.</p>
+            <p data-i18n="ext2_desc">Vídeos, transcripciones y miniaturas de cualquier canal, en lote.</p>
           </div>
-          <span class="ext-cta soon">Pronto</span>
+          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
         </div>
 
         <div class="ext-row">
@@ -241,10 +260,10 @@
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.5h13a2.5 2.5 0 0 1 2.5 2.5v9a2.5 2.5 0 0 1-2.5 2.5H7.5A3.5 3.5 0 0 1 4 16V5.5z" stroke="white" stroke-width="1.7"/><path d="M7.5 9h6M7.5 12.5h4" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>
           </div>
           <div class="ext-info">
-            <h3>Noticias del Día en X</h3>
-            <p>Extrae y resume las publicaciones del día de las cuentas que elijas.</p>
+            <h3 data-i18n="ext3_title">Noticias del Día en X (Twitter)</h3>
+            <p data-i18n="ext3_desc">Extrae y resume las publicaciones del día de las cuentas que elijas, y programa una búsqueda automática para automatizar tu día.</p>
           </div>
-          <span class="ext-cta soon">Pronto</span>
+          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
         </div>
 
       </div>
@@ -252,53 +271,60 @@
 
     <!-- Precios -->
     <div class="card" id="precios">
-      <div class="card-title">Un solo pago, las tres extensiones</div>
+      <div class="card-title" data-i18n="pricing_title">Un pago, todas las extensiones</div>
       <div class="plans-row">
         <div class="plan">
-          <span class="badge">MENSUAL</span>
+          <span class="badge" data-i18n="plan_monthly">MENSUAL</span>
           <div class="price">3&euro;</div>
-          <div class="per">/ mes</div>
+          <div class="per" data-i18n="per_month">/ mes</div>
         </div>
         <div class="plan featured">
-          <span class="badge">POPULAR</span>
+          <span class="badge" data-i18n="plan_popular">POPULAR</span>
           <div class="price">7&euro;</div>
-          <div class="per">/ 3 meses</div>
+          <div class="per" data-i18n="per_3months">/ 3 meses</div>
         </div>
         <div class="plan">
-          <span class="badge">MEJOR</span>
+          <span class="badge" data-i18n="plan_best">MEJOR</span>
           <div class="price">25&euro;</div>
-          <div class="per">/ año</div>
+          <div class="per" data-i18n="per_year">/ año</div>
         </div>
       </div>
-      <a class="btn-primary" href="https://aidautomation.lemonsqueezy.com/checkout/buy/4d7d990c-2148-47ce-b073-b3f1081d95f0" target="_blank" rel="noopener">Suscribirme</a>
+      <a class="btn-primary" href="https://aidautomation.lemonsqueezy.com/checkout/buy/4d7d990c-2148-47ce-b073-b3f1081d95f0" target="_blank" rel="noopener" data-i18n="subscribe_btn">Suscribirme</a>
     </div>
 
-    <!-- Conectar -->
+    <!-- Contacto -->
     <div class="card">
-      <div class="card-title">¿Algo no funciona?</div>
-      <div class="connect-grid">
-        <a class="connect-btn cb-mail" href="mailto:aidastudioautomation@hotmail.com">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="white" stroke-width="1.8"/><path d="M3 7l9 6 9-6" stroke="white" stroke-width="1.8"/></svg>
-          Escríbeme un email
-        </a>
-        <a class="connect-btn cb-web" href="#" id="webBtn">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15.5 0 18M12 3c-2.5 2.5-2.5 15.5 0 18" stroke="white" stroke-width="1.8"/></svg>
-          Esta misma web
-        </a>
-        <a class="connect-btn cb-github" href="https://github.com/AidaStudioAutomation" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.5 2 2 6.5 2 12c0 4.4 2.9 8.1 6.8 9.4.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.2-.4-1.2.1-2.6 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.6.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5C19.1 20.1 22 16.4 22 12c0-5.5-4.5-10-10-10z"/></svg>
-          Repositorios
-        </a>
-      </div>
+      <div class="card-title" data-i18n="contact_title">¿Algo no funciona?</div>
+      <p class="support-text" data-i18n="contact_text">Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.</p>
+      <button class="btn-contact" id="openContact" data-i18n="contact_btn">Escríbeme un mensaje</button>
     </div>
 
-    <footer>Panel de Extensiones &middot; hecho con cuidado por Aida</footer>
+    <!-- FAQ -->
+    <div class="card">
+      <div class="card-title" data-i18n="faq_title">Preguntas frecuentes</div>
+      <div id="faqList"></div>
+    </div>
+
+    <footer data-i18n="footer_text">Panel de Extensiones</footer>
 
   </div>
 </div>
 
+<!-- Modal de contacto -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3 data-i18n="modal_title">Envíame un mensaje</h3>
+    <p data-i18n="modal_sub">Te leo y te respondo en cuanto pueda.</p>
+    <input type="email" id="contactEmail" placeholder="tu@email.com" data-i18n-placeholder="modal_email_ph">
+    <textarea id="contactMsg" rows="4" placeholder="Cuéntame qué ha pasado..." data-i18n-placeholder="modal_msg_ph"></textarea>
+    <div class="modal-actions">
+      <button class="modal-cancel" id="cancelContact" data-i18n="modal_cancel">Cancelar</button>
+      <button class="modal-send" id="sendContact" data-i18n="modal_send">Enviar</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Fondo de estrellas
   const starsEl = document.getElementById('stars');
   for (let i = 0; i < 60; i++) {
     const s = document.createElement('span');
@@ -308,8 +334,131 @@
     starsEl.appendChild(s);
   }
 
-  document.getElementById('webBtn').href = window.location.href;
+  /* Contacto: modal (pendiente conectar envio real) */
+  const modal = document.getElementById('contactModal');
+  document.getElementById('openContact').addEventListener('click', () => modal.classList.add('show'));
+  document.getElementById('supportBtn').addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('show'); });
+  document.getElementById('cancelContact').addEventListener('click', () => modal.classList.remove('show'));
+  document.getElementById('sendContact').addEventListener('click', () => {
+    alert('Esta parte se conectara en el siguiente paso para que el mensaje te llegue de verdad.');
+  });
 
+  /* FAQ */
+  const faqData = [
+    { q: 'faq_q1', a: 'faq_a1' },
+    { q: 'faq_q2', a: 'faq_a2' },
+    { q: 'faq_q3', a: 'faq_a3' },
+    { q: 'faq_q4', a: 'faq_a4' },
+  ];
+  const faqList = document.getElementById('faqList');
+  faqData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'faq-item';
+    div.innerHTML = `
+      <div class="faq-q"><span data-i18n="${item.q}"></span><span class="arrow">&#9660;</span></div>
+      <div class="faq-a"><p data-i18n="${item.a}"></p></div>
+    `;
+    div.querySelector('.faq-q').addEventListener('click', () => div.classList.toggle('open'));
+    faqList.appendChild(div);
+  });
+
+  /* Traducciones */
+  const T = {
+    es: {
+      brand_name: 'Panel de Extensiones',
+      brand_sub: '3 extensiones &middot; 1 sola suscripción',
+      support_btn: 'Soporte',
+      changelog_btn: 'Registro de cambios',
+      check_label: '¿Ya eres cliente? Comprueba tu suscripción',
+      check_btn: 'Comprobar',
+      r_estado: 'Estado', r_plan: 'Plan', r_renueva: 'Renueva',
+      check_hint: 'Escribe el email con el que compraste (o vas a comprar).',
+      ext_title: 'Extensiones incluidas',
+      ext1_desc: 'Descarga imágenes y vídeos libres de derechos desde Pexels y Pixabay, en bloque y en segundos.',
+      ext2_desc: 'Vídeos, transcripciones y miniaturas de cualquier canal, en lote.',
+      ext3_title: 'Noticias del Día en X (Twitter)',
+      ext3_desc: 'Extrae y resume las publicaciones del día de las cuentas que elijas, y programa una búsqueda automática para automatizar tu día.',
+      soon: 'Pronto',
+      pricing_title: 'Un pago, todas las extensiones',
+      plan_monthly: 'MENSUAL', plan_popular: 'POPULAR', plan_best: 'MEJOR',
+      per_month: '/ mes', per_3months: '/ 3 meses', per_year: '/ año',
+      subscribe_btn: 'Suscribirme',
+      contact_title: '¿Algo no funciona?',
+      contact_text: 'Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.',
+      contact_btn: 'Escríbeme un mensaje',
+      faq_title: 'Preguntas frecuentes',
+      faq_q1: '¿Una suscripción sirve para las tres extensiones?',
+      faq_a1: 'Sí. Con un solo pago y un solo email, las tres extensiones se activan a la vez.',
+      faq_q2: '¿Puedo cancelar cuando quiera?',
+      faq_a2: 'Sí, no hay permanencia. Cancelas desde el enlace que recibes al suscribirte y sigues teniendo acceso hasta que acabe el período pagado.',
+      faq_q3: '¿Necesito cuentas de Pexels o Pixabay?',
+      faq_a3: 'Solo para BuscaStock Pro, y son gratuitas: te llevamos paso a paso para crearlas la primera vez.',
+      faq_q4: '¿Qué pasa si olvido con qué email compré?',
+      faq_a4: 'Escríbeme un mensaje desde esta página y te lo confirmo enseguida.',
+      modal_title: 'Envíame un mensaje',
+      modal_sub: 'Te leo y te respondo en cuanto pueda.',
+      modal_email_ph: 'tu@email.com',
+      modal_msg_ph: 'Cuéntame qué ha pasado...',
+      modal_cancel: 'Cancelar',
+      modal_send: 'Enviar',
+      footer_text: 'Panel de Extensiones',
+    },
+    en: {
+      brand_name: 'Extensions Panel',
+      brand_sub: '3 extensions &middot; 1 subscription',
+      support_btn: 'Support',
+      changelog_btn: 'Changelog',
+      check_label: 'Already a customer? Check your subscription',
+      check_btn: 'Check',
+      r_estado: 'Status', r_plan: 'Plan', r_renueva: 'Renews',
+      check_hint: 'Type the email you purchased with (or plan to).',
+      ext_title: 'Included extensions',
+      ext1_desc: 'Download royalty-free images and videos from Pexels and Pixabay, in bulk, in seconds.',
+      ext2_desc: 'Videos, transcripts and thumbnails from any channel, in bulk.',
+      ext3_title: 'Daily News on X (Twitter)',
+      ext3_desc: 'Extracts and summarizes daily posts from the accounts you choose, and schedule an automatic search to automate your day.',
+      soon: 'Soon',
+      pricing_title: 'One payment, every extension',
+      plan_monthly: 'MONTHLY', plan_popular: 'POPULAR', plan_best: 'BEST',
+      per_month: '/ mo', per_3months: '/ 3 mo', per_year: '/ yr',
+      subscribe_btn: 'Subscribe',
+      contact_title: 'Something not working?',
+      contact_text: "If the product isn't working as expected or you find bugs, let me know and I'll fix it right away.",
+      contact_btn: 'Send me a message',
+      faq_title: 'Frequently asked questions',
+      faq_q1: 'Does one subscription cover all three extensions?',
+      faq_a1: 'Yes. One payment and one email activate all three at once.',
+      faq_q2: 'Can I cancel anytime?',
+      faq_a2: "Yes, no commitment. Cancel from the link you get when subscribing, and you'll keep access until the paid period ends.",
+      faq_q3: 'Do I need Pexels or Pixabay accounts?',
+      faq_a3: 'Only for BuscaStock Pro, and they are free: we guide you step by step the first time.',
+      faq_q4: 'What if I forget which email I purchased with?',
+      faq_a4: "Send me a message from this page and I'll confirm it right away.",
+      modal_title: 'Send me a message',
+      modal_sub: "I'll read it and reply as soon as I can.",
+      modal_email_ph: 'you@email.com',
+      modal_msg_ph: 'Tell me what happened...',
+      modal_cancel: 'Cancel',
+      modal_send: 'Send',
+      footer_text: 'Extensions Panel',
+    }
+  };
+
+  function applyLang(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (T[lang][key] !== undefined) el.placeholder = T[lang][key];
+    });
+    document.documentElement.lang = lang;
+  }
+  document.getElementById('langSelect').addEventListener('change', (e) => applyLang(e.target.value));
+  applyLang('es');
+
+  /* Comprobación de suscripción */
   const SERVER_URL = 'https://servidor-licencias-production.up.railway.app';
   const form = document.getElementById('checkForm');
   const btn = document.getElementById('checkBtn');
@@ -318,20 +467,19 @@
   const rEstado = document.getElementById('rEstado');
   const rPlan = document.getElementById('rPlan');
   const rRenueva = document.getElementById('rRenueva');
+  const emailInput = document.getElementById('emailInput');
 
   function formatFecha(iso){
     if(!iso) return '\u2014';
     const d = new Date(iso);
-    return d.toLocaleDateString('es-ES', { day:'numeric', month:'short', year:'numeric' });
+    const lang = document.getElementById('langSelect').value;
+    return d.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { day:'numeric', month:'short', year:'numeric' });
   }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = document.getElementById('emailInput').value.trim().toLowerCase();
-    if(!email) return;
-
+  async function checkEmail(email){
     btn.disabled = true;
-    btn.textContent = 'Comprobando...';
+    const prevText = btn.textContent;
+    btn.textContent = '...';
     hint.textContent = '';
     readout.classList.remove('show');
 
@@ -341,7 +489,7 @@
       readout.classList.add('show');
 
       if (data.activa) {
-        rEstado.innerHTML = '<span class="dot"></span>Activa';
+        rEstado.innerHTML = '<span class="dotmark"></span>Activa';
         rEstado.className = 'v active';
         rPlan.textContent = data.plan || '\u2014';
         rRenueva.textContent = formatFecha(data.renueva_el);
@@ -354,12 +502,27 @@
         hint.innerHTML = 'Ese email no tiene ninguna suscripción activa. <a href="#precios">Ver planes</a>';
       }
     } catch (err) {
-      hint.textContent = 'No se pudo comprobar ahora mismo. Inténtalo de nuevo en un momento.';
+      hint.textContent = 'No se pudo comprobar ahora mismo. Intentalo de nuevo en un momento.';
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Comprobar';
+      btn.textContent = prevText;
     }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim().toLowerCase();
+    if(!email) return;
+    checkEmail(email);
   });
+
+  /* Si llega desde una extension con ?email=..., comprobar automáticamente */
+  const params = new URLSearchParams(window.location.search);
+  const urlEmail = params.get('email');
+  if (urlEmail) {
+    emailInput.value = urlEmail;
+    checkEmail(urlEmail.trim().toLowerCase());
+  }
 </script>
 
 </body>
