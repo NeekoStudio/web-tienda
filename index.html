@@ -130,7 +130,8 @@
 
   /* Precios */
   .plans-row{display:flex; gap:10px; margin-bottom:18px;}
-  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s;}
+  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s, transform .1s; cursor:pointer;}
+  .plan:active{transform:scale(0.97);}
   .plan.featured{border-color:var(--fuchsia);}
   .plan .badge{font-size:10px; font-weight:700; color:var(--muted); letter-spacing:0.03em; display:block; margin-bottom:8px;}
   .plan.featured .badge{color:var(--fuchsia);}
@@ -284,18 +285,18 @@
     <!-- Precios -->
     <div class="card" id="precios">
       <div class="card-title" data-i18n="pricing_title">Un pago, todas las extensiones</div>
-      <div class="plans-row">
-        <div class="plan">
+      <div class="plans-row" id="plansRow">
+        <div class="plan" data-plan="monthly">
           <span class="badge" data-i18n="plan_monthly">MENSUAL</span>
           <div class="price">3&euro;</div>
           <div class="per" data-i18n="per_month">/ mes</div>
         </div>
-        <div class="plan featured">
+        <div class="plan featured" data-plan="quarterly">
           <span class="badge" data-i18n="plan_popular">POPULAR</span>
           <div class="price">7&euro;</div>
           <div class="per" data-i18n="per_3months">/ 3 meses</div>
         </div>
-        <div class="plan">
+        <div class="plan" data-plan="yearly">
           <span class="badge" data-i18n="plan_best">MEJOR</span>
           <div class="price">25&euro;</div>
           <div class="per" data-i18n="per_year">/ año</div>
@@ -345,6 +346,13 @@
     s.style.animationDelay = (Math.random() * 4) + 's';
     starsEl.appendChild(s);
   }
+
+  document.querySelectorAll('#plansRow .plan').forEach((el) => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#plansRow .plan').forEach((p) => p.classList.remove('featured'));
+      el.classList.add('featured');
+    });
+  });
 
   const aura = document.getElementById('cursorAura');
   let auraX = window.innerWidth / 2, auraY = window.innerHeight / 2;
