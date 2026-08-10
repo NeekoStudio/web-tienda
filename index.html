@@ -376,8 +376,40 @@
   document.getElementById('openContact').addEventListener('click', () => modal.classList.add('show'));
   document.getElementById('supportBtn').addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('show'); });
   document.getElementById('cancelContact').addEventListener('click', () => modal.classList.remove('show'));
-  document.getElementById('sendContact').addEventListener('click', () => {
-    alert('Esta parte se conectara en el siguiente paso para que el mensaje te llegue de verdad.');
+  const sendBtn = document.getElementById('sendContact');
+  sendBtn.addEventListener('click', async () => {
+    const email = document.getElementById('contactEmail').value.trim();
+    const msg = document.getElementById('contactMsg').value.trim();
+    if (!email || !msg) {
+      alert('Escribe tu email y tu mensaje antes de enviar.');
+      return;
+    }
+    sendBtn.disabled = true;
+    const prevText = sendBtn.textContent;
+    sendBtn.textContent = '...';
+    try {
+      const fd = new FormData();
+      fd.append('email', email);
+      fd.append('message', msg);
+      const res = await fetch('https://formspree.io/f/myegwgzg', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: fd
+      });
+      if (res.ok) {
+        alert('¡Mensaje enviado! Te responderé en cuanto pueda.');
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactMsg').value = '';
+        modal.classList.remove('show');
+      } else {
+        alert('No se pudo enviar. Inténtalo de nuevo en un momento.');
+      }
+    } catch (err) {
+      alert('No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.');
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = prevText;
+    }
   });
 
   /* FAQ */
