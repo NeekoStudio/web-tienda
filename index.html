@@ -352,10 +352,21 @@
     starsEl.appendChild(s);
   }
 
+  const PLAN_URLS = {
+    monthly: 'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK',
+    quarterly: 'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv',
+    yearly: 'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gc',
+  };
+  const subscribeBtn = document.querySelector('#precios .btn-primary');
+
   document.querySelectorAll('#plansRow .plan').forEach((el) => {
     el.addEventListener('click', () => {
       document.querySelectorAll('#plansRow .plan').forEach((p) => p.classList.remove('featured'));
       el.classList.add('featured');
+      const plan = el.getAttribute('data-plan');
+      if (PLAN_URLS[plan] && subscribeBtn) {
+        subscribeBtn.href = PLAN_URLS[plan];
+      }
     });
   });
 
