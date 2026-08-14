@@ -134,7 +134,8 @@
 
   /* Precios */
   .plans-row{display:flex; gap:10px; margin-bottom:18px;}
-  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s, transform .1s; cursor:pointer;}
+  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s, transform .1s; cursor:pointer; display:block; text-decoration:none; color:inherit;}
+  .plan:hover{transform:translateY(-2px);}
   .plan:active{transform:scale(0.97);}
   .plan.featured{border-color:var(--fuchsia);}
   .plan .badge{font-size:10px; font-weight:700; color:var(--muted); letter-spacing:0.03em; display:block; margin-bottom:8px;}
@@ -289,24 +290,24 @@
     <!-- Precios -->
     <div class="card" id="precios">
       <div class="card-title" data-i18n="pricing_title">Un pago, todas las extensiones</div>
+      <p class="desc" data-i18n="pricing_desc" style="margin-bottom:12px;">Elige un plan para ir directa al pago.</p>
       <div class="plans-row" id="plansRow">
-        <div class="plan" data-plan="monthly">
+        <a class="plan" data-plan="monthly" href="https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK" target="_blank" rel="noopener">
           <span class="badge" data-i18n="plan_monthly">MENSUAL</span>
           <div class="price">3&euro;</div>
           <div class="per" data-i18n="per_month">/ mes</div>
-        </div>
-        <div class="plan featured" data-plan="quarterly">
+        </a>
+        <a class="plan featured" data-plan="quarterly" href="https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv" target="_blank" rel="noopener">
           <span class="badge" data-i18n="plan_popular">POPULAR</span>
           <div class="price">7&euro;</div>
           <div class="per" data-i18n="per_3months">/ 3 meses</div>
-        </div>
-        <div class="plan" data-plan="yearly">
+        </a>
+        <a class="plan" data-plan="yearly" href="https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gc" target="_blank" rel="noopener">
           <span class="badge" data-i18n="plan_best">MEJOR</span>
           <div class="price">25&euro;</div>
           <div class="per" data-i18n="per_year">/ año</div>
-        </div>
+        </a>
       </div>
-      <a class="btn-primary" href="https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv" target="_blank" rel="noopener" data-i18n="subscribe_btn">Suscribirme</a>
     </div>
 
     <!-- Contacto -->
@@ -351,24 +352,6 @@
     s.style.animationDelay = (Math.random() * 4) + 's';
     starsEl.appendChild(s);
   }
-
-  const PLAN_URLS = {
-    monthly: 'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK',
-    quarterly: 'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv',
-    yearly: 'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gc',
-  };
-  const subscribeBtn = document.querySelector('#precios .btn-primary');
-
-  document.querySelectorAll('#plansRow .plan').forEach((el) => {
-    el.addEventListener('click', () => {
-      document.querySelectorAll('#plansRow .plan').forEach((p) => p.classList.remove('featured'));
-      el.classList.add('featured');
-      const plan = el.getAttribute('data-plan');
-      if (PLAN_URLS[plan] && subscribeBtn) {
-        subscribeBtn.href = PLAN_URLS[plan];
-      }
-    });
-  });
 
   const aura = document.getElementById('cursorAura');
   let auraX = window.innerWidth / 2, auraY = window.innerHeight / 2;
@@ -474,6 +457,7 @@
       soon: 'Pronto',
       install: 'Instalar',
       pricing_title: 'Un pago, todas las extensiones',
+      pricing_desc: 'Elige un plan para ir directa al pago.',
       plan_monthly: 'MENSUAL', plan_popular: 'POPULAR', plan_best: 'MEJOR',
       per_month: '/ mes', per_3months: '/ 3 meses', per_year: '/ año',
       subscribe_btn: 'Suscribirme',
@@ -513,6 +497,7 @@
       soon: 'Soon',
       install: 'Install',
       pricing_title: 'One payment, every extension',
+      pricing_desc: 'Choose a plan to go straight to checkout.',
       plan_monthly: 'MONTHLY', plan_popular: 'POPULAR', plan_best: 'BEST',
       per_month: '/ mo', per_3months: '/ 3 mo', per_year: '/ yr',
       subscribe_btn: 'Subscribe',
