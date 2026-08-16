@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neeko Studio</title>
+<title>Neeko Studio — Extensiones de Chrome y CleanFrame</title>
 <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
@@ -131,6 +131,30 @@
   }
   .ext-cta:hover{opacity:0.85;}
   .ext-cta.soon{background:transparent; color:var(--muted); border:1px dashed var(--card-border);}
+
+  /* CleanFrame: desplegable "Mas informacion" (reusa la mecanica del FAQ) */
+  .tool-more{
+    display:flex; align-items:center; gap:6px;
+    background:none; border:none; padding:6px 2px 0; cursor:pointer;
+    color:var(--muted); font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600;
+  }
+  .tool-more:hover{color:var(--text);}
+  .tool-more .arrow{transition:transform .2s; font-size:9px;}
+  .tool-more[aria-expanded="true"] .arrow{transform:rotate(180deg);}
+  .tool-panel{max-height:0; overflow:hidden; transition:max-height .28s ease;}
+  .tool-panel.open{max-height:520px;}
+  .tool-panel p{color:var(--muted); font-size:12.5px; line-height:1.55; padding:12px 2px 0;}
+  .tool-panel ul{list-style:none; margin:10px 0 4px; display:flex; flex-direction:column; gap:6px;}
+  .tool-panel li{color:var(--muted); font-size:12.5px; line-height:1.45; padding-left:14px; position:relative;}
+  .tool-panel li::before{
+    content:''; position:absolute; left:0; top:7px;
+    width:5px; height:5px; border-radius:50%; background:var(--gold);
+  }
+  .tool-panel b{color:var(--text); font-weight:700;}
+  .tag-free{
+    display:inline-block; margin-left:7px; vertical-align:middle;
+    color:var(--gold); font-size:10px; font-weight:800; letter-spacing:0.05em;
+  }
 
   /* Precios */
   .plans-row{display:flex; gap:10px; margin-bottom:18px;}
@@ -289,6 +313,39 @@
       </div>
     </div>
 
+    <!-- CleanFrame -->
+    <div class="card" id="cleanframe">
+      <div class="card-title" data-i18n="tool_title">Herramienta gratuita</div>
+      <div class="ext-list">
+
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/cleanframe.png" alt="CleanFrame">
+          </div>
+          <div class="ext-info">
+            <h3>CleanFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="tool_desc_short">Elimina las marcas de agua de tus imágenes y vídeos de Gemini y Veo.</p>
+          </div>
+          <a class="ext-cta" href="cleanframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+      </div>
+
+      <button class="tool-more" id="toolMore" type="button" aria-expanded="false" aria-controls="toolPanel">
+        <span data-i18n="tool_more">Más información</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="toolPanel">
+        <p data-i18n="tool_desc_long">Arrastra tus archivos y CleanFrame detecta solo dónde está la marca y la borra reconstruyendo lo que había debajo. No la tapa ni la difumina: invierte la mezcla con la que se aplicó, así que solo se toca esa zona. Puedes soltar varios archivos a la vez, comparar el antes y el después con un deslizador y descargarlos uno a uno o todos juntos en un ZIP.</p>
+        <ul>
+          <li data-i18n="tool_f1"><b>Imágenes y vídeos</b> — PNG, JPG, WEBP, MP4, WEBM y MOV</li>
+          <li data-i18n="tool_f2"><b>Mantiene el formato</b> — misma resolución, mismos FPS y el audio original del archivo</li>
+          <li data-i18n="tool_f3"><b>Por lotes</b> — varios archivos a la vez y descarga en ZIP</li>
+          <li data-i18n="tool_f4"><b>100% privado</b> — se procesa en tu navegador, no se sube nada</li>
+          <li data-i18n="tool_f5">No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.</li>
+        </ul>
+      </div>
+    </div>
+
     <!-- Precios -->
     <div class="card" id="precios">
       <div class="card-title" data-i18n="pricing_title">Un pago, todas las extensiones</div>
@@ -444,6 +501,17 @@
     faqList.appendChild(div);
   });
 
+  /* CleanFrame: desplegable */
+  (function(){
+    var moreBtn = document.getElementById('toolMore');
+    var panel = document.getElementById('toolPanel');
+    if(!moreBtn || !panel) return;
+    moreBtn.addEventListener('click', function(){
+      var open = panel.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  })();
+
   /* Traducciones */
   const T = {
     es: {
@@ -461,6 +529,17 @@
       ext3_desc: 'Busca noticias del día de las cuentas que elijas o por palabras clave, en la fecha que quieras, y prográmalo para que se repita solo.',
       soon: 'Pronto',
       install: 'Instalar',
+      tool_title: 'Herramienta gratuita',
+      tool_badge: 'GRATIS',
+      tool_open: 'Abrir',
+      tool_more: 'Más información',
+      tool_desc_short: 'Elimina las marcas de agua de tus imágenes y vídeos de Gemini y Veo.',
+      tool_desc_long: 'Arrastra tus archivos y CleanFrame detecta solo dónde está la marca y la borra reconstruyendo lo que había debajo. No la tapa ni la difumina: invierte la mezcla con la que se aplicó, así que solo se toca esa zona. Puedes soltar varios archivos a la vez, comparar el antes y el después con un deslizador y descargarlos uno a uno o todos juntos en un ZIP.',
+      tool_f1: '<b>Imágenes y vídeos</b> — PNG, JPG, WEBP, MP4, WEBM y MOV',
+      tool_f2: '<b>Mantiene el formato</b> — misma resolución, mismos FPS y el audio original del archivo',
+      tool_f3: '<b>Por lotes</b> — varios archivos a la vez y descarga en ZIP',
+      tool_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada',
+      tool_f5: 'No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.',
       pricing_title: 'Un pago, todas las extensiones',
       pricing_desc: 'Elige un plan para ir directa al pago.',
       plan_monthly: 'MENSUAL', plan_popular: 'POPULAR', plan_best: 'MEJOR',
@@ -501,6 +580,17 @@
       ext3_desc: 'Search daily news from the accounts you pick or by keyword, on any date you want, and schedule it to repeat on its own.',
       soon: 'Soon',
       install: 'Install',
+      tool_title: 'Free tool',
+      tool_badge: 'FREE',
+      tool_open: 'Open',
+      tool_more: 'More information',
+      tool_desc_short: 'Removes the watermarks from your Gemini and Veo images and videos.',
+      tool_desc_long: 'Drop your files and CleanFrame finds the watermark on its own and erases it by rebuilding what was underneath. It does not cover it or blur it: it undoes the blend it was applied with, so only that area is touched. You can drop several files at once, compare before and after with a slider and download them one by one or all together in a ZIP.',
+      tool_f1: '<b>Images and videos</b> — PNG, JPG, WEBP, MP4, WEBM and MOV',
+      tool_f2: '<b>Keeps the format</b> — same resolution, same FPS and the original audio of the file',
+      tool_f3: '<b>Batch mode</b> — several files at once and ZIP download',
+      tool_f4: '<b>100% private</b> — processed in your browser, nothing is uploaded',
+      tool_f5: 'No install, no sign-up. Desktop Chrome and Edge.',
       pricing_title: 'One payment, every extension',
       pricing_desc: 'Choose a plan to go straight to checkout.',
       plan_monthly: 'MONTHLY', plan_popular: 'POPULAR', plan_best: 'BEST',
