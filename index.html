@@ -67,10 +67,23 @@
   .profile-id p{color:var(--muted); font-size:13.5px; margin-top:2px;}
   .profile-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
   .lang-select{
+    display:inline-flex; align-items:center; gap:7px;
     background:#1c1626; border:1px solid var(--card-border); color:var(--text);
-    font-size:13px; font-weight:600; padding:8px 12px; border-radius:100px;
-    outline:none; cursor:pointer;
+    padding:7px 12px; border-radius:100px; cursor:pointer;
+    transition:border-color .15s;
   }
+  .lang-select:hover, .lang-select:focus-within{border-color:var(--fuchsia);}
+  .lang-select .globe{width:17px; height:17px; flex-shrink:0; color:var(--fuchsia);}
+  .lang-select .caret{width:13px; height:13px; flex-shrink:0; color:var(--muted); pointer-events:none;}
+  .lang-select select{
+    appearance:none; -webkit-appearance:none;
+    background:transparent; border:none; outline:none; color:inherit;
+    font-family:'Inter', sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; padding:0 2px 0 0;
+  }
+  /* La lista desplegada la pinta el sistema: hay que darle fondo propio o en
+     algunos navegadores sale texto claro sobre fondo claro. */
+  .lang-select select option{background:#1c1626; color:#f2f0f6;}
   .chip-btn{
     display:inline-flex; align-items:center; gap:6px;
     border:none; color:#22102e;
@@ -243,10 +256,21 @@
         </div>
       </div>
       <div class="profile-actions">
-        <select class="lang-select" id="langSelect">
-          <option value="es">ES</option>
-          <option value="en">EN</option>
-        </select>
+        <label class="lang-select" title="Idioma / Language">
+          <svg class="globe" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <select id="langSelect" aria-label="Idioma / Language">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+          <svg class="caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </label>
         <a class="chip-btn chip-support" href="#" id="supportBtn">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="white"/></svg>
           <span data-i18n="support_btn">Soporte</span>
