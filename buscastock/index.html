@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BuscaStock Pro — Imágenes y vídeos libres de derechos, en bloque · Neeko Studio</title>
+<meta name="description" content="Busca en Pexels y Pixabay a la vez y descarga imágenes y vídeos libres de derechos en bloque, sin instalar nada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>:root{--bg:#000000; --surface:#1c1922; --surface2:#141118; --card-border:#423c50;--text:#f2f0f6; --muted:#b8b0c9; --gold:#ffbe3d; --verde:#3ddc8a; --rojo:#ff6b8a}*{box-sizing:border-box}html,body{margin:0;padding:0}body{background:var(--bg);color:var(--text);font-family:Sora,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}a{color:var(--gold);text-decoration:none}button{font-family:inherit;font-size:inherit;cursor:pointer}input,select{font-family:inherit;font-size:inherit}header{position:sticky;top:0;z-index:40;background:rgba(0,0,0,.94);border-bottom:1px solid var(--card-border);backdrop-filter:blur(8px)}.cab{max-width:1500px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}.volver{color:var(--muted);font-size:13px}.volver:hover{color:var(--text)}.marca{font-weight:800;font-size:16px}.marca small{display:block;font-weight:400;font-size:10.5px;color:var(--muted);letter-spacing:.5px}.cab-der{margin-left:auto;display:flex;gap:8px;align-items:center}.zona{max-width:1500px;margin:0 auto;padding:20px}.btn{font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:11px;border:1px solid var(--card-border);background:transparent;color:var(--text);transition:.15s;white-space:nowrap}.btn:hover{border-color:var(--text)}.btn.principal{background:var(--text);color:var(--bg);border-color:transparent}.btn.principal:hover{opacity:.87}.btn.mini{padding:6px 12px;font-size:12.5px;border-radius:9px}.btn:disabled{opacity:.4;cursor:default}.buscador{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.campo{flex:1;min-width:230px;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--card-border);border-radius:13px;padding:0 15px}.campo input{flex:1;background:none;border:0;color:var(--text);padding:14px 0;outline:none}.campo .lupa{color:var(--muted);font-size:17px}select{background:var(--surface);border:1px solid var(--card-border);color:var(--text);border-radius:11px;padding:12px 13px;outline:none}.fuentes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}.chip{background:var(--surface);border:1px solid var(--card-border);color:var(--muted);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;transition:.15s}.chip.on{background:var(--gold);border-color:transparent;color:#000}.contador{margin-left:auto;font-size:12.5px;color:var(--muted)}.contador b{color:var(--text)}.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}.pieza{position:relative;border-radius:14px;overflow:hidden;background:var(--surface);border:1px solid var(--card-border);aspect-ratio:4/3;cursor:pointer;transition:.15s}.pieza:hover{border-color:var(--gold)}.pieza img,.pieza video{width:100%;height:100%;object-fit:cover;display:block}.pieza .marca-sel{position:absolute;inset:0;border:3px solid var(--gold);border-radius:14px;opacity:0;transition:.12s;pointer-events:none}.pieza.sel .marca-sel{opacity:1}.pieza .tic{position:absolute;top:9px;left:9px;width:23px;height:23px;border-radius:50%;background:rgba(0,0,0,.65);border:1.5px solid rgba(255,255,255,.55);display:grid;place-items:center;font-size:12px;color:transparent;transition:.12s}.pieza.sel .tic{background:var(--gold);border-color:var(--gold);color:#000}.pieza .info{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;font-size:11px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.85));display:flex;justify-content:space-between;gap:8px;align-items:flex-end}.pieza .autor{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.85}.pieza .tipo{background:rgba(0,0,0,.6);border-radius:5px;padding:1px 6px;flex-shrink:0}.barra{position:sticky;bottom:0;z-index:30;margin:16px -20px -20px;padding:13px 20px;background:rgba(0,0,0,.95);border-top:1px solid var(--card-border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;backdrop-filter:blur(8px)}.barra .txt{font-size:13px;color:var(--muted)}.barra .txt b{color:var(--text)}.barra .der{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}.aviso{background:var(--surface);border:1px solid var(--card-border);border-radius:15px;padding:17px 19px;margin-bottom:16px;font-size:13.5px;color:var(--muted)}.aviso b{color:var(--text)}.aviso.dorado{background:rgba(255,190,61,.07);border-color:rgba(255,190,61,.3)}.aviso.malo{background:rgba(255,107,138,.08);border-color:rgba(255,107,138,.35);color:#ffc2cf}.vacio{text-align:center;padding:60px 20px;color:var(--muted)}.vacio .ico{font-size:40px;color:var(--card-border);margin-bottom:10px}.velo{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;z-index:60;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.velo.abierto{display:flex}.modal{background:var(--surface);border:1px solid var(--card-border);border-radius:18px;padding:24px;max-width:520px;width:100%}.modal h2{margin:0 0 6px;font-size:19px}.modal p{color:var(--muted);font-size:13.5px;margin:0 0 16px}.modal label{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 5px}.modal input{width:100%;background:var(--surface2);border:1px solid var(--card-border);color:var(--text);border-radius:10px;padding:11px 13px;outline:none}.modal .pie{display:flex;gap:9px;margin-top:20px;justify-content:flex-end}footer{border-top:1px solid var(--card-border);margin-top:34px;padding:20px;color:var(--muted);font-size:12px;line-height:1.7;max-width:1500px;margin-left:auto;margin-right:auto}footer a{color:var(--muted);text-decoration:underline}@media(max-width:600px){.rejilla{grid-template-columns:repeat(auto-fill,minmax(145px,1fr))}.zona,.cab{padding-left:14px;padding-right:14px}.barra{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}}</style>
+</head>
+<body>
+
+<header>
+  <div class="cab">
+    <a class="volver" href="/">← Neeko Studio</a>
+    <div class="marca">BuscaStock Pro<small>EN LÍNEA · SIN INSTALAR NADA</small></div>
+    <div class="cab-der">
+      <button class="btn mini" id="btnClaves">Mis claves</button>
+    </div>
+  </div>
+</header>
+
+<div class="zona">
+
+  <div class="aviso dorado" id="avisoClaves" style="display:none">
+    <b>Antes de empezar necesitas dos claves gratuitas.</b> BuscaStock busca en Pexels y en
+    Pixabay, y cada uno pide su propia clave. Son gratis, tardas dos minutos y no piden tarjeta.
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <a class="btn mini" href="https://www.pexels.com/api/" target="_blank" rel="noopener">Sacar la de Pexels</a>
+      <a class="btn mini" href="https://pixabay.com/api/docs/" target="_blank" rel="noopener">Sacar la de Pixabay</a>
+      <button class="btn mini principal" id="btnClaves2">Pegarlas aquí</button>
+    </div>
+  </div>
+
+  <div class="buscador">
+    <div class="campo">
+      <span class="lupa">⌕</span>
+      <input id="q" placeholder="Qué buscas: bosque de niebla, oficina moderna, olas al atardecer…" autocomplete="off">
+    </div>
+    <select id="tipo">
+      <option value="foto">Fotos</option>
+      <option value="video">Vídeos</option>
+    </select>
+    <select id="orientacion">
+      <option value="">Cualquier forma</option>
+      <option value="landscape">Horizontal</option>
+      <option value="portrait">Vertical</option>
+      <option value="square">Cuadrada</option>
+    </select>
+    <button class="btn principal" id="btnBuscar">Buscar</button>
+  </div>
+
+  <div class="fuentes">
+    <button class="chip on" data-fuente="pexels">Pexels</button>
+    <button class="chip on" data-fuente="pixabay">Pixabay</button>
+    <span class="contador" id="contador"></span>
+  </div>
+
+  <div id="salida">
+    <div class="vacio">
+      <div class="ico">◈</div>
+      <div>Escribe qué necesitas y pulsa <b>Buscar</b>.</div>
+      <div style="margin-top:6px;font-size:13px">Busca en Pexels y Pixabay a la vez, y te descargas lo que marques de una tacada.</div>
+    </div>
+  </div>
+
+  <div class="barra" id="barra" style="display:none">
+    <div class="txt"><b id="nSel">0</b> seleccionados</div>
+    <div class="der">
+      <button class="btn mini" id="btnTodos">Marcar todos</button>
+      <button class="btn mini" id="btnNinguno">Desmarcar</button>
+      <button class="btn mini" id="btnMas">Ver más</button>
+      <button class="btn mini principal" id="btnDescargar">Descargar seleccionados</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>BuscaStock Pro</b> · una herramienta de <a href="/">Neeko Studio</a>.<br><br>
+  Los resultados proceden de <a href="https://www.pexels.com" target="_blank" rel="noopener">Pexels</a> y
+  <a href="https://pixabay.com" target="_blank" rel="noopener">Pixabay</a>, que ofrecen contenido libre de
+  derechos bajo sus propias licencias. Esta herramienta no está afiliada a ninguno de los dos.
+  Revisa la licencia de cada pieza antes de usarla en un proyecto comercial, y acredita al autor
+  cuando la licencia lo pida. Tus claves se guardan solo en este navegador y no viajan a ningún
+  servidor nuestro: las peticiones van directas de tu ordenador a Pexels y a Pixabay.
+</footer>
+
+<div class="velo" id="velo">
+  <div class="modal">
+    <h2>Tus claves</h2>
+    <p>Se guardan solo en este navegador. No las vemos ni salen de tu ordenador
+       salvo hacia Pexels y Pixabay.</p>
+    <label>Clave de Pexels</label>
+    <input id="k_pexels" type="password" placeholder="Pégala aquí" autocomplete="off">
+    <label>Clave de Pixabay</label>
+    <input id="k_pixabay" type="password" placeholder="Pégala aquí" autocomplete="off">
+    <div class="pie">
+      <button class="btn" id="btnCerrarClaves">Cerrar</button>
+      <button class="btn principal" id="btnGuardarClaves">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>// ===== NÚCLEO INICIO =====
+const POR_PAGINA = 40;
+function dePexels(item, tipo){
+if(tipo === 'video'){
+const archivos = (item.video_files||[]).slice().sort((a,b)=>(b.width||0)-(a.width||0));
+const mejor = archivos[0];
+if(!mejor) return null;
+return {
+id:'px-v-'+item.id, fuente:'Pexels', tipo:'video',
+vista:(item.video_pictures&&item.video_pictures[0]||{}).picture || item.image,
+descarga:mejor.link, ancho:mejor.width, alto:mejor.height,
+autor:(item.user||{}).name||'', pagina:item.url, ext:'mp4'
+};
+}
+const s = item.src||{};
+return {
+id:'px-f-'+item.id, fuente:'Pexels', tipo:'foto',
+vista:s.medium||s.small, descarga:s.original||s.large2x||s.large,
+ancho:item.width, alto:item.height,
+autor:item.photographer||'', pagina:item.url, ext:'jpg'
+};
+}
+function dePixabay(item, tipo){
+if(tipo === 'video'){
+const v = item.videos||{};
+const mejor = v.large && v.large.url ? v.large : (v.medium||v.small||{});
+if(!mejor.url) return null;
+return {
+id:'pb-v-'+item.id, fuente:'Pixabay', tipo:'video',
+vista:'https://i.vimeocdn.com/video/'+item.picture_id+'_295x166.jpg',
+descarga:mejor.url, ancho:mejor.width, alto:mejor.height,
+autor:item.user||'', pagina:item.pageURL, ext:'mp4'
+};
+}
+return {
+id:'pb-f-'+item.id, fuente:'Pixabay', tipo:'foto',
+vista:item.webformatURL, descarga:item.largeImageURL||item.webformatURL,
+ancho:item.imageWidth, alto:item.imageHeight,
+autor:item.user||'', pagina:item.pageURL, ext:'jpg'
+};
+}
+function entrelazar(listas){
+const salida = [];
+const max = Math.max(0, ...listas.map(l=>l.length));
+for(let i=0;i<max;i++) listas.forEach(l=>{ if(l[i]) salida.push(l[i]); });
+return salida;
+}
+function sinRepetidos(lista){
+const vistos = new Set();
+return lista.filter(x => x && !vistos.has(x.id) && vistos.add(x.id));
+}
+function nombreArchivo(pieza, consulta, indice){
+const base = String(consulta||'stock').toLowerCase()
+.normalize('NFD').replace(/[̀-ͯ]/g,'')
+.replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'stock';
+const n = String(indice+1).padStart(3,'0');
+return base+'-'+n+'-'+pieza.fuente.toLowerCase()+'.'+pieza.ext;
+}
+function textoCreditos(piezas, consulta){
+const lineas = ['Créditos de las piezas descargadas','Búsqueda: '+(consulta||''),''];
+piezas.forEach((p,i)=>{
+lineas.push(nombreArchivo(p, consulta, i));
+lineas.push('  Autor: '+(p.autor||'sin indicar')+'  ·  '+p.fuente);
+if(p.pagina) lineas.push('  '+p.pagina);
+lineas.push('');
+});
+lineas.push('Revisa la licencia de cada pieza en su página antes de usarla comercialmente.');
+return lineas.join('\n');
+}
+if (typeof module !== 'undefined' && module.exports) {
+module.exports = { dePexels, dePixabay, entrelazar, sinRepetidos, nombreArchivo, textoCreditos, POR_PAGINA };
+}
+// ===== NÚCLEO FIN =====
+const LS = {
+get(k,d){ try{ const v=localStorage.getItem(k); return v===null?d:JSON.parse(v); }catch(e){ return d; } },
+set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+let CLAVES = LS.get('bs_claves', {pexels:'', pixabay:''});
+let PIEZAS = [];
+let SEL = new Set();
+let PAGINA = 1;
+let BUSCANDO = false;
+const $ = id => document.getElementById(id);
+const escapar = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fuentesActivas = () => [...document.querySelectorAll('.chip.on')].map(c=>c.getAttribute('data-fuente'));
+function hayClaves(){ return !!(CLAVES.pexels || CLAVES.pixabay); }
+function pintarAvisoClaves(){
+$('avisoClaves').style.display = hayClaves() ? 'none' : 'block';
+document.querySelectorAll('.chip').forEach(c=>{
+const f = c.getAttribute('data-fuente');
+const tiene = !!CLAVES[f];
+c.style.opacity = tiene ? '1' : '.4';
+c.title = tiene ? '' : 'Te falta la clave de '+f;
+});
+}
+function abrirClaves(){
+$('k_pexels').value = CLAVES.pexels || '';
+$('k_pixabay').value = CLAVES.pixabay || '';
+$('velo').classList.add('abierto');
+}
+function cerrarClaves(){ $('velo').classList.remove('abierto'); }
+$('btnClaves').onclick = abrirClaves;
+$('btnClaves2').onclick = abrirClaves;
+$('btnCerrarClaves').onclick = cerrarClaves;
+$('btnGuardarClaves').onclick = () => {
+CLAVES = { pexels:$('k_pexels').value.trim(), pixabay:$('k_pixabay').value.trim() };
+LS.set('bs_claves', CLAVES);
+pintarAvisoClaves();
+cerrarClaves();
+};
+$('velo').addEventListener('click', e=>{ if(e.target.id==='velo') cerrarClaves(); });
+document.querySelectorAll('.chip').forEach(c=>{
+c.onclick = () => { c.classList.toggle('on'); };
+});
+async function buscarPexels(q, tipo, orientacion, pagina){
+if(!CLAVES.pexels) return [];
+const base = tipo==='video' ? 'https://api.pexels.com/videos/search' : 'https://api.pexels.com/v1/search';
+const u = new URL(base);
+u.searchParams.set('query', q);
+u.searchParams.set('per_page', POR_PAGINA);
+u.searchParams.set('page', pagina);
+if(orientacion) u.searchParams.set('orientation', orientacion);
+const r = await fetch(u, { headers:{ Authorization: CLAVES.pexels } });
+if(!r.ok) throw new Error('Pexels ha respondido '+r.status+(r.status===401?': la clave no es válida.':''));
+const j = await r.json();
+const items = tipo==='video' ? (j.videos||[]) : (j.photos||[]);
+return items.map(i=>dePexels(i,tipo)).filter(Boolean);
+}
+async function buscarPixabay(q, tipo, orientacion, pagina){
+if(!CLAVES.pixabay) return [];
+const base = tipo==='video' ? 'https://pixabay.com/api/videos/' : 'https://pixabay.com/api/';
+const u = new URL(base);
+u.searchParams.set('key', CLAVES.pixabay);
+u.searchParams.set('q', q);
+u.searchParams.set('per_page', POR_PAGINA);
+u.searchParams.set('page', pagina);
+u.searchParams.set('safesearch', 'true');
+if(orientacion === 'landscape') u.searchParams.set('orientation','horizontal');
+if(orientacion === 'portrait')  u.searchParams.set('orientation','vertical');
+const r = await fetch(u);
+if(!r.ok) throw new Error('Pixabay ha respondido '+r.status+(r.status===400?': revisa la clave.':''));
+const j = await r.json();
+return (j.hits||[]).map(i=>dePixabay(i,tipo)).filter(Boolean);
+}
+async function buscar(masResultados){
+if(BUSCANDO) return;
+const q = $('q').value.trim();
+if(!q){ $('q').focus(); return; }
+if(!hayClaves()){ abrirClaves(); return; }
+const activas = fuentesActivas().filter(f=>CLAVES[f]);
+if(!activas.length){
+$('salida').innerHTML = '<div class="aviso malo">No tienes ninguna fuente activa con su clave puesta.</div>';
+return;
+}
+BUSCANDO = true;
+const btn = $('btnBuscar'); btn.disabled = true; btn.textContent = 'Buscando…';
+if(!masResultados){ PAGINA = 1; PIEZAS = []; SEL.clear(); }
+const tipo = $('tipo').value;
+const orientacion = $('orientacion').value;
+const errores = [];
+const listas = [];
+for(const f of activas){
+try{
+const fn = f==='pexels' ? buscarPexels : buscarPixabay;
+listas.push(await fn(q, tipo, orientacion, PAGINA));
+}catch(e){ errores.push(e.message); listas.push([]); }
+}
+PIEZAS = sinRepetidos(PIEZAS.concat(entrelazar(listas)));
+BUSCANDO = false;
+btn.disabled = false; btn.textContent = 'Buscar';
+pintar(errores);
+}
+function pintar(errores){
+const salida = $('salida');
+const aviso = (errores && errores.length)
+? '<div class="aviso malo">'+errores.map(escapar).join('<br>')+'</div>' : '';
+if(!PIEZAS.length){
+salida.innerHTML = aviso + '<div class="vacio"><div class="ico">◈</div>'+
+'<div>No he encontrado nada con esas palabras.</div>'+
+'<div style="margin-top:6px;font-size:13px">Prueba con algo más general, o cambia la forma.</div></div>';
+$('barra').style.display = 'none';
+$('contador').textContent = '';
+return;
+}
+salida.innerHTML = aviso + '<div class="rejilla">' + PIEZAS.map(p=>`
+<div class="pieza${SEL.has(p.id)?' sel':''}" data-id="${escapar(p.id)}">
+<img loading="lazy" src="${escapar(p.vista||'')}" alt="">
+<div class="marca-sel"></div>
+<div class="tic">✓</div>
+<div class="info">
+<span class="autor">${escapar(p.autor||'')}</span>
+<span class="tipo">${escapar(p.fuente)}${p.tipo==='video'?' · vídeo':''}</span>
+</div>
+</div>`).join('') + '</div>';
+salida.querySelectorAll('.pieza').forEach(el=>{
+el.onclick = () => {
+const id = el.getAttribute('data-id');
+if(SEL.has(id)) SEL.delete(id); else SEL.add(id);
+el.classList.toggle('sel');
+actualizarBarra();
+};
+});
+$('barra').style.display = 'flex';
+$('contador').innerHTML = '<b>'+PIEZAS.length+'</b> resultados';
+actualizarBarra();
+}
+function actualizarBarra(){
+$('nSel').textContent = SEL.size;
+$('btnDescargar').disabled = SEL.size === 0;
+}
+$('btnBuscar').onclick = () => buscar(false);
+$('q').addEventListener('keydown', e=>{ if(e.key==='Enter') buscar(false); });
+$('tipo').onchange = () => { if(PIEZAS.length) buscar(false); };
+$('orientacion').onchange = () => { if(PIEZAS.length) buscar(false); };
+$('btnMas').onclick = () => { PAGINA++; buscar(true); };
+$('btnTodos').onclick = () => { PIEZAS.forEach(p=>SEL.add(p.id)); pintar(); };
+$('btnNinguno').onclick = () => { SEL.clear(); pintar(); };
+$('btnDescargar').onclick = async () => {
+const elegidas = PIEZAS.filter(p=>SEL.has(p.id));
+if(!elegidas.length) return;
+const btn = $('btnDescargar');
+btn.disabled = true;
+const consulta = $('q').value.trim();
+const zip = new JSZip();
+let hechas = 0, fallidas = [];
+for(let i=0;i<elegidas.length;i++){
+const p = elegidas[i];
+btn.textContent = 'Descargando '+(i+1)+' de '+elegidas.length+'…';
+try{
+const r = await fetch(p.descarga);
+if(!r.ok) throw new Error(String(r.status));
+zip.file(nombreArchivo(p, consulta, i), await r.blob());
+hechas++;
+}catch(e){ fallidas.push(p); }
+}
+if(hechas){
+zip.file('CREDITOS.txt', textoCreditos(elegidas, consulta));
+btn.textContent = 'Comprimiendo…';
+const blob = await zip.generateAsync({type:'blob'});
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = (consulta.replace(/[^a-z0-9]+/gi,'-').toLowerCase()||'buscastock')+'.zip';
+a.click();
+setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+btn.disabled = false;
+btn.textContent = 'Descargar seleccionados';
+if(fallidas.length){
+const salida = $('salida');
+const caja = document.createElement('div');
+caja.className = 'aviso';
+caja.innerHTML = '<b>'+fallidas.length+' piezas no se han podido meter en el ZIP</b> porque su '+
+'servidor no permite descargarlas desde otra web. Ábrelas de una en una desde aquí:'+
+'<div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap">'+
+fallidas.map((p,i)=>'<a class="btn mini" href="'+escapar(p.descarga)+'" target="_blank" rel="noopener" download>'+(i+1)+'</a>').join('')+
+'</div>';
+salida.prepend(caja);
+}
+};
+pintarAvisoClaves();</script>
+</body>
+</html>
