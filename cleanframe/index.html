@@ -13,6 +13,13 @@
       name="description"
       content="CleanFrame elimina las marcas de agua de las imagenes y videos generados con Gemini y Veo, directamente en tu navegador. Tus archivos nunca salen de tu dispositivo."
     />
+    <style>
+      /* El pie de Neeko Studio va abajo del todo (#neeko-footer). Se oculta el
+         enlace suelto que ya pintaba la aplicación, para no repetirlo. */
+      #root footer {
+        display: none !important;
+      }
+    </style>
     <title>CleanFrame · Elimina marcas de agua · Neeko Studio</title>
     <script type="module" crossorigin src="./assets/index-2rnTAvN1.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Dukn0YXY.css">
@@ -26,7 +33,7 @@
       style="
         position: relative;
         z-index: 1;
-        margin: -32px auto 0;
+        margin: 28px auto 0;
         max-width: 64rem;
         padding: 0 20px 40px;
         text-align: center;
@@ -52,6 +59,31 @@
         new MutationObserver(paint).observe(document.documentElement, {
           attributes: true,
           attributeFilter: ['lang'],
+        })
+
+        /* El botón «Neeko Studio» de arriba abría otra pestaña. Se convierte en
+           una flecha de volver, igual que en CutFrame. */
+        var FLECHA =
+          '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true" style="flex:none">' +
+          '<path d="M14 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        function volver() {
+          var chips = document.querySelectorAll('a.chip-btn')
+          for (var i = 0; i < chips.length; i++) {
+            var a = chips[i]
+            if (!/Neeko Studio/.test(a.textContent) || a.dataset.flecha) continue
+            a.dataset.flecha = '1'
+            a.removeAttribute('target')
+            a.removeAttribute('rel')
+            a.style.display = 'inline-flex'
+            a.style.alignItems = 'center'
+            a.style.gap = '6px'
+            a.innerHTML = FLECHA + '<span>' + a.textContent.trim() + '</span>'
+          }
+        }
+        volver()
+        new MutationObserver(volver).observe(document.getElementById('root'), {
+          childList: true,
+          subtree: true,
         })
       })()
     </script>
