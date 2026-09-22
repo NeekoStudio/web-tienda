@@ -144,7 +144,7 @@
     font-size:13px; font-weight:700; padding:9px 16px; border-radius:10px;
     text-decoration:none; white-space:nowrap; transition:opacity .15s;
   }
-    .ext-cta:hover{opacity:0.85;}
+  .ext-cta:hover{opacity:0.85;}
   .ext-cta.soon{background:transparent; color:var(--muted); border:1px dashed var(--card-border);}
 
   /* CleanFrame: desplegable "Mas informacion" (reusa la mecanica del FAQ) */
@@ -221,6 +221,17 @@
   .modal-cancel{background:#1c1626; color:var(--text);}
   .modal-send{background:var(--fuchsia); color:#1a0210;}
 
+  /* Registro de cambios */
+  .changelog-list{list-style:none; margin:0; padding:0;}
+  .changelog-list li{padding:12px 0; border-top:1px solid var(--card-border);}
+  .changelog-list li:first-child{border-top:none; padding-top:2px;}
+  .changelog-date{
+    display:inline-block; font-size:11.5px; font-weight:700; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--gold); margin-bottom:5px;
+  }
+  .changelog-list p{color:var(--muted); font-size:13px; line-height:1.55; margin:0;}
+  .changelog-list b{color:var(--text);}
+
   /* FAQ */
   .faq-item{border-bottom:1px solid var(--card-border);}
   .faq-item:last-child{border-bottom:none;}
@@ -276,7 +287,7 @@
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="white"/></svg>
           <span data-i18n="support_btn">Soporte</span>
         </a>
-        <a class="chip-btn chip-ghost" href="#">
+        <a class="chip-btn chip-ghost" href="#changelog">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span data-i18n="changelog_btn">Registro de cambios</span>
         </a>
@@ -300,7 +311,7 @@
 
     <!-- CleanFrame -->
     <div class="card" id="cleanframe">
-      <div class="card-title" data-i18n="tool_title">Herramienta gratuita</div>
+      <div class="card-title" data-i18n="tool_title">Herramientas gratuitas</div>
       <div class="ext-list">
 
         <div class="ext-row">
@@ -330,11 +341,41 @@
           <li data-i18n="tool_f6">No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.</li>
         </ul>
       </div>
+
+      <div class="ext-list" style="margin-top:14px">
+
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/cutframe.png" alt="CutFrame">
+          </div>
+          <div class="ext-info">
+            <h3>CutFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="cut_desc_short">Quita el fondo a tus im&aacute;genes y las deja con fondo transparente, por lotes.</p>
+          </div>
+          <a class="ext-cta" href="cutframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+      </div>
+
+      <button class="tool-more" id="cutMore" type="button" aria-expanded="false" aria-controls="cutPanel">
+        <span data-i18n="tool_more">M&aacute;s informaci&oacute;n</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="cutPanel">
+        <p data-i18n="cut_desc_long">Arrastra tus fotos, o una carpeta entera, y CutFrame separa el objeto del fondo y te lo devuelve con fondo transparente. Puedes soltar tantas im&aacute;genes como quieras, comparar el antes y el despu&eacute;s con un deslizador y guardarlas directamente en una carpeta de tu ordenador, sueltas, sin tener que descomprimir nada.</p>
+        <ul>
+          <li data-i18n="cut_f1"><b>Im&aacute;genes</b> &mdash; PNG, JPG, WEBP, AVIF, BMP y GIF</li>
+          <li data-i18n="cut_f2"><b>Fondo transparente o de color</b> &mdash; salida en PNG o WEBP, al tama&ntilde;o original</li>
+          <li data-i18n="cut_f3"><b>Por lotes, sin l&iacute;mite de cantidad</b> &mdash; guarda en una carpeta de tu disco o descarga un ZIP</li>
+          <li data-i18n="cut_f4"><b>100% privado</b> &mdash; se procesa en tu navegador, no se sube nada</li>
+          <li data-i18n="cut_f5"><b>No es un recorte perfecto</b> &mdash; el pelo suelto, el humo, el cristal y los fondos del mismo color que el objeto salen con el borde imperfecto. Compara el antes y el despu&eacute;s antes de descargar, y usa los ajustes del borde si hace falta.</li>
+          <li data-i18n="cut_f6"><b>Va a la velocidad de tu ordenador</b> &mdash; la primera vez carga 44&nbsp;MB y luego tarda unos segundos por imagen. En equipos m&aacute;s justos elige sola una versi&oacute;n ligera. No hace falta instalar nada ni registrarse.</li>
+        </ul>
+      </div>
     </div>
 
     <!-- Lista de extensiones -->
     <div class="card">
-      <div class="card-title" data-i18n="ext_title">Herramientas incluidas</div>
+      <div class="card-title" data-i18n="ext_title">Extensiones incluidas</div>
       <p class="desc" data-i18n="ext_browsers" style="color:var(--muted); font-size:12.5px; margin:-8px 0 14px;">Funcionan en Chrome, Edge, Brave y Opera.</p>
       <div class="ext-list">
 
@@ -378,17 +419,6 @@
           <div class="ext-info">
             <h3>AutoGPT Pro</h3>
             <p data-i18n="ext4_desc">Automatiza ChatGPT por lotes: texto, imágenes, combinar varias, edición y <b>LOGOS</b>.</p>
-          </div>
-          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
-        </div>
-
-        <div class="ext-row">
-          <div class="ext-icon i6">
-            <img src="icons/nicheradar.png" alt="Niche Radar">
-          </div>
-          <div class="ext-info">
-            <h3>Niche Radar</h3>
-            <p data-i18n="ext6_desc">Encuentra canales de YouTube recién nacidos que ya despegan, antes de que el nicho se llene.</p>
           </div>
           <span class="ext-cta soon" data-i18n="soon">Pronto</span>
         </div>
@@ -438,6 +468,21 @@
       <div class="card-title" data-i18n="contact_title">¿Algo no funciona?</div>
       <p class="support-text" data-i18n="contact_text">Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.</p>
       <button class="btn-contact" id="openContact" data-i18n="contact_btn">Escríbeme un mensaje</button>
+    </div>
+
+    <!-- Registro de cambios -->
+    <div class="card" id="changelog">
+      <div class="card-title" data-i18n="changelog_title">Registro de cambios</div>
+      <ul class="changelog-list">
+        <li>
+          <span class="changelog-date" data-i18n="chg_1_date">Septiembre 2026</span>
+          <p data-i18n="chg_1_text">Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las im&aacute;genes y las deja con fondo transparente, por lotes y dentro del navegador.</p>
+        </li>
+        <li>
+          <span class="changelog-date" data-i18n="chg_2_date">Agosto 2026</span>
+          <p data-i18n="chg_2_text">Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las im&aacute;genes y v&iacute;deos de Gemini y Veo.</p>
+        </li>
+      </ul>
     </div>
 
     <!-- FAQ -->
@@ -562,16 +607,16 @@
     faqList.appendChild(div);
   });
 
-  /* CleanFrame: desplegable */
-  (function(){
-    var moreBtn = document.getElementById('toolMore');
-    var panel = document.getElementById('toolPanel');
+  /* Herramientas gratuitas: desplegables */
+  [['toolMore','toolPanel'], ['cutMore','cutPanel']].forEach(function(ids){
+    var moreBtn = document.getElementById(ids[0]);
+    var panel = document.getElementById(ids[1]);
     if(!moreBtn || !panel) return;
     moreBtn.addEventListener('click', function(){
       var open = panel.classList.toggle('open');
       moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
-  })();
+  });
 
   /* Traducciones */
   const T = {
@@ -579,22 +624,26 @@
             brand_sub: 'Todas las extensiones &middot; una sola suscripción',
       support_btn: 'Soporte',
       changelog_btn: 'Registro de cambios',
+      changelog_title: 'Registro de cambios',
+      chg_1_date: 'Septiembre 2026',
+      chg_1_text: 'Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las imágenes y las deja con fondo transparente, por lotes y dentro del navegador.',
+      chg_2_date: 'Agosto 2026',
+      chg_2_text: 'Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las imágenes y vídeos de Gemini y Veo.',
       check_label: '¿Ya eres cliente? Comprueba tu suscripción',
       check_btn: 'Comprobar',
       r_estado: 'Estado', r_plan: 'Plan', r_renueva: 'Renueva',
       check_hint: 'Escribe el email con el que compraste (o vas a comprar).',
-      ext_title: 'Herramientas incluidas',
+      ext_title: 'Extensiones incluidas',
       ext1_desc: 'Descarga imágenes y vídeos libres de derechos de Pexels y Pixabay, en bloque.',
       ext2_desc: 'Descarga vídeos, transcripciones y miniaturas de cualquier canal, en lote.',
       
       ext3_desc: 'Busca noticias del día por cuentas o palabras clave, y prográmalo para que se repita solo.',
       ext4_desc: 'Automatiza ChatGPT por lotes: texto, imágenes, combinar varias, edición y <b>LOGOS</b>.',
       ext5_desc: 'Automatiza Grok por lotes: vídeo, creación y edición de imágenes.',
-      ext6_desc: 'Encuentra canales de YouTube recién nacidos que ya despegan, antes de que el nicho se llene.',
       soon: 'Pronto',
       install: 'Instalar',
       ext_browsers: 'Funcionan en Chrome, Edge, Brave y Opera.',
-      tool_title: 'Herramienta gratuita',
+      tool_title: 'Herramientas gratuitas',
       tool_badge: 'GRATIS',
       tool_open: 'Abrir',
       tool_more: 'Más información',
@@ -606,6 +655,14 @@
       tool_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada',
       tool_f5: '<b>Puede quedar un rastro leve</b> — en fondos oscuros o muy detallados a veces se nota una marca tenue donde estaba el logo. Compara el antes y el después antes de descargar.',
       tool_f6: 'No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.',
+      cut_desc_short: 'Quita el fondo a tus imágenes y las deja con fondo transparente, por lotes.',
+      cut_desc_long: 'Arrastra tus fotos, o una carpeta entera, y CutFrame separa el objeto del fondo y te lo devuelve con fondo transparente. Puedes soltar tantas imágenes como quieras, comparar el antes y el después con un deslizador y guardarlas directamente en una carpeta de tu ordenador, sueltas, sin tener que descomprimir nada.',
+      cut_f1: '<b>Imágenes</b> — PNG, JPG, WEBP, AVIF, BMP y GIF',
+      cut_f2: '<b>Fondo transparente o de color</b> — salida en PNG o WEBP, al tamaño original',
+      cut_f3: '<b>Por lotes, sin límite de cantidad</b> — guarda en una carpeta de tu disco o descarga un ZIP',
+      cut_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada',
+      cut_f5: '<b>No es un recorte perfecto</b> — el pelo suelto, el humo, el cristal y los fondos del mismo color que el objeto salen con el borde imperfecto. Compara el antes y el después antes de descargar, y usa los ajustes del borde si hace falta.',
+      cut_f6: '<b>Va a la velocidad de tu ordenador</b> — la primera vez carga 44 MB y luego tarda unos segundos por imagen. En equipos más justos elige sola una versión ligera. No hace falta instalar nada ni registrarse.',
       pricing_title: 'Un pago, todas las extensiones',
       pricing_desc: 'Elige un plan para ir directa al pago.',
       plan_monthly: 'MENSUAL', plan_popular: 'POPULAR', plan_best: 'MEJOR',
@@ -635,22 +692,26 @@
             brand_sub: 'Every extension &middot; one subscription',
       support_btn: 'Support',
       changelog_btn: 'Changelog',
+      changelog_title: 'Changelog',
+      chg_1_date: 'September 2026',
+      chg_1_text: 'New free tool: <b>CutFrame</b>, which removes the background from images and leaves them transparent, in batches and inside your browser.',
+      chg_2_date: 'August 2026',
+      chg_2_text: 'First free tool: <b>CleanFrame</b>, which removes the watermarks from Gemini and Veo images and videos.',
       check_label: 'Already a customer? Check your subscription',
       check_btn: 'Check',
       r_estado: 'Status', r_plan: 'Plan', r_renueva: 'Renews',
       check_hint: 'Type the email you purchased with (or plan to).',
-      ext_title: 'Included tools',
+      ext_title: 'Included extensions',
       ext1_desc: 'Download royalty-free images and videos from Pexels and Pixabay, in bulk.',
       ext2_desc: 'Download videos, transcripts and thumbnails from any channel, in bulk.',
       
       ext3_desc: 'Search daily news by account or keyword, and schedule it to repeat on its own.',
       ext4_desc: 'Automate ChatGPT in batches: text, images, merging, editing and <b>LOGOS</b>.',
       ext5_desc: 'Automate Grok in batches: video, image creation and image editing.',
-      ext6_desc: 'Find brand-new YouTube channels that are already taking off, before the niche fills up.',
       soon: 'Soon',
       install: 'Install',
       ext_browsers: 'They work on Chrome, Edge, Brave and Opera.',
-      tool_title: 'Free tool',
+      tool_title: 'Free tools',
       tool_badge: 'FREE',
       tool_open: 'Open',
       tool_more: 'More information',
@@ -662,6 +723,14 @@
       tool_f4: '<b>100% private</b> — processed in your browser, nothing is uploaded',
       tool_f5: '<b>A faint trace may remain</b> — on dark or highly detailed backgrounds a light mark is sometimes visible where the logo was. Compare before and after before downloading.',
       tool_f6: 'No install, no sign-up. Desktop Chrome and Edge.',
+      cut_desc_short: 'Removes the background from your images and leaves them transparent, in batches.',
+      cut_desc_long: 'Drop your photos, or a whole folder, and CutFrame separates the subject from the background and hands it back with a transparent background. You can drop as many images as you want, compare before and after with a slider and save them straight into a folder on your computer, as loose files, with nothing to unzip.',
+      cut_f1: '<b>Images</b> — PNG, JPG, WEBP, AVIF, BMP and GIF',
+      cut_f2: '<b>Transparent or solid background</b> — PNG or WEBP output, at the original size',
+      cut_f3: '<b>Batch mode, no limit</b> — save to a folder on your disk or download a ZIP',
+      cut_f4: '<b>100% private</b> — processed in your browser, nothing is uploaded',
+      cut_f5: '<b>Not a perfect cutout</b> — loose hair, smoke, glass and backgrounds the same colour as the subject come out with an imperfect edge. Compare before and after before downloading, and use the edge settings if needed.',
+      cut_f6: '<b>It runs at the speed of your computer</b> — it loads 44 MB the first time and then takes a few seconds per image. On weaker machines it picks a lighter version on its own. No install, no sign-up.',
       pricing_title: 'One payment, every extension',
       pricing_desc: 'Choose a plan to go straight to checkout.',
       plan_monthly: 'MONTHLY', plan_popular: 'POPULAR', plan_best: 'BEST',
