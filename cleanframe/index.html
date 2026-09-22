@@ -19,5 +19,41 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Pie de Neeko Studio. Sigue al idioma que elija la aplicación. -->
+    <footer
+      id="neeko-footer"
+      style="
+        position: relative;
+        z-index: 1;
+        margin: -32px auto 0;
+        max-width: 64rem;
+        padding: 0 20px 40px;
+        text-align: center;
+        color: #b8b0c9;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        font-size: 12px;
+      "
+    ></footer>
+    <script>
+      ;(function () {
+        var el = document.getElementById('neeko-footer')
+        var T = {
+          es: 'CleanFrame &middot; una herramienta de',
+          en: 'CleanFrame &middot; a tool by',
+        }
+        function paint() {
+          var lang = document.documentElement.lang === 'en' ? 'en' : 'es'
+          el.innerHTML =
+            T[lang] +
+            ' <a href="https://neekostudio.app/" style="color:#8b5cf6;text-decoration:none">Neeko Studio</a>'
+        }
+        paint()
+        new MutationObserver(paint).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['lang'],
+        })
+      })()
+    </script>
   </body>
 </html>
