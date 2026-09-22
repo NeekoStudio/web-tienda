@@ -222,15 +222,64 @@
   .modal-send{background:var(--fuchsia); color:#1a0210;}
 
   /* Registro de cambios */
-  .changelog-list{list-style:none; margin:0; padding:0;}
-  .changelog-list li{padding:12px 0; border-top:1px solid var(--card-border);}
-  .changelog-list li:first-child{border-top:none; padding-top:2px;}
-  .changelog-date{
-    display:inline-block; font-size:11.5px; font-weight:700; letter-spacing:.04em;
-    text-transform:uppercase; color:var(--gold); margin-bottom:5px;
+  .chg-modal{
+    background:var(--card); border:1px solid var(--card-border); border-radius:22px;
+    width:100%; max-width:520px; max-height:86vh; display:flex; flex-direction:column;
+    overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.65);
   }
-  .changelog-list p{color:var(--muted); font-size:13px; line-height:1.55; margin:0;}
-  .changelog-list b{color:var(--text);}
+  .chg-head{display:flex; align-items:flex-start; gap:14px; padding:22px 22px 0;}
+  .chg-icon{
+    width:54px; height:54px; border-radius:16px; flex:none;
+    background:linear-gradient(135deg, var(--purple), var(--fuchsia));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chg-head h3{font-family:'Sora', sans-serif; font-size:19px; line-height:1.3; padding-top:4px;}
+  .chg-head h3::after{
+    content:''; display:block; width:46px; height:3px; border-radius:3px; margin-top:8px;
+    background:linear-gradient(90deg, var(--purple), var(--fuchsia));
+  }
+  .chg-close{
+    margin-left:auto; background:none; border:none; cursor:pointer; color:var(--muted);
+    padding:4px; line-height:0; border-radius:8px; transition:color .15s;
+  }
+  .chg-close:hover{color:var(--text);}
+  .chg-intro{color:var(--muted); font-size:13px; padding:16px 22px 0;}
+  .chg-body{overflow-y:auto; padding:14px 22px 4px;}
+  .chg-body::-webkit-scrollbar{width:8px;}
+  .chg-body::-webkit-scrollbar-thumb{background:var(--card-border); border-radius:100px;}
+  .chg-entry + .chg-entry{margin-top:18px;}
+  .chg-bar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:var(--surface); border:1px solid var(--card-border);
+    border-radius:12px; padding:10px 13px;
+  }
+  .chg-entry.is-latest .chg-bar{border-color:var(--purple); background:rgba(139,92,246,0.14);}
+  .chg-date{
+    font-family:'Sora', sans-serif; font-size:13px; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; color:var(--gold);
+  }
+  .chg-entry.is-latest .chg-date{color:#d9c6ff;}
+  .chg-tag{
+    margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+    background:var(--purple); color:#14061f; font-size:10.5px; font-weight:800;
+    letter-spacing:.06em; text-transform:uppercase; padding:5px 11px; border-radius:100px;
+  }
+  .chg-tag::before{content:''; width:6px; height:6px; border-radius:50%; background:#14061f;}
+  .chg-items{list-style:none; margin:12px 0 0; padding:0 4px 0 13px;}
+  .chg-items li{position:relative; padding-left:16px; color:var(--muted); font-size:13px; line-height:1.6;}
+  .chg-items li + li{margin-top:9px;}
+  .chg-items li::before{
+    content:''; position:absolute; left:0; top:8px; width:5px; height:5px;
+    border-radius:1px; background:var(--fuchsia);
+  }
+  .chg-items b{color:var(--text);}
+  .chg-foot{padding:16px 22px 22px;}
+  .chg-ok{
+    width:100%; border:none; cursor:pointer; border-radius:100px; padding:13px;
+    font-family:'Sora', sans-serif; font-weight:700; font-size:14px; color:#12061c;
+    background:linear-gradient(90deg, var(--purple), var(--fuchsia)); transition:filter .15s;
+  }
+  .chg-ok:hover{filter:brightness(1.08);}
 
   /* FAQ */
   .faq-item{border-bottom:1px solid var(--card-border);}
@@ -287,7 +336,7 @@
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="white"/></svg>
           <span data-i18n="support_btn">Soporte</span>
         </a>
-        <a class="chip-btn chip-ghost" href="#changelog">
+        <a class="chip-btn chip-ghost" href="#" id="changelogBtn">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span data-i18n="changelog_btn">Registro de cambios</span>
         </a>
@@ -470,21 +519,6 @@
       <button class="btn-contact" id="openContact" data-i18n="contact_btn">Escríbeme un mensaje</button>
     </div>
 
-    <!-- Registro de cambios -->
-    <div class="card" id="changelog">
-      <div class="card-title" data-i18n="changelog_title">Registro de cambios</div>
-      <ul class="changelog-list">
-        <li>
-          <span class="changelog-date" data-i18n="chg_1_date">Septiembre 2026</span>
-          <p data-i18n="chg_1_text">Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las im&aacute;genes y las deja con fondo transparente, por lotes y dentro del navegador.</p>
-        </li>
-        <li>
-          <span class="changelog-date" data-i18n="chg_2_date">Agosto 2026</span>
-          <p data-i18n="chg_2_text">Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las im&aacute;genes y v&iacute;deos de Gemini y Veo.</p>
-        </li>
-      </ul>
-    </div>
-
     <!-- FAQ -->
     <div class="card">
       <div class="card-title" data-i18n="faq_title">Preguntas frecuentes</div>
@@ -493,6 +527,49 @@
 
     <footer data-i18n="footer_text">Neeko Studio</footer>
 
+  </div>
+</div>
+
+<!-- Registro de cambios -->
+<div class="modal-overlay" id="changelogModal">
+  <div class="chg-modal" role="dialog" aria-modal="true" aria-labelledby="chgTitle">
+    <div class="chg-head">
+      <span class="chg-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+          <circle cx="12" cy="12" r="8.4" stroke="#ffffff" stroke-width="1.9"/>
+          <path d="M12 7.2v5l3.4 2" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <h3 id="chgTitle" data-i18n="changelog_title">Registro de cambios</h3>
+      <button class="chg-close" id="chgClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <p class="chg-intro" data-i18n="changelog_intro">Todo lo que se ha a&ntilde;adido y mejorado, de lo m&aacute;s nuevo a lo m&aacute;s antiguo.</p>
+    <div class="chg-body">
+      <div class="chg-entry is-latest">
+        <div class="chg-bar">
+          <span class="chg-date" data-i18n="chg_1_date">Septiembre 2026</span>
+          <span class="chg-tag" data-i18n="chg_latest">M&aacute;s reciente</span>
+        </div>
+        <ul class="chg-items">
+          <li data-i18n="chg_1_text">Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las im&aacute;genes y las deja con fondo transparente, por lotes y dentro del navegador.</li>
+        </ul>
+      </div>
+      <div class="chg-entry">
+        <div class="chg-bar">
+          <span class="chg-date" data-i18n="chg_2_date">Agosto 2026</span>
+        </div>
+        <ul class="chg-items">
+          <li data-i18n="chg_2_text">Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las im&aacute;genes y v&iacute;deos de Gemini y Veo.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chg-foot">
+      <button class="chg-ok" id="chgOk" data-i18n="changelog_ok">&iexcl;Genial!</button>
+    </div>
   </div>
 </div>
 
@@ -543,6 +620,21 @@
   document.getElementById('openContact').addEventListener('click', () => modal.classList.add('show'));
   document.getElementById('supportBtn').addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('show'); });
   document.getElementById('cancelContact').addEventListener('click', () => modal.classList.remove('show'));
+
+  // Registro de cambios
+  const chgModal = document.getElementById('changelogModal');
+  const closeChg = () => chgModal.classList.remove('show');
+  document.getElementById('changelogBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    chgModal.classList.add('show');
+  });
+  document.getElementById('chgClose').addEventListener('click', closeChg);
+  document.getElementById('chgOk').addEventListener('click', closeChg);
+  chgModal.addEventListener('click', (e) => { if (e.target === chgModal) closeChg(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chgModal.classList.contains('show')) closeChg();
+  });
+
   const sendBtn = document.getElementById('sendContact');
   const statusEl = document.getElementById('contactStatus');
   sendBtn.addEventListener('click', async () => {
@@ -625,6 +717,9 @@
       support_btn: 'Soporte',
       changelog_btn: 'Registro de cambios',
       changelog_title: 'Registro de cambios',
+      changelog_intro: 'Todo lo que se ha añadido y mejorado, de lo más nuevo a lo más antiguo.',
+      changelog_ok: '¡Genial!',
+      chg_latest: 'Más reciente',
       chg_1_date: 'Septiembre 2026',
       chg_1_text: 'Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las imágenes y las deja con fondo transparente, por lotes y dentro del navegador.',
       chg_2_date: 'Agosto 2026',
@@ -693,6 +788,9 @@
       support_btn: 'Support',
       changelog_btn: 'Changelog',
       changelog_title: 'Changelog',
+      changelog_intro: 'Everything that has been added and improved, newest first.',
+      changelog_ok: 'Great!',
+      chg_latest: 'Latest',
       chg_1_date: 'September 2026',
       chg_1_text: 'New free tool: <b>CutFrame</b>, which removes the background from images and leaves them transparent, in batches and inside your browser.',
       chg_2_date: 'August 2026',
