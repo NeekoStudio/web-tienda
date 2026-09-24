@@ -403,6 +403,17 @@
           <a class="ext-cta" href="cutframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
         </div>
 
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/voiceframe.png" alt="VoiceFrame">
+          </div>
+          <div class="ext-info">
+            <h3>VoiceFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="voz_desc_short">Limpia tus grabaciones de voz, les da efecto p&oacute;dcast y las deja al volumen exacto de YouTube.</p>
+          </div>
+          <a class="ext-cta" href="voiceframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
       </div>
 
       <button class="tool-more" id="cutMore" type="button" aria-expanded="false" aria-controls="cutPanel">
@@ -417,6 +428,21 @@
           <li data-i18n="cut_f4"><b>100% privado</b> &mdash; se procesa en tu navegador, no se sube nada</li>
           <li data-i18n="cut_f5"><b>No es un recorte perfecto</b> &mdash; el pelo suelto, el humo, el cristal y los fondos del mismo color que el objeto salen con el borde imperfecto. Compara el antes y el despu&eacute;s antes de descargar, y usa los ajustes del borde si hace falta.</li>
           <li data-i18n="cut_f6"><b>Va a la velocidad de tu ordenador</b> &mdash; la primera vez carga 44&nbsp;MB y luego tarda unos segundos por imagen. En equipos m&aacute;s justos elige sola una versi&oacute;n ligera. No hace falta instalar nada ni registrarse.</li>
+        </ul>
+      </div>
+
+      <button class="tool-more" id="vozMore" type="button" aria-expanded="false" aria-controls="vozPanel">
+        <span data-i18n="tool_more">M&aacute;s informaci&oacute;n</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="vozPanel">
+        <p data-i18n="voz_desc_long">Arrastra tus audios y VoiceFrame les quita el ruido de fondo, iguala lo fuerte y lo flojo, y los deja al volumen exacto que pide cada plataforma. Puedes escuchar el antes y el despu&eacute;s uno al lado del otro antes de descargar.</p>
+        <ul>
+          <li data-i18n="voz_f1"><b>Audio</b> &mdash; MP3, WAV, M4A, OGG, FLAC y WEBM. Sale en MP3 o WAV.</li>
+          <li data-i18n="voz_f2"><b>Volumen listo para publicar</b> &mdash; deja el audio a &minus;14&nbsp;LUFS para YouTube, &minus;16 para p&oacute;dcast o &minus;13 para redes, medido seg&uacute;n la norma que usan las propias plataformas.</li>
+          <li data-i18n="voz_f3"><b>La ecualizaci&oacute;n est&aacute; medida, no puesta a ojo</b> &mdash; la curva se calcul&oacute; comparando el espectro contra Adobe Podcast banda a banda.</li>
+          <li data-i18n="voz_f4"><b>100% privado</b> &mdash; se procesa en tu navegador, no se sube nada.</li>
+          <li data-i18n="voz_f5"><b>No hace milagros</b> &mdash; quita el ruido constante del fondo, pero no el eco de una habitaci&oacute;n vac&iacute;a ni arregla una toma saturada.</li>
+          <li data-i18n="voz_f6"><b>Por lotes</b> &mdash; varios audios seguidos y descarga en ZIP. No hace falta instalar nada ni registrarse.</li>
         </ul>
       </div>
     </div>
@@ -710,7 +736,7 @@
   });
 
   /* Herramientas gratuitas: desplegables */
-  [['toolMore','toolPanel'], ['cutMore','cutPanel']].forEach(function(ids){
+  [['toolMore','toolPanel'], ['cutMore','cutPanel'], ['vozMore','vozPanel']].forEach(function(ids){
     var moreBtn = document.getElementById(ids[0]);
     var panel = document.getElementById(ids[1]);
     if(!moreBtn || !panel) return;
@@ -762,6 +788,14 @@
       tool_f5: '<b>Puede quedar un rastro leve</b> — en fondos oscuros o muy detallados a veces se nota una marca tenue donde estaba el logo. Compara el antes y el después antes de descargar.',
       tool_f6: 'No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.',
       cut_desc_short: 'Quita el fondo a tus imágenes y las deja con fondo transparente, por lotes.',
+      voz_desc_short: 'Limpia tus grabaciones de voz, les da efecto pódcast y las deja al volumen exacto de YouTube.',
+      voz_desc_long: 'Arrastra tus audios y VoiceFrame les quita el ruido de fondo, iguala lo fuerte y lo flojo, y los deja al volumen exacto que pide cada plataforma. Puedes escuchar el antes y el después uno al lado del otro antes de descargar.',
+      voz_f1: '<b>Audio</b> — MP3, WAV, M4A, OGG, FLAC y WEBM. Sale en MP3 o WAV.',
+      voz_f2: '<b>Volumen listo para publicar</b> — deja el audio a −14 LUFS para YouTube, −16 para pódcast o −13 para redes, medido según la norma que usan las propias plataformas.',
+      voz_f3: '<b>La ecualización está medida, no puesta a ojo</b> — la curva se calculó comparando el espectro contra Adobe Podcast banda a banda.',
+      voz_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada.',
+      voz_f5: '<b>No hace milagros</b> — quita el ruido constante del fondo, pero no el eco de una habitación vacía ni arregla una toma saturada.',
+      voz_f6: '<b>Por lotes</b> — varios audios seguidos y descarga en ZIP. No hace falta instalar nada ni registrarse.',
       cut_desc_long: 'Arrastra tus fotos, o una carpeta entera, y CutFrame separa el objeto del fondo y te lo devuelve con fondo transparente. Puedes soltar tantas imágenes como quieras, comparar el antes y el después con un deslizador y guardarlas directamente en una carpeta de tu ordenador, sueltas, sin tener que descomprimir nada.',
       cut_f1: '<b>Imágenes</b> — PNG, JPG, WEBP, AVIF, BMP y GIF',
       cut_f2: '<b>Fondo transparente o de color</b> — salida en PNG o WEBP, al tamaño original',
@@ -834,6 +868,14 @@
       tool_f5: '<b>A faint trace may remain</b> — on dark or highly detailed backgrounds a light mark is sometimes visible where the logo was. Compare before and after before downloading.',
       tool_f6: 'No install, no sign-up. Desktop Chrome and Edge.',
       cut_desc_short: 'Removes the background from your images and leaves them transparent, in batches.',
+      voz_desc_short: 'Cleans up your voice recordings, gives them podcast sound and sets them to YouTube\u2019s exact loudness.',
+      voz_desc_long: 'Drop in your audio and VoiceFrame removes the background noise, evens out loud and quiet, and sets the exact loudness each platform asks for. You can hear the before and after side by side before downloading.',
+      voz_f1: '<b>Audio</b> — MP3, WAV, M4A, OGG, FLAC and WEBM. Output in MP3 or WAV.',
+      voz_f2: '<b>Publish-ready loudness</b> — leaves the audio at −14 LUFS for YouTube, −16 for podcasts or −13 for social, measured to the same standard the platforms use.',
+      voz_f3: '<b>The EQ is measured, not guessed</b> — the curve was worked out by comparing the spectrum against Adobe Podcast band by band.',
+      voz_f4: '<b>100% private</b> — everything runs in your browser, nothing is uploaded.',
+      voz_f5: '<b>It is not magic</b> — it removes steady background noise, but not the echo of an empty room, and it cannot rescue a clipped take.',
+      voz_f6: '<b>In batches</b> — several files in a row, with a ZIP download. Nothing to install, no sign-up.',
       cut_desc_long: 'Drop your photos, or a whole folder, and CutFrame separates the subject from the background and hands it back with a transparent background. You can drop as many images as you want, compare before and after with a slider and save them straight into a folder on your computer, as loose files, with nothing to unzip.',
       cut_f1: '<b>Images</b> — PNG, JPG, WEBP, AVIF, BMP and GIF',
       cut_f2: '<b>Transparent or solid background</b> — PNG or WEBP output, at the original size',
