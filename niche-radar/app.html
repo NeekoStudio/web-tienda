@@ -87,6 +87,11 @@
   .cuenta{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)}
   .cuenta .btn{padding:4px 9px;font-size:12px;border-radius:7px}
 
+  .nota-sel{background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.28);
+    border-radius:12px;padding:12px 14px;margin-bottom:14px;color:var(--muted);
+    font-size:13px;line-height:1.6}
+  .nota-sel b{color:var(--text)}
+  #btnMisFav.encendido{background:rgba(239,77,143,.18);border-color:var(--rosa);color:#ffb4d2}
   .filtros{background:var(--card);border:1px solid var(--line);border-radius:var(--radio);padding:16px;margin-bottom:16px}
   .filtros h3{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
   .rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
@@ -165,6 +170,7 @@
     <div class="recado" id="recado"></div>
     <div class="planes" id="planes"></div>
 
+    <p class="pie" style="margin-top:14px">Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.</p>
     <p class="pie">¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de
       <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.</p>
   </div>
@@ -179,6 +185,7 @@
     </div>
     <div class="cab-der" id="sello"></div>
     <div class="cuenta" id="cuenta" style="display:none">
+      <button class="btn" id="btnMisFav" title="Los canales que has guardado, siempre a mano.">★ Mis guardados</button>
       <span id="cuentaCorreo"></span>
       <button class="btn" id="btnSalir">Salir</button>
     </div>
@@ -223,6 +230,9 @@
 
 <script>
 let BASE = [];
+/* El rincón de guardados. Cuando está encendido se enseñan SOLO los canales
+   guardados, sin que los filtros de arriba los escondan. */
+let MODO_FAV = false;
 let FAVORITOS = [];
 try{ FAVORITOS = JSON.parse(localStorage.getItem('neeko_pub_fav')||'[]'); }catch(e){ FAVORITOS = []; }
 
@@ -351,11 +361,7 @@ function opcionesDe(lista, sacar, nombrar){
 
 function montarBuscador(){
   document.getElementById('contenido').innerHTML = `
-    <div class="buscador">
-      <div class="campo"><span class="lupa">⌕</span>
-        <input id="q" placeholder="Busca por nombre de canal o por tema: misterio, historia, animales…" autocomplete="off">
-      </div>
-    </div>
+    <div class="nota-sel">Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.</div>
     <div class="filtros">
       <h3>Filtros</h3>
       <div class="rejilla">
@@ -395,16 +401,13 @@ function montarBuscador(){
         <div class="campo-f"><label class="check"><input type="checkbox" id="soloYPP"> Solo los que cumplen los mínimos del programa</label></div>
       </div>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+    <div id="accionesBusqueda" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
       <button class="btn principal" id="btnBuscar" style="padding:12px 28px;font-size:16px">Buscar nichos</button>
       <button class="btn" id="btnLimpiar">Limpiar filtros</button>
     </div>
     <div class="barra-res" id="barraRes" style="display:none">
       <h2 id="titulo">Canales</h2>
-      <span class="cuenta" id="cuenta"></span>
-      <div class="acciones">
-        <button class="btn mini" id="btnFav">Ver solo mis guardados</button>
-      </div>
+      <span class="cuenta" id="cuentaRes"></span>
     </div>
     <div id="lista"><div class="vacio"><div class="ico">◎</div>
       <div>Pon tus condiciones arriba y pulsa <b>Buscar nichos</b>.</div>
@@ -413,45 +416,34 @@ function montarBuscador(){
   // Solo se busca cuando el usuario lo pide; después, cambiar un filtro sí refresca.
   let buscado = false;
   const refrescar = () => { if(buscado) pintar(); };
-  ['q','subsMin','subsMax','ingMin','vpsMin'].forEach(id=>{
+  ['subsMin','subsMax','ingMin','vpsMin'].forEach(id=>{
     document.getElementById(id).addEventListener('input', refrescar);
   });
   ['primera','tema','pais','idioma','orden'].forEach(id=>{
     document.getElementById(id).addEventListener('change', refrescar);
   });
   document.getElementById('soloYPP').addEventListener('change', refrescar);
-  document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter'){ buscado=true; pintar(); } });
   document.getElementById('btnBuscar').onclick = () => { buscado = true; pintar(); };
   document.getElementById('btnLimpiar').onclick = () => {
-    ['q','subsMin','subsMax','ingMin','vpsMin'].forEach(id=>document.getElementById(id).value='');
+    ['subsMin','subsMax','ingMin','vpsMin'].forEach(id=>document.getElementById(id).value='');
     ['primera','tema','pais','idioma'].forEach(id=>document.getElementById(id).selectedIndex=0);
     document.getElementById('soloYPP').checked = false;
     refrescar();
   };
-  document.getElementById('btnFav').onclick = function(){
-    this.dataset.on = this.dataset.on==='1' ? '' : '1';
-    this.textContent = this.dataset.on==='1' ? 'Ver todos' : 'Ver solo mis guardados';
-    pintar();
-  };
 }
 
 function filtrar(){
+  // En el rincón de guardados no manda ningún filtro: salen todos los suyos.
+  if(MODO_FAV) return BASE.filter(c => FAVORITOS.includes(c.id));
   const v = id => { const x = parseFloat(document.getElementById(id).value); return isFinite(x)?x:0; };
-  const q = document.getElementById('q').value.trim().toLowerCase();
   const subsMin=v('subsMin'), subsMax=v('subsMax'), ingMin=v('ingMin'), vpsMin=v('vpsMin');
   const primera = parseInt(document.getElementById('primera').value,10)||0;
   const tema = document.getElementById('tema').value;
   const pais = document.getElementById('pais').value;
   const idioma = document.getElementById('idioma').value;
   const soloYPP = document.getElementById('soloYPP').checked;
-  const soloFav = document.getElementById('btnFav').dataset.on==='1';
 
   return BASE.filter(c=>{
-    if(soloFav && !FAVORITOS.includes(c.id)) return false;
-    if(q){
-      const texto = ((c.nombre||'')+' '+(c.tema||'')+' '+(c.consulta||'')+' '+(c.handle||'')).toLowerCase();
-      if(!texto.includes(q)) return false;
-    }
     if(subsMin && c.subs < subsMin) return false;
     if(subsMax && c.subs > subsMax) return false;
     if(ingMin && (!c.ingresos || c.ingresos.max < ingMin)) return false;
@@ -463,6 +455,31 @@ function filtrar(){
     if(soloYPP && !c.monetizable) return false;
     return true;
   });
+}
+
+/** El número de guardados, siempre visible en el botón de la cabecera. */
+function pintarCuentaFav(){
+  const b = document.getElementById('btnMisFav');
+  if(!b) return;
+  b.textContent = FAVORITOS.length ? '★ Mis guardados (' + FAVORITOS.length + ')' : '★ Mis guardados';
+  b.classList.toggle('encendido', MODO_FAV);
+}
+
+/** Entra o sale del rincón de guardados. Mientras está dentro se quitan de en
+ *  medio los filtros: lo que quiere ver es su lista, no buscar otra cosa. */
+function verGuardados(){
+  if(!document.getElementById('lista')) return;   // la base aún no ha cargado
+  MODO_FAV = !MODO_FAV;
+  const esconder = MODO_FAV ? 'none' : '';
+  const f = document.querySelector('.filtros');
+  const a = document.getElementById('accionesBusqueda');
+  const n = document.querySelector('.nota-sel');
+  if(f) f.style.display = esconder;
+  if(a) a.style.display = esconder;
+  if(n) n.style.display = esconder;
+  pintarCuentaFav();
+  pintar();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 function pintar(){
@@ -478,11 +495,18 @@ function pintar(){
   if(ord) lista.sort(ord);
 
   document.getElementById('barraRes').style.display = 'flex';
-  document.getElementById('cuenta').textContent = lista.length + ' de ' + BASE.length + ' canales';
+  document.getElementById('titulo').textContent = MODO_FAV ? 'Mis guardados' : 'Canales';
+  document.getElementById('cuentaRes').textContent = MODO_FAV
+    ? lista.length + (lista.length === 1 ? ' canal guardado' : ' canales guardados')
+    : lista.length + ' de ' + BASE.length + ' canales';
   const cont = document.getElementById('lista');
   if(!lista.length){
-    cont.innerHTML = '<div class="vacio"><div class="ico">◎</div><div>Ningún canal cumple esas condiciones.</div>'+
-      '<div style="margin-top:6px;font-size:13px">Prueba a aflojar los filtros.</div></div>';
+    cont.innerHTML = MODO_FAV
+      ? '<div class="vacio"><div class="ico">★</div><div>Todavía no has guardado ningún canal.</div>'+
+        '<div style="margin-top:6px;font-size:13px">Cuando encuentres uno que te interese, dale a '+
+        '<b>Guardar</b> y lo tendrás siempre aquí.</div></div>'
+      : '<div class="vacio"><div class="ico">◎</div><div>Ningún canal cumple esas condiciones.</div>'+
+        '<div style="margin-top:6px;font-size:13px">Prueba a aflojar los filtros.</div></div>';
     return;
   }
   cont.innerHTML = '<div class="tarjetas">'+lista.slice(0,300).map(tarjeta).join('')+'</div>' +
@@ -494,6 +518,7 @@ function pintar(){
       if(i>=0){ FAVORITOS.splice(i,1); b.textContent='Guardar'; b.classList.remove('guardado'); }
       else{ FAVORITOS.push(id); b.textContent='Guardado'; b.classList.add('guardado'); }
       try{ localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS)); }catch(e){}
+      pintarCuentaFav();
     };
   });
 }
@@ -674,6 +699,8 @@ G('btnEntrar').onclick = () => {
 };
 G('correo').addEventListener('keydown', e => { if(e.key === 'Enter') G('btnEntrar').click(); });
 G('btnSalir').onclick = cerrarSesion;
+G('btnMisFav').onclick = verGuardados;
+pintarCuentaFav();
 
 /* Arranque: si ya entró en este navegador, se comprueba por detrás y se le
    abre la página sin hacerle escribir nada otra vez. */
