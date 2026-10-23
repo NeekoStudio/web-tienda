@@ -266,7 +266,7 @@ const T = {
     f_1mes:'Hace menos de 1 mes', f_2meses:'Hace menos de 2 meses', f_3meses:'Hace menos de 3 meses',
     f_4meses:'Hace menos de 4 meses', f_6meses:'Hace menos de 6 meses', f_1ano:'Hace menos de 1 año',
     f_idioma:'Idioma', f_todos_idiomas:'Todos los que hay',
-    f_orden:'Ordenar por',
+    f_orden:'Ordenar por', o_azar:'Aleatorio',
     o_tiempo_asc:'Menos tiempo publicando', o_tiempo_desc:'Más tiempo publicando',
     o_subs_asc:'Menos suscriptores', o_subs_desc:'Más suscriptores',
     o_vistas_asc:'Menos visitas al mes', o_vistas_desc:'Más visitas al mes',
@@ -323,7 +323,7 @@ const T = {
     f_1mes:'Less than 1 month ago', f_2meses:'Less than 2 months ago', f_3meses:'Less than 3 months ago',
     f_4meses:'Less than 4 months ago', f_6meses:'Less than 6 months ago', f_1ano:'Less than 1 year ago',
     f_idioma:'Language', f_todos_idiomas:'All available',
-    f_orden:'Sort by',
+    f_orden:'Sort by', o_azar:'Random',
     o_tiempo_asc:'Publishing for less time', o_tiempo_desc:'Publishing for longer',
     o_subs_asc:'Fewer subscribers', o_subs_desc:'More subscribers',
     o_vistas_asc:'Fewer views per month', o_vistas_desc:'More views per month',
@@ -580,7 +580,8 @@ function montarBuscador(){
         </div>
         <div class="campo-f"><label data-i18n="f_orden">${t('f_orden')}</label>
           <select id="orden">
-            <option value="tiempo_asc" selected data-i18n="o_tiempo_asc">${t('o_tiempo_asc')}</option>
+            <option value="azar" selected data-i18n="o_azar">${t('o_azar')}</option>
+            <option value="tiempo_asc" data-i18n="o_tiempo_asc">${t('o_tiempo_asc')}</option>
             <option value="tiempo_desc" data-i18n="o_tiempo_desc">${t('o_tiempo_desc')}</option>
             <option value="subs_asc" data-i18n="o_subs_asc">${t('o_subs_asc')}</option>
             <option value="subs_desc" data-i18n="o_subs_desc">${t('o_subs_desc')}</option>
@@ -666,11 +667,33 @@ function verGuardados(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
+/* ---------- Orden al azar ----------
+ *  Si la lista sale siempre en el mismo orden, todo el mundo ve los mismos
+ *  canales arriba y los de abajo no los mira nadie. Por eso el orden normal
+ *  es al azar.
+ *
+ *  La semilla se saca una sola vez al abrir la página: el orden cambia en
+ *  cada visita, pero no se vuelve a barajar al tocar un filtro (eso marearía
+ *  y harías perder de vista un canal que estabas mirando).
+ */
+const SEMILLA = Math.floor(Math.random() * 4294967296);
+function numeroDeId(id){
+  // Mezcla sencilla y estable: el mismo id con la misma semilla da el mismo
+  // número, así que el orden no baila mientras navegas.
+  let h = SEMILLA ^ 0x9e3779b9;
+  for(let i = 0; i < id.length; i++){
+    h ^= id.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
 function pintar(){
   const lista = filtrar();
   const modo = document.getElementById('orden').value;
   const vistasMes = c => (c.ingresos && c.ingresos.vistasMes) || 0;
   const ord = {
+    azar:(a,b)=>numeroDeId(a.id)-numeroDeId(b.id),
     tiempo_asc:(a,b)=>diasPub(a)-diasPub(b),
     tiempo_desc:(a,b)=>diasPub(b)-diasPub(a),
     subs_asc:(a,b)=>a.subs-b.subs,
