@@ -268,11 +268,13 @@ const T = {
     btn_buscar:'Buscar nichos', btn_limpiar:'Limpiar filtros',
     res_titulo:'Canales', res_vacio:'Ningún canal cumple esas condiciones.',
     res_vacio_2:'Prueba a aflojar los filtros.',
+    res_vacio_fav:'Prueba a aflojar los filtros. Los que ya has guardado no salen aquí: están en <b>Mis guardados</b>.',
     inicio_1:'Pon tus condiciones arriba y pulsa <b>Buscar nichos</b>.',
     inicio_2:'Hay {n} canales esperando.',
     tope:'Se muestran los 300 primeros de {n}. Afina los filtros para ver el resto.',
     canales:'canales', idiomas:'idiomas', al_dia_el:'al día el', vista_previa:'vista previa',
     cuenta_de:'{a} de {b} canales', cuenta_fav_1:'{n} canal guardado', cuenta_fav:'{n} canales guardados',
+    ocultos_1:'{n} guardado, que no se repite aquí', ocultos:'{n} guardados, que no se repiten aquí',
     cargando_h:'Estamos rastreando',
     cargando_p:'Niche Radar se actualiza con canales nuevos cada semana. La tanda de esta semana está en marcha; vuelve en un rato y tendrás la lista al día.',
     cargar_mano:'Cargar una base a mano',
@@ -322,11 +324,13 @@ const T = {
     btn_buscar:'Find niches', btn_limpiar:'Clear filters',
     res_titulo:'Channels', res_vacio:'No channel matches those conditions.',
     res_vacio_2:'Try loosening the filters.',
+    res_vacio_fav:'Try loosening the filters. The ones you already saved are not shown here: they are in <b>My saved</b>.',
     inicio_1:'Set your conditions above and hit <b>Find niches</b>.',
     inicio_2:'{n} channels are waiting.',
     tope:'Showing the first 300 of {n}. Narrow the filters to see the rest.',
     canales:'channels', idiomas:'languages', al_dia_el:'updated', vista_previa:'preview',
     cuenta_de:'{a} of {b} channels', cuenta_fav_1:'{n} saved channel', cuenta_fav:'{n} saved channels',
+    ocultos_1:'{n} saved, not repeated here', ocultos:'{n} saved, not repeated here',
     cargando_h:'We are scouting',
     cargando_p:'Niche Radar gets new channels every week. This week\u2019s batch is on its way; come back in a while and the list will be up to date.',
     cargar_mano:'Load a file manually',
@@ -612,12 +616,15 @@ function montarBuscador(){
 function filtrar(){
   // En el rincón de guardados no manda ningún filtro: salen todos los suyos.
   if(MODO_FAV) return BASE.filter(c => FAVORITOS.includes(c.id));
+  // Y fuera de él, lo que ya está guardado no vuelve a salir: la lista
+  // principal es lo que queda por mirar.
   const v = id => { const x = parseFloat(document.getElementById(id).value); return isFinite(x)?x:0; };
   const subsMin=v('subsMin'), subsMax=v('subsMax');
   const primera = parseInt(document.getElementById('primera').value,10)||0;
   const idioma = document.getElementById('idioma').value;
 
   return BASE.filter(c=>{
+    if(FAVORITOS.includes(c.id)) return false;
     if(subsMin && c.subs < subsMin) return false;
     if(subsMax && c.subs > subsMax) return false;
     if(primera && !(diasPub(c) <= primera)) return false;
@@ -669,14 +676,17 @@ function pintar(){
   document.getElementById('titulo').textContent = MODO_FAV ? t('fav_titulo') : t('res_titulo');
   document.getElementById('cuentaRes').textContent = MODO_FAV
     ? t(lista.length === 1 ? 'cuenta_fav_1' : 'cuenta_fav', {n: num(lista.length)})
-    : t('cuenta_de', {a: num(lista.length), b: num(BASE.length)});
+    : t('cuenta_de', {a: num(lista.length), b: num(BASE.length)}) +
+      (FAVORITOS.length ? ' · ' + t(FAVORITOS.length === 1 ? 'ocultos_1' : 'ocultos',
+                                    {n: num(FAVORITOS.length)}) : '');
   const cont = document.getElementById('lista');
   if(!lista.length){
     cont.innerHTML = MODO_FAV
       ? '<div class="vacio"><div class="ico">★</div><div>'+t('fav_vacio')+'</div>'+
         '<div style="margin-top:6px;font-size:13px">'+t('fav_vacio_2')+'</div></div>'
       : '<div class="vacio"><div class="ico">◎</div><div>'+t('res_vacio')+'</div>'+
-        '<div style="margin-top:6px;font-size:13px">'+t('res_vacio_2')+'</div></div>';
+        '<div style="margin-top:6px;font-size:13px">'+
+        (FAVORITOS.length ? t('res_vacio_fav') : t('res_vacio_2'))+'</div></div>';
     return;
   }
   cont.innerHTML = '<div class="tarjetas">'+lista.slice(0,300).map(tarjeta).join('')+'</div>' +
