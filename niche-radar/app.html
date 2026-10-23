@@ -143,9 +143,11 @@
   .etq.ok{border-color:rgba(47,191,125,.45);color:var(--verde)}
   /* Los botones van a su tamaño, no estirados: antes se hinchaban hasta
      rellenar el hueco que dejaba una tarjeta más corta que sus vecinas. */
-  .pie-tj{display:flex;align-items:center;gap:8px;margin-top:auto;padding-top:2px}
-  .pie-tj .btn.mini{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
-    line-height:1.3;text-align:center;font-size:12.5px;padding:7px 12px}
+  .pie-tj{display:flex;align-items:stretch;gap:10px;margin-top:auto;padding-top:8px}
+  .pie-tj .btn.mini{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;
+    line-height:1.25;text-align:center;font-size:14px;font-weight:600;padding:12px 8px;border-radius:11px}
+  .pie-tj .btn.ver{background:linear-gradient(135deg,var(--morado),var(--rosa));border:0;color:#fff}
+  .pie-tj .btn.ver:hover{filter:brightness(1.1)}
   .pie-tj .btn.guardado{background:rgba(239,77,143,.18);border-color:var(--rosa);color:#ffb4d2}
 
   .vacio{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -712,12 +714,7 @@ function pintar(){
 function tarjeta(c){
   const d = c.destacado||{};
   const fav = FAVORITOS.includes(c.id);
-  const cat = nombreCategoria(c.categoria) ? '<span class="etq">'+nombreCategoria(c.categoria)+'</span>' : '';
   const dias = diasPub(c);
-  const joven = dias<=180 ? '<span class="etq oro">'+t('tj_nuevo')+'</span>' : '';
-  const mon = c.monetizable ? '<span class="etq ok" title="'+t('tj_minimos_t')+'">'+t('tj_minimos')+'</span>' : '';
-  const pais = c.pais ? '<span class="etq">'+escapar(c.pais)+'</span>' : '';
-  const tema = c.tema ? '<span class="etq">'+escapar(c.tema)+'</span>' : '';
   const ing = c.ingresos || {min:0,max:0,vistasMes:0};
   const rpm = c.rpm || [0,0];
   return `
@@ -746,9 +743,8 @@ function tarjeta(c){
         <div class="det">${t('tj_rpm_nicho')} $${rpm[0]}–$${rpm[1]} · ${c.ritmo} ${t('tj_videos_mes')}${
           c.vistasTotales ? ' · ' + corto(c.vistasTotales) + ' ' + t('tj_vistas_totales') : ''}</div>
       </div>
-      <div class="etqs">${cat}${mon}${joven}${pais}${tema}</div>
       <div class="pie-tj">
-        <a class="btn mini" href="https://www.youtube.com/channel/${escapar(c.id)}" target="_blank" rel="noopener">${t('tj_ver')}</a>
+        <a class="btn mini ver" href="https://www.youtube.com/channel/${escapar(c.id)}" target="_blank" rel="noopener">${t('tj_ver')}</a>
         <button class="btn mini ${fav?'guardado':''}" data-fav="${escapar(c.id)}">${fav?t('tj_guardado'):t('tj_guardar')}</button>
       </div>
     </div>
