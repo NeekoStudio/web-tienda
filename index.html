@@ -357,6 +357,7 @@
         <div class="pill"><div class="k" data-i18n="r_renueva">Renueva</div><div class="v" id="rRenueva" style="color:var(--text); font-size:13px;">&mdash;</div></div>
       </div>
       <p class="hint" id="hint" data-i18n="check_hint">Escribe el email con el que compraste (o vas a comprar).</p>
+      <p class="hint" style="margin-top:10px;"><a href="https://payhip.com/NeekoStudio/users/login" target="_blank" rel="noopener" data-i18n="cancel_link">Cancelar mi suscripción</a></p>
     </div>
 
     <!-- CleanFrame -->
@@ -832,8 +833,9 @@
       faq_title: 'Preguntas frecuentes',
       faq_q1: '¿Una suscripción sirve para todas las herramientas?',
       faq_a1: 'Sí. Con un solo pago y un solo email se activan todas las herramientas a la vez, incluidas las que se añadan más adelante.',
+      cancel_link: 'Cancelar mi suscripción',
       faq_q2: '¿Puedo cancelar cuando quiera?',
-      faq_a2: 'Sí, no hay permanencia. Cancelas desde el enlace que recibes al suscribirte y sigues teniendo acceso hasta que acabe el período pagado.',
+      faq_a2: 'Sí, no hay permanencia. Cancelas tú misma desde <a href="https://payhip.com/NeekoStudio/users/login" target="_blank" rel="noopener">tu cuenta de Payhip</a>, y sigues teniendo acceso hasta que acabe el período que ya has pagado.',
       faq_q3: '¿Necesito cuentas de Pexels o Pixabay?',
       faq_a3: 'Solo para BuscaStock Pro, y son gratuitas: te llevamos paso a paso para crearlas la primera vez.',
       faq_q4: '¿Qué pasa si olvido con qué email compré?',
@@ -915,8 +917,1042 @@
       faq_title: 'Frequently asked questions',
       faq_q1: 'Does one subscription cover every tool?',
       faq_a1: 'Yes. One payment and one email activate every tool at once, including the ones added later.',
+      cancel_link: 'Cancel my subscription',
       faq_q2: 'Can I cancel anytime?',
-      faq_a2: "Yes, no commitment. Cancel from the link you get when subscribing, and you'll keep access until the paid period ends.",
+      faq_a2: "Yes, no commitment. You cancel it yourself from <a href='https://payhip.com/NeekoStudio/users/login' target='_blank' rel='noopener'>your Payhip account</a>, and you keep access until the period you already paid for ends.",
+      faq_q3: 'Do I need Pexels or Pixabay accounts?',
+      faq_a3: 'Only for BuscaStock Pro, and they are free: we guide you step by step the first time.',
+      faq_q4: 'What if I forget which email I purchased with?',
+      faq_a4: "Send me a message from this page and I'll confirm it right away.",
+      modal_title: 'Send me a message',
+      modal_sub: "I'll read it and reply as soon as I can.",
+      modal_email_ph: 'you@email.com',
+      modal_msg_ph: 'Tell me what happened...',
+      modal_cancel: 'Cancel',
+      modal_send: 'Send',
+      footer_text: 'Neeko Studio',
+    }
+  };
+
+  function applyLang(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (T[lang][key] !== undefined) el.placeholder = T[lang][key];
+    });
+    document.documentElement.lang = lang;
+  }
+  document.getElementById('langSelect').addEventListener('change', (e) => applyLang(e.target.value));
+  applyLang('es');
+
+  /* Comprobación de suscripción */
+  const SERVER_URL = 'https://servidor-licencias-production.up.railway.app';
+  const form = document.getElementById('checkForm');
+  const btn = document.getElementById('checkBtn');
+  const readout = document.getElementById('readout');
+  const hint = document.getElementById('hint');
+  const rEstado = document.getElementById('rEstado');
+  const rPlan = document.getElementById('rPlan');
+  const rRenueva = document.getElementById('rRenueva');
+  const emailInput = document.getElementById('emailInput');
+
+  function formatFecha(iso){
+    if(!iso) return '\u2014';
+    const d = new Date(iso);
+    const lang = document.getElementById('langSelect').value;
+    return d.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-ES', { day:'numeric', month:'short', year:'numeric' });
+  }
+
+  async function checkEmail(email){
+    btn.disabled = true;
+    const prevText = btn.textContent;
+    btn.textContent = '...';
+    hint.textContent = '';
+    readout.classList.remove('show');
+
+    try {
+      const res = await fetch(SERVER_URL + '/verificar-licencia?email=' + encodeURIComponent(email));
+      const data = await res.json();
+      readout.classList.add('show');
+
+      if (data.activa) {
+        rEstado.innerHTML = '<span class="dotmark"></span>Activa';
+        rEstado.className = 'v active';
+        rPlan.textContent = data.plan || '\u2014';
+        rRenueva.textContent = formatFecha(data.renueva_el);
+        hint.textContent = 'Ya puedes escribir este mismo email en cualquiera de tus herramientas para activarlas.';
+      } else {
+        rEstado.textContent = 'Sin activar';
+        rEstado.className = 'v inactive';
+        rPlan.textContent = '\u2014';
+        rRenueva.textContent = '\u2014';
+        hint.innerHTML = 'Ese email no tiene ninguna suscripción activa. <a href="#precios">Ver planes</a>';
+      }
+    } catch (err) {
+      hint.textContent = 'No se pudo comprobar ahora mismo. Intentalo de nuevo en un momento.';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = prevText;
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = emailInput.value.trim().toLowerCase();
+    if(!email) return;
+    checkEmail(email);
+  });
+
+  /* Si llega desde una extension con ?email=..., comprobar automáticamente */
+  const params = new URLSearchParams(window.location.search);
+  const urlEmail = params.get('email');
+  if (urlEmail) {
+    emailInput.value = urlEmail;
+    checkEmail(urlEmail.trim().toLowerCase());
+  }
+</script>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a7addb545989d1d4159b2ea/1jvnv43pm';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+  <script src="conversor-moneda.js" defer></script>
+</body>
+</html>
+<!DOCTYPE html>
+<!-- publicado: 2026-08-18 -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quitar fondo, marcas de agua y ruido de audio, gratis</title>
+<meta name="description" content="Herramientas gratis en tu navegador: quita el fondo a tus imágenes, borra marcas de agua de Gemini y Veo y limpia el ruido de tus audios. Sin instalar nada.">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #000000;
+    --card: #131118;
+    --card-border: #423c50;
+    --surface: #1c1922;
+    --text: #f2f0f6;
+    --muted: #b8b0c9;
+    --purple: #8b5cf6;
+    --gold: #ffbe3d;
+    --fuchsia: #ef4d8f;
+    --fuchsia-dim: #260a17;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .stars{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;}
+  .stars span{
+    position:absolute; width:2px; height:2px; border-radius:50%;
+    background:#ffffff; opacity:0.5; animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{0%,100%{opacity:0.15;} 50%{opacity:0.75;}}
+  .cursor-aura{
+    position:fixed; top:0; left:0; width:420px; height:420px;
+    border-radius:50%; pointer-events:none; z-index:0;
+    background:radial-gradient(circle, rgba(167,107,250,0.16), rgba(255,63,160,0.06) 45%, transparent 70%);
+    transform:translate(-50%,-50%); filter:blur(6px);
+    transition:opacity .3s ease; opacity:0;
+  }
+  .cursor-aura.show{opacity:1;}
+
+  .wrap{position:relative; z-index:1; max-width:620px; margin:0 auto; padding:56px 20px 80px;}
+  .stack{display:flex; flex-direction:column; gap:16px;}
+  .card{background:var(--card); border:1px solid var(--card-border); border-radius:20px; padding:24px;}
+
+  /* Perfil */
+  .profile{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .profile-id{display:flex; align-items:center; gap:14px;}
+  .avatar{
+    width:86px; height:86px; flex-shrink:0; border-radius:50%; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .avatar img{width:100%; height:100%; object-fit:cover;}
+  .profile-id h1{font-family:'Sora', sans-serif; font-size:18px; font-weight:700;}
+  .profile-id p{color:var(--muted); font-size:13.5px; margin-top:2px;}
+  .profile-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .lang-select{
+    display:inline-flex; align-items:center; gap:7px;
+    background:#1c1626; border:1px solid var(--card-border); color:var(--text);
+    padding:7px 12px; border-radius:100px; cursor:pointer;
+    transition:border-color .15s;
+  }
+  .lang-select:hover, .lang-select:focus-within{border-color:var(--fuchsia);}
+  .lang-select .globe{width:17px; height:17px; flex-shrink:0; color:var(--fuchsia);}
+  .lang-select .caret{width:13px; height:13px; flex-shrink:0; color:var(--muted); pointer-events:none;}
+  .lang-select select{
+    appearance:none; -webkit-appearance:none;
+    background:transparent; border:none; outline:none; color:inherit;
+    font-family:'Inter', sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; padding:0 2px 0 0;
+  }
+  /* La lista desplegada la pinta el sistema: hay que darle fondo propio o en
+     algunos navegadores sale texto claro sobre fondo claro. */
+  .lang-select select option{background:#1c1626; color:#f2f0f6;}
+  .chip-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    border:none; color:#22102e;
+    font-size:13px; font-weight:700; padding:9px 15px; border-radius:100px;
+    text-decoration:none; cursor:pointer; transition:filter .15s;
+  }
+  .chip-support{background:var(--fuchsia); color:#1a0210;}
+  .chip-ghost{
+    background:#1c1626; border:1px solid var(--card-border); color:var(--text); font-weight:600;
+  }
+  .chip-btn:hover{filter:brightness(1.08);}
+
+  /* Comprobar suscripción */
+  .check-card label{display:block; font-size:14.5px; color:var(--text); font-weight:600; margin-bottom:12px;}
+  .check-card form{display:flex; gap:8px;}
+  .check-card input{
+    flex:1; background:var(--surface); border:1px solid var(--card-border); color:var(--text);
+    font-family:'Inter', sans-serif; font-size:14.5px; padding:12px 15px; border-radius:12px;
+    outline:none; transition:border-color .15s;
+  }
+  .check-card input:focus{border-color:var(--fuchsia);}
+  .check-card input::placeholder{color:#5f5675;}
+  .btn-check{
+    background:var(--fuchsia); color:#1a0210; border:none;
+    font-weight:700; font-size:14.5px; padding:12px 20px; border-radius:12px; cursor:pointer;
+    transition:filter .15s, transform .15s; white-space:nowrap;
+  }
+  .btn-check:hover{filter:brightness(1.08);}
+  .btn-check:active{transform:scale(0.98);}
+  .readout{margin-top:16px; display:none; gap:10px; flex-wrap:wrap;}
+  .readout.show{display:flex;}
+  .pill{flex:1; min-width:110px; background:var(--surface); border-radius:12px; padding:11px 13px;}
+  .pill .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;}
+  .pill .v{font-size:14.5px; font-weight:700; margin-top:3px;}
+  .v.active{color:var(--text);}
+  .v.inactive{color:var(--muted);}
+  .dotmark{display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--fuchsia); margin-right:6px;}
+  .hint{color:var(--muted); font-size:12.5px; margin-top:14px;}
+  .hint a{color:var(--fuchsia); text-decoration:none; font-weight:600;}
+  .hint a:hover{text-decoration:underline;}
+
+  .card-title{font-family:'Sora', sans-serif; font-size:15px; font-weight:700; color:var(--gold); margin-bottom:16px;}
+
+  /* Lista extensiones */
+  /* grid con filas iguales: todas las tarjetas miden lo mismo */
+  .ext-list{display:grid; grid-auto-rows:1fr; gap:10px;}
+  .ext-row{
+    display:flex; align-items:center; gap:14px;
+    background:var(--surface); border:1px solid var(--card-border); border-radius:16px; padding:14px 16px;
+  }
+  .ext-icon{width:64px; height:64px; border-radius:16px; flex-shrink:0; overflow:hidden; background:var(--surface);}
+  .ext-icon img{width:100%; height:100%; object-fit:cover; display:block;}
+  .ext-info{flex:1; min-width:0;}
+  .ext-info h3{font-family:'Sora', sans-serif; font-size:14.5px; font-weight:700;}
+  .ext-info p{color:var(--muted); font-size:12.5px; margin-top:3px; line-height:1.4;}
+  .ext-cta{
+    flex-shrink:0; background:var(--text); color:var(--bg);
+    font-size:13px; font-weight:700; padding:9px 16px; border-radius:10px;
+    text-decoration:none; white-space:nowrap; transition:opacity .15s;
+  }
+    .ext-cta:hover{opacity:0.85;}
+  .ext-cta.soon{background:transparent; color:var(--muted); border:1px dashed var(--card-border);}
+
+  /* CleanFrame: desplegable "Mas informacion" (reusa la mecanica del FAQ) */
+  .tool-more{
+    display:flex; align-items:center; gap:6px;
+    background:none; border:none; padding:6px 2px 0; cursor:pointer;
+    color:var(--muted); font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600;
+  }
+  .tool-more:hover{color:var(--text);}
+  .tool-more .arrow{transition:transform .2s; font-size:9px;}
+  .tool-more[aria-expanded="true"] .arrow{transform:rotate(180deg);}
+  .tool-panel{max-height:0; overflow:hidden; transition:max-height .28s ease;}
+  .tool-panel.open{max-height:520px;}
+  .tool-panel p{color:var(--muted); font-size:12.5px; line-height:1.55; padding:12px 2px 0;}
+  .tool-panel ul{list-style:none; margin:10px 0 4px; display:flex; flex-direction:column; gap:6px;}
+  .tool-panel li{color:var(--muted); font-size:12.5px; line-height:1.45; padding-left:14px; position:relative;}
+  .tool-panel li::before{
+    content:''; position:absolute; left:0; top:7px;
+    width:5px; height:5px; border-radius:50%; background:var(--gold);
+  }
+  .tool-panel b{color:var(--text); font-weight:700;}
+  .tag-free{
+    display:inline-block; margin-left:7px; vertical-align:middle;
+    color:var(--gold); font-size:10px; font-weight:800; letter-spacing:0.05em;
+  }
+
+  /* Precios */
+  .plans-row{display:flex; gap:10px; margin-bottom:18px;}
+  .plan{flex:1; background:var(--surface); border:1px solid var(--card-border); border-radius:14px; padding:16px 12px; text-align:center; transition:border-color .2s, transform .1s; cursor:pointer; display:block; text-decoration:none; color:inherit;}
+  .plan:hover{transform:translateY(-2px);}
+  .plan:active{transform:scale(0.97);}
+  .plan.featured{border-color:var(--fuchsia);}
+  .plan .badge{font-size:10px; font-weight:700; color:var(--muted); letter-spacing:0.03em; display:block; margin-bottom:8px;}
+  .plan.featured .badge{color:var(--fuchsia);}
+  .plan .price{font-family:'Sora', sans-serif; font-size:24px; font-weight:800;}
+  .plan .per{color:var(--muted); font-size:11.5px;}
+  .plan-cta{margin-top:10px; background:var(--fuchsia); color:#fff; font-size:12px; font-weight:700; padding:7px 0; border-radius:8px; transition:opacity .15s;}
+  .plan:hover .plan-cta{opacity:0.85;}
+  .btn-primary{
+    display:block; text-align:center; background:var(--fuchsia); color:#1a0210;
+    font-weight:700; font-size:15px; padding:14px; border-radius:14px; text-decoration:none; transition:filter .15s;
+  }
+  .btn-primary:hover{filter:brightness(1.08);}
+
+  /* Contacto */
+  .support-text{color:var(--muted); font-size:13.5px; margin-bottom:16px; line-height:1.5;}
+  .btn-contact{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    background:var(--fuchsia); color:#1a0210; border:none;
+    font-size:14.5px; font-weight:700; padding:14px; border-radius:14px; cursor:pointer; transition:filter .15s;
+  }
+  .btn-contact:hover{filter:brightness(1.08);}
+
+  /* Modal de contacto */
+  .modal-overlay{
+    display:none; position:fixed; inset:0; background:rgba(10,8,14,0.75); z-index:10;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal{
+    background:var(--card); border:1px solid var(--card-border); border-radius:20px;
+    padding:26px; max-width:420px; width:100%;
+  }
+  .modal h3{font-family:'Sora', sans-serif; font-size:17px; margin-bottom:6px;}
+  .modal p{color:var(--muted); font-size:13px; margin-bottom:18px;}
+  .modal input, .modal textarea{
+    width:100%; background:var(--surface); border:1px solid var(--card-border); color:var(--text);
+    font-family:'Inter', sans-serif; font-size:14px; padding:11px 13px; border-radius:10px;
+    outline:none; margin-bottom:10px; resize:vertical;
+  }
+  .modal input:focus, .modal textarea:focus{border-color:var(--fuchsia);}
+  .modal-actions{display:flex; gap:8px; margin-top:6px;}
+  .modal-actions button{flex:1; padding:11px; border-radius:10px; font-weight:700; font-size:13.5px; cursor:pointer; border:none;}
+  .modal-cancel{background:#1c1626; color:var(--text);}
+  .modal-send{background:var(--fuchsia); color:#1a0210;}
+
+  /* Registro de cambios */
+  .chg-modal{
+    background:var(--card); border:1px solid var(--card-border); border-radius:22px;
+    width:100%; max-width:520px; max-height:86vh; display:flex; flex-direction:column;
+    overflow:hidden; box-shadow:0 24px 60px rgba(0,0,0,0.65);
+  }
+  .chg-head{display:flex; align-items:flex-start; gap:14px; padding:22px 22px 0;}
+  .chg-icon{
+    width:54px; height:54px; border-radius:16px; flex:none;
+    background:linear-gradient(135deg, var(--purple), var(--fuchsia));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chg-head h3{font-family:'Sora', sans-serif; font-size:19px; line-height:1.3; padding-top:4px;}
+  .chg-head h3::after{
+    content:''; display:block; width:46px; height:3px; border-radius:3px; margin-top:8px;
+    background:linear-gradient(90deg, var(--purple), var(--fuchsia));
+  }
+  .chg-close{
+    margin-left:auto; background:none; border:none; cursor:pointer; color:var(--muted);
+    padding:4px; line-height:0; border-radius:8px; transition:color .15s;
+  }
+  .chg-close:hover{color:var(--text);}
+  .chg-intro{color:var(--muted); font-size:13px; padding:16px 22px 0;}
+  .chg-body{overflow-y:auto; padding:14px 22px 4px;}
+  .chg-body::-webkit-scrollbar{width:8px;}
+  .chg-body::-webkit-scrollbar-thumb{background:var(--card-border); border-radius:100px;}
+  .chg-entry + .chg-entry{margin-top:18px;}
+  .chg-bar{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    background:var(--surface); border:1px solid var(--card-border);
+    border-radius:12px; padding:10px 13px;
+  }
+  .chg-entry.is-latest .chg-bar{border-color:var(--purple); background:rgba(139,92,246,0.14);}
+  .chg-date{
+    font-family:'Sora', sans-serif; font-size:13px; font-weight:700;
+    letter-spacing:.04em; text-transform:uppercase; color:var(--gold);
+  }
+  .chg-entry.is-latest .chg-date{color:#d9c6ff;}
+  .chg-tag{
+    margin-left:auto; display:inline-flex; align-items:center; gap:6px;
+    background:var(--purple); color:#14061f; font-size:10.5px; font-weight:800;
+    letter-spacing:.06em; text-transform:uppercase; padding:5px 11px; border-radius:100px;
+  }
+  .chg-tag::before{content:''; width:6px; height:6px; border-radius:50%; background:#14061f;}
+  .chg-items{list-style:none; margin:12px 0 0; padding:0 4px 0 13px;}
+  .chg-items li{position:relative; padding-left:16px; color:var(--muted); font-size:13px; line-height:1.6;}
+  .chg-items li + li{margin-top:9px;}
+  .chg-items li::before{
+    content:''; position:absolute; left:0; top:8px; width:5px; height:5px;
+    border-radius:1px; background:var(--fuchsia);
+  }
+  .chg-items b{color:var(--text);}
+  .chg-foot{padding:16px 22px 22px;}
+  .chg-ok{
+    width:100%; border:none; cursor:pointer; border-radius:100px; padding:13px;
+    font-family:'Sora', sans-serif; font-weight:700; font-size:14px; color:#12061c;
+    background:linear-gradient(90deg, var(--purple), var(--fuchsia)); transition:filter .15s;
+  }
+  .chg-ok:hover{filter:brightness(1.08);}
+
+  /* FAQ */
+  .faq-item{border-bottom:1px solid var(--card-border);}
+  .faq-item:last-child{border-bottom:none;}
+  .faq-q{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:14px 2px; cursor:pointer; font-size:14px; font-weight:600;
+  }
+  .faq-q .arrow{transition:transform .2s; color:var(--muted); flex-shrink:0;}
+  .faq-item.open .faq-q .arrow{transform:rotate(180deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .faq-item.open .faq-a{max-height:200px;}
+  .faq-a p{color:var(--muted); font-size:13px; padding:0 2px 14px; line-height:1.55;}
+
+  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:24px; opacity:0.7;}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="cursor-aura" id="cursorAura"></div>
+
+<div class="wrap">
+  <div class="stack">
+
+    <!-- Perfil -->
+    <div class="card profile">
+      <div class="profile-id">
+        <div class="avatar">
+          <img src="icons/perfil.png" alt="Neeko Studio">
+        </div>
+        <div>
+          <h1>Neeko Studio</h1>
+          <p data-i18n="brand_sub">Todas las herramientas &middot; una sola suscripción</p>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <label class="lang-select" title="Idioma / Language">
+          <svg class="globe" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"
+                  stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <select id="langSelect" aria-label="Idioma / Language">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
+          <svg class="caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </label>
+        <a class="chip-btn chip-support" href="#" id="supportBtn">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" fill="white"/></svg>
+          <span data-i18n="support_btn">Soporte</span>
+        </a>
+        <a class="chip-btn chip-ghost" href="#" id="changelogBtn">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span data-i18n="changelog_btn">Registro de cambios</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Comprobar suscripción -->
+    <div class="card check-card">
+      <label data-i18n="check_label">¿Ya eres cliente? Comprueba tu suscripción</label>
+      <form id="checkForm">
+        <input type="email" id="emailInput" placeholder="tu@email.com" required>
+        <button type="submit" class="btn-check" id="checkBtn" data-i18n="check_btn">Comprobar</button>
+      </form>
+      <div class="readout" id="readout">
+        <div class="pill"><div class="k" data-i18n="r_estado">Estado</div><div class="v" id="rEstado">&mdash;</div></div>
+        <div class="pill"><div class="k" data-i18n="r_plan">Plan</div><div class="v" id="rPlan" style="color:var(--text)">&mdash;</div></div>
+        <div class="pill"><div class="k" data-i18n="r_renueva">Renueva</div><div class="v" id="rRenueva" style="color:var(--text); font-size:13px;">&mdash;</div></div>
+      </div>
+      <p class="hint" id="hint" data-i18n="check_hint">Escribe el email con el que compraste (o vas a comprar).</p>
+      <p class="hint" style="margin-top:10px;"><a href="https://payhip.com/NeekoStudio/users/login" target="_blank" rel="noopener" data-i18n="cancel_link">Cancelar mi suscripción</a></p>
+    </div>
+
+    <!-- CleanFrame -->
+    <div class="card" id="cleanframe">
+      <div class="card-title" data-i18n="tool_title">Herramientas gratuitas</div>
+      <div class="ext-list">
+
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/cleanframe.png" alt="CleanFrame">
+          </div>
+          <div class="ext-info">
+            <h3>CleanFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="tool_desc_short">Elimina las marcas de agua de tus imágenes y vídeos de Gemini y Veo.</p>
+          </div>
+          <a class="ext-cta" href="cleanframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+      </div>
+
+      <button class="tool-more" id="toolMore" type="button" aria-expanded="false" aria-controls="toolPanel">
+        <span data-i18n="tool_more">Más información</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="toolPanel">
+        <p data-i18n="tool_desc_long">Arrastra tus archivos y CleanFrame detecta solo dónde está la marca y la borra reconstruyendo lo que había debajo. No la tapa ni la difumina: invierte la mezcla con la que se aplicó, así que solo se toca esa zona. Puedes soltar varios archivos a la vez, comparar el antes y el después con un deslizador y descargarlos uno a uno o todos juntos en un ZIP.</p>
+        <ul>
+          <li data-i18n="tool_f1"><b>Imágenes y vídeos</b> — PNG, JPG, WEBP, MP4, WEBM y MOV</li>
+          <li data-i18n="tool_f2"><b>Mantiene el formato</b> — misma resolución, mismos FPS y el audio original del archivo</li>
+          <li data-i18n="tool_f3"><b>Por lotes</b> — varios archivos a la vez y descarga en ZIP</li>
+          <li data-i18n="tool_f4"><b>100% privado</b> — se procesa en tu navegador, no se sube nada</li>
+          <li data-i18n="tool_f5"><b>Puede quedar un rastro leve</b> — en fondos oscuros o muy detallados a veces se nota una marca tenue donde estaba el logo. Compara el antes y el después antes de descargar.</li>
+          <li data-i18n="tool_f6">No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.</li>
+        </ul>
+      </div>
+      <div class="ext-list" style="margin-top:14px">
+
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/cutframe.png" alt="CutFrame">
+          </div>
+          <div class="ext-info">
+            <h3>CutFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="cut_desc_short">Quita el fondo a tus im&aacute;genes y las deja con fondo transparente, por lotes.</p>
+          </div>
+          <a class="ext-cta" href="cutframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+
+      </div>
+
+      <button class="tool-more" id="cutMore" type="button" aria-expanded="false" aria-controls="cutPanel">
+        <span data-i18n="tool_more">M&aacute;s informaci&oacute;n</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="cutPanel">
+        <p data-i18n="cut_desc_long">Arrastra tus fotos, o una carpeta entera, y CutFrame separa el objeto del fondo y te lo devuelve con fondo transparente. Puedes soltar tantas im&aacute;genes como quieras, comparar el antes y el despu&eacute;s con un deslizador y guardarlas directamente en una carpeta de tu ordenador, sueltas, sin tener que descomprimir nada.</p>
+        <ul>
+          <li data-i18n="cut_f1"><b>Im&aacute;genes</b> &mdash; PNG, JPG, WEBP, AVIF, BMP y GIF</li>
+          <li data-i18n="cut_f2"><b>Fondo transparente o de color</b> &mdash; salida en PNG o WEBP, al tama&ntilde;o original</li>
+          <li data-i18n="cut_f3"><b>Por lotes, sin l&iacute;mite de cantidad</b> &mdash; guarda en una carpeta de tu disco o descarga un ZIP</li>
+          <li data-i18n="cut_f4"><b>100% privado</b> &mdash; se procesa en tu navegador, no se sube nada</li>
+          <li data-i18n="cut_f5"><b>No es un recorte perfecto</b> &mdash; el pelo suelto, el humo, el cristal y los fondos del mismo color que el objeto salen con el borde imperfecto. Compara el antes y el despu&eacute;s antes de descargar, y usa los ajustes del borde si hace falta.</li>
+          <li data-i18n="cut_f6"><b>Va a la velocidad de tu ordenador</b> &mdash; la primera vez carga 44&nbsp;MB y luego tarda unos segundos por imagen. En equipos m&aacute;s justos elige sola una versi&oacute;n ligera. No hace falta instalar nada ni registrarse.</li>
+        </ul>
+      </div>
+
+      <div class="ext-list" style="margin-top:14px">
+
+        <div class="ext-row">
+          <div class="ext-icon">
+            <img src="icons/voiceframe.png" alt="VoiceFrame">
+          </div>
+          <div class="ext-info">
+            <h3>VoiceFrame <span class="tag-free" data-i18n="tool_badge">GRATIS</span></h3>
+            <p data-i18n="voz_desc_short">Limpia tus voces: quita el ruido de fondo y las deja al volumen exacto que pide YouTube.</p>
+          </div>
+          <a class="ext-cta" href="voiceframe/" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+      </div>
+
+      <button class="tool-more" id="vozMore" type="button" aria-expanded="false" aria-controls="vozPanel">
+        <span data-i18n="tool_more">M&aacute;s informaci&oacute;n</span><span class="arrow">&#9660;</span>
+      </button>
+      <div class="tool-panel" id="vozPanel">
+        <p data-i18n="voz_desc_long">Arrastra tus audios y VoiceFrame les quita el ruido de fondo, iguala lo fuerte y lo flojo, y los deja al volumen exacto que pide cada plataforma. Puedes escuchar el antes y el despu&eacute;s uno al lado del otro antes de descargar.</p>
+        <ul>
+          <li data-i18n="voz_f1"><b>Audio</b> &mdash; MP3, WAV, M4A, OGG, FLAC y WEBM. Sale en MP3 o WAV.</li>
+          <li data-i18n="voz_f2"><b>Volumen listo para publicar</b> &mdash; deja el audio a &minus;14&nbsp;LUFS para YouTube, &minus;16 para p&oacute;dcast o &minus;13 para redes, medido seg&uacute;n la norma que usan las propias plataformas.</li>
+          <li data-i18n="voz_f3"><b>La ecualizaci&oacute;n est&aacute; medida, no puesta a ojo</b> &mdash; la curva se calcul&oacute; comparando el espectro contra Adobe Podcast banda a banda.</li>
+          <li data-i18n="voz_f4"><b>100% privado</b> &mdash; se procesa en tu navegador, no se sube nada.</li>
+          <li data-i18n="voz_f5"><b>No hace milagros</b> &mdash; quita el ruido constante del fondo, pero no el eco de una habitaci&oacute;n vac&iacute;a ni arregla una toma saturada.</li>
+          <li data-i18n="voz_f6"><b>Por lotes</b> &mdash; varios audios seguidos y descarga en ZIP. No hace falta instalar nada ni registrarse.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Lista de extensiones -->
+    <div class="card">
+      <div class="card-title" data-i18n="ext_title">Herramientas incluidas</div>
+      <p class="desc" data-i18n="ext_browsers" style="color:var(--muted); font-size:12.5px; margin:-8px 0 14px;">Funcionan en Chrome, Edge, Brave y Opera.</p>
+      <div class="ext-list">
+
+        <div class="ext-row">
+          <div class="ext-icon i6">
+            <img src="icons/nicheradar.png" alt="Niche Radar">
+          </div>
+          <div class="ext-info">
+            <h3>Niche Radar</h3>
+            <p data-i18n="ext6_desc">Encuentra canales de YouTube recién nacidos que ya despegan, antes de que el nicho se llene.</p>
+          </div>
+          <a class="ext-cta" href="niche-radar/app.html" target="_blank" rel="noopener" data-i18n="tool_open">Abrir</a>
+        </div>
+
+        <div class="ext-row">
+          <div class="ext-icon i1">
+            <img src="icons/buscastock.png" alt="BuscaStock Pro">
+          </div>
+          <div class="ext-info">
+            <h3>BuscaStock Pro</h3>
+            <p data-i18n="ext1_desc">Descarga imágenes y vídeos libres de derechos de Pexels y Pixabay, en bloque.</p>
+          </div>
+          <a class="ext-cta" href="https://chromewebstore.google.com/detail/buscastock-pro/gnmdldpekhflgognolodoohggooioffg" target="_blank" rel="noopener" data-i18n="install">Instalar</a>
+        </div>
+
+        <div class="ext-row">
+          <div class="ext-icon i2">
+            <img src="icons/tubedata.png" alt="TubeData">
+          </div>
+          <div class="ext-info">
+            <h3>TubeData</h3>
+            <p data-i18n="ext2_desc">Descarga vídeos, transcripciones y miniaturas de cualquier canal de YouTube, en lote.</p>
+          </div>
+          <a class="ext-cta" href="https://chromewebstore.google.com/detail/tubedata/cbbcjbnppmjkpifbjlgbnfkbbpmbhdbl" target="_blank" rel="noopener" data-i18n="install">Instalar</a>
+        </div>
+
+        <div class="ext-row">
+          <div class="ext-icon i3">
+            <img src="icons/twitternews.png" alt="TwitterNews">
+          </div>
+          <div class="ext-info">
+            <h3>TwitterNews</h3>
+            <p data-i18n="ext3_desc">Busca noticias del día por cuentas o palabras clave, y prográmalo para que se repita solo.</p>
+          </div>
+          <a class="ext-cta" href="https://chromewebstore.google.com/detail/twitternews/lkapbknkkohafaigbbeimdcgbkackpfj" target="_blank" rel="noopener" data-i18n="install">Instalar</a>
+        </div>
+
+        <div class="ext-row">
+          <div class="ext-icon i4">
+            <img src="icons/autogptpro.png" alt="AutoGPT Pro">
+          </div>
+          <div class="ext-info">
+            <h3>AutoGPT Pro</h3>
+            <p data-i18n="ext4_desc">Automatiza ChatGPT por lotes: texto, imágenes, combinar varias, edición y <b>LOGOS</b>.</p>
+          </div>
+          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
+        </div>
+
+        <div class="ext-row">
+          <div class="ext-icon i5">
+            <img src="icons/autogrokpro.png" alt="AutoGrok Pro">
+          </div>
+          <div class="ext-info">
+            <h3>AutoGrok Pro</h3>
+            <p data-i18n="ext5_desc">Automatiza Grok por lotes: vídeo, creación y edición de imágenes.</p>
+          </div>
+          <span class="ext-cta soon" data-i18n="soon">Pronto</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Precios -->
+    <div class="card" id="precios">
+      <div class="card-title" data-i18n="pricing_title">Un pago, todas las herramientas</div>
+      <p class="desc" data-i18n="pricing_desc" style="margin-bottom:12px;">Elige un plan para ir directa al pago.</p>
+      <div class="plans-row" id="plansRow">
+        <a class="plan" data-plan="monthly" href="https://payhip.com/order?link=wRUx3&pricing_plan=nLWRalY3Ga" target="_blank" rel="noopener">
+          <span class="badge" data-i18n="plan_monthly">MENSUAL</span>
+          <div class="price">8,90&euro;</div>
+          <div class="per" data-i18n="per_month">/ mes</div>
+          <div class="plan-cta" data-i18n="subscribe_btn">Suscribirme</div>
+        </a>
+        <a class="plan featured" data-plan="quarterly" href="https://payhip.com/order?link=wRUx3&pricing_plan=Q7zqeDrZzg" target="_blank" rel="noopener">
+          <span class="badge" data-i18n="plan_popular">POPULAR</span>
+          <div class="price">19,90&euro;</div>
+          <div class="per" data-i18n="per_3months">/ 3 meses</div>
+          <div class="plan-cta" data-i18n="subscribe_btn">Suscribirme</div>
+        </a>
+        <a class="plan" data-plan="yearly" href="https://payhip.com/order?link=wRUx3&pricing_plan=x2GZ3A13Wp" target="_blank" rel="noopener">
+          <span class="badge" data-i18n="plan_best">MEJOR</span>
+          <div class="price">69,90&euro;</div>
+          <div class="per" data-i18n="per_year">/ año</div>
+          <div class="plan-cta" data-i18n="subscribe_btn">Suscribirme</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Contacto -->
+    <div class="card">
+      <div class="card-title" data-i18n="contact_title">¿Algo no funciona?</div>
+      <p class="support-text" data-i18n="contact_text">Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.</p>
+      <button class="btn-contact" id="openContact" data-i18n="contact_btn">Escríbeme un mensaje</button>
+    </div>
+
+    <!-- FAQ -->
+    <div class="card">
+      <div class="card-title" data-i18n="faq_title">Preguntas frecuentes</div>
+      <div id="faqList"></div>
+    </div>
+
+    <footer data-i18n="footer_text">Neeko Studio</footer>
+
+  </div>
+</div>
+
+<!-- Registro de cambios -->
+<div class="modal-overlay" id="changelogModal">
+  <div class="chg-modal" role="dialog" aria-modal="true" aria-labelledby="chgTitle">
+    <div class="chg-head">
+      <span class="chg-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+          <circle cx="12" cy="12" r="8.4" stroke="#ffffff" stroke-width="1.9"/>
+          <path d="M12 7.2v5l3.4 2" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <h3 id="chgTitle" data-i18n="changelog_title">Registro de cambios</h3>
+      <button class="chg-close" id="chgClose" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    <p class="chg-intro" data-i18n="changelog_intro">Todo lo que se ha a&ntilde;adido y mejorado, de lo m&aacute;s nuevo a lo m&aacute;s antiguo.</p>
+    <div class="chg-body">
+      <div class="chg-entry is-latest">
+        <div class="chg-bar">
+          <span class="chg-date" data-i18n="chg_1_date">Octubre 2026</span>
+          <span class="chg-tag" data-i18n="chg_latest">M&aacute;s reciente</span>
+        </div>
+        <ul class="chg-items">
+          <li data-i18n="chg_1_text">Nueva herramienta gratuita: <b>VoiceFrame</b>, que limpia el ruido de tus audios y les da sonido de podcast, sin salir del navegador.</li>
+          <li data-i18n="chg_nr_text">Nueva herramienta de pago: Niche Radar, que encuentra canales de YouTube recién nacidos que ya están despegando.</li>
+        </ul>
+      </div>
+      <div class="chg-entry">
+        <div class="chg-bar">
+          <span class="chg-date" data-i18n="chg_2_date">Septiembre 2026</span>
+        </div>
+        <ul class="chg-items">
+          <li data-i18n="chg_2_text">Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las im&aacute;genes y las deja con fondo transparente, por lotes y dentro del navegador.</li>
+        </ul>
+      </div>
+      <div class="chg-entry">
+        <div class="chg-bar">
+          <span class="chg-date" data-i18n="chg_3_date">Agosto 2026</span>
+        </div>
+        <ul class="chg-items">
+          <li data-i18n="chg_3_text">Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las im&aacute;genes y v&iacute;deos de Gemini y Veo.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chg-foot">
+      <button class="chg-ok" id="chgOk" data-i18n="changelog_ok">&iexcl;Genial!</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de contacto -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <h3 data-i18n="modal_title">Envíame un mensaje</h3>
+    <p data-i18n="modal_sub">Te leo y te respondo en cuanto pueda.</p>
+    <input type="email" id="contactEmail" placeholder="tu@email.com" data-i18n-placeholder="modal_email_ph">
+    <textarea id="contactMsg" rows="4" placeholder="Cuéntame qué ha pasado..." data-i18n-placeholder="modal_msg_ph"></textarea>
+    <p id="contactStatus" style="font-size:13px; margin:-2px 0 10px; min-height:16px;"></p>
+    <div class="modal-actions">
+      <button class="modal-cancel" id="cancelContact" data-i18n="modal_cancel">Cancelar</button>
+      <button class="modal-send" id="sendContact" data-i18n="modal_send">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('span');
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    starsEl.appendChild(s);
+  }
+
+  const aura = document.getElementById('cursorAura');
+  let auraX = window.innerWidth / 2, auraY = window.innerHeight / 2;
+  let targetX = auraX, targetY = auraY;
+  document.addEventListener('mousemove', (e) => {
+    targetX = e.clientX; targetY = e.clientY;
+    aura.classList.add('show');
+  });
+  document.addEventListener('mouseleave', () => aura.classList.remove('show'));
+  function animateAura(){
+    auraX += (targetX - auraX) * 0.12;
+    auraY += (targetY - auraY) * 0.12;
+    aura.style.left = auraX + 'px';
+    aura.style.top = auraY + 'px';
+    requestAnimationFrame(animateAura);
+  }
+  animateAura();
+
+  /* Contacto: modal (pendiente conectar envio real) */
+  const modal = document.getElementById('contactModal');
+  document.getElementById('openContact').addEventListener('click', () => modal.classList.add('show'));
+  document.getElementById('supportBtn').addEventListener('click', (e) => { e.preventDefault(); modal.classList.add('show'); });
+  document.getElementById('cancelContact').addEventListener('click', () => modal.classList.remove('show'));
+
+  // Registro de cambios
+  const chgModal = document.getElementById('changelogModal');
+  const closeChg = () => chgModal.classList.remove('show');
+  document.getElementById('changelogBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    chgModal.classList.add('show');
+  });
+  document.getElementById('chgClose').addEventListener('click', closeChg);
+  document.getElementById('chgOk').addEventListener('click', closeChg);
+  chgModal.addEventListener('click', (e) => { if (e.target === chgModal) closeChg(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chgModal.classList.contains('show')) closeChg();
+  });
+
+  const sendBtn = document.getElementById('sendContact');
+  const statusEl = document.getElementById('contactStatus');
+  sendBtn.addEventListener('click', async () => {
+    const email = document.getElementById('contactEmail').value.trim();
+    const msg = document.getElementById('contactMsg').value.trim();
+    if (!email || !msg) {
+      statusEl.textContent = 'Escribe tu email y tu mensaje antes de enviar.';
+      statusEl.style.color = 'var(--fuchsia)';
+      return;
+    }
+    sendBtn.disabled = true;
+    const prevText = sendBtn.textContent;
+    sendBtn.textContent = '...';
+    statusEl.textContent = '';
+    try {
+      const fd = new FormData();
+      fd.append('email', email);
+      fd.append('message', msg);
+      const res = await fetch('https://formspree.io/f/myegwgzg', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: fd
+      });
+      if (res.ok) {
+        statusEl.textContent = 'Mensaje enviado. Neeko Studio te responderá en cuanto pueda.';
+        statusEl.style.color = 'var(--muted)';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactMsg').value = '';
+        setTimeout(() => {
+          modal.classList.remove('show');
+          statusEl.textContent = '';
+        }, 1800);
+      } else {
+        statusEl.textContent = 'No se pudo enviar. Inténtalo de nuevo en un momento.';
+        statusEl.style.color = 'var(--fuchsia)';
+      }
+    } catch (err) {
+      statusEl.textContent = 'No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.';
+      statusEl.style.color = 'var(--fuchsia)';
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = prevText;
+    }
+  });
+
+  /* FAQ */
+  const faqData = [
+    { q: 'faq_q1', a: 'faq_a1' },
+    { q: 'faq_q2', a: 'faq_a2' },
+    { q: 'faq_q3', a: 'faq_a3' },
+    { q: 'faq_q4', a: 'faq_a4' },
+  ];
+  const faqList = document.getElementById('faqList');
+  faqData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'faq-item';
+    div.innerHTML = `
+      <div class="faq-q"><span data-i18n="${item.q}"></span><span class="arrow">&#9660;</span></div>
+      <div class="faq-a"><p data-i18n="${item.a}"></p></div>
+    `;
+    div.querySelector('.faq-q').addEventListener('click', () => div.classList.toggle('open'));
+    faqList.appendChild(div);
+  });
+
+  /* Herramientas gratuitas: desplegables */
+  [['toolMore','toolPanel'], ['cutMore','cutPanel'], ['vozMore','vozPanel']].forEach(function(ids){
+    var moreBtn = document.getElementById(ids[0]);
+    var panel = document.getElementById(ids[1]);
+    if(!moreBtn || !panel) return;
+    moreBtn.addEventListener('click', function(){
+      var open = panel.classList.toggle('open');
+      moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+
+  /* Traducciones */
+  const T = {
+    es: {
+            brand_sub: 'Todas las herramientas &middot; una sola suscripción',
+      support_btn: 'Soporte',
+      changelog_btn: 'Registro de cambios',
+      changelog_title: 'Registro de cambios',
+      changelog_intro: 'Todo lo que se ha añadido y mejorado, de lo más nuevo a lo más antiguo.',
+      changelog_ok: '¡Genial!',
+      chg_latest: 'Más reciente',
+      chg_1_date: 'Octubre 2026',
+      chg_1_text: 'Nueva herramienta gratuita: <b>VoiceFrame</b>, que limpia el ruido de tus audios y les da sonido de podcast, sin salir del navegador.',
+      chg_nr_text: 'Nueva herramienta de pago: <b>Niche Radar</b>, que encuentra canales de YouTube recién nacidos que ya están despegando.',
+      chg_2_text: 'Nueva herramienta gratuita: <b>CutFrame</b>, que quita el fondo a las imágenes y las deja con fondo transparente, por lotes y dentro del navegador.',
+      chg_2_date: 'Septiembre 2026',
+      chg_3_date: 'Agosto 2026',
+      chg_3_text: 'Primera herramienta gratuita: <b>CleanFrame</b>, que elimina las marcas de agua de las imágenes y vídeos de Gemini y Veo.',
+      check_label: '¿Ya eres cliente? Comprueba tu suscripción',
+      check_btn: 'Comprobar',
+      r_estado: 'Estado', r_plan: 'Plan', r_renueva: 'Renueva',
+      check_hint: 'Escribe el email con el que compraste (o vas a comprar).',
+      ext_title: 'Herramientas incluidas',
+      ext1_desc: 'Descarga imágenes y vídeos libres de derechos de Pexels y Pixabay, en bloque.',
+      ext2_desc: 'Descarga vídeos, transcripciones y miniaturas de cualquier canal de YouTube, en lote.',
+      
+      ext3_desc: 'Busca noticias del día por cuentas o palabras clave, y prográmalo para que se repita solo.',
+      ext4_desc: 'Automatiza ChatGPT por lotes: texto, imágenes, combinar varias, edición y <b>LOGOS</b>.',
+      ext5_desc: 'Automatiza Grok por lotes: vídeo, creación y edición de imágenes.',
+      ext6_desc: 'Encuentra canales de YouTube recién nacidos que ya despegan, antes de que el nicho se llene.',
+      soon: 'Pronto',
+      install: 'Instalar',
+      ext_browsers: 'Funcionan en Chrome, Edge, Brave y Opera.',
+      tool_title: 'Herramientas gratuitas',
+      tool_badge: 'GRATIS',
+      tool_open: 'Abrir',
+      tool_more: 'Más información',
+      tool_desc_short: 'Elimina las marcas de agua de tus imágenes y vídeos de Gemini y Veo.',
+      tool_desc_long: 'Arrastra tus archivos y CleanFrame detecta solo dónde está la marca y la borra reconstruyendo lo que había debajo. No la tapa ni la difumina: invierte la mezcla con la que se aplicó, así que solo se toca esa zona. Puedes soltar varios archivos a la vez, comparar el antes y el después con un deslizador y descargarlos uno a uno o todos juntos en un ZIP.',
+      tool_f1: '<b>Imágenes y vídeos</b> — PNG, JPG, WEBP, MP4, WEBM y MOV',
+      tool_f2: '<b>Mantiene el formato</b> — misma resolución, mismos FPS y el audio original del archivo',
+      tool_f3: '<b>Por lotes</b> — varios archivos a la vez y descarga en ZIP',
+      tool_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada',
+      tool_f5: '<b>Puede quedar un rastro leve</b> — en fondos oscuros o muy detallados a veces se nota una marca tenue donde estaba el logo. Compara el antes y el después antes de descargar.',
+      tool_f6: 'No hace falta instalar nada ni registrarse. Chrome y Edge de escritorio.',
+      cut_desc_short: 'Quita el fondo a tus imágenes y las deja con fondo transparente, por lotes.',
+      voz_desc_short: 'Limpia tus voces: quita el ruido de fondo y las deja al volumen exacto que pide YouTube.',
+      voz_desc_long: 'Arrastra tus audios y VoiceFrame les quita el ruido de fondo, iguala lo fuerte y lo flojo, y los deja al volumen exacto que pide cada plataforma. Puedes escuchar el antes y el después uno al lado del otro antes de descargar.',
+      voz_f1: '<b>Audio</b> — MP3, WAV, M4A, OGG, FLAC y WEBM. Sale en MP3 o WAV.',
+      voz_f2: '<b>Volumen listo para publicar</b> — deja el audio a −14 LUFS para YouTube, −16 para pódcast o −13 para redes, medido según la norma que usan las propias plataformas.',
+      voz_f3: '<b>La ecualización está medida, no puesta a ojo</b> — la curva se calculó comparando el espectro contra Adobe Podcast banda a banda.',
+      voz_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada.',
+      voz_f5: '<b>No hace milagros</b> — quita el ruido constante del fondo, pero no el eco de una habitación vacía ni arregla una toma saturada.',
+      voz_f6: '<b>Por lotes</b> — varios audios seguidos y descarga en ZIP. No hace falta instalar nada ni registrarse.',
+      cut_desc_long: 'Arrastra tus fotos, o una carpeta entera, y CutFrame separa el objeto del fondo y te lo devuelve con fondo transparente. Puedes soltar tantas imágenes como quieras, comparar el antes y el después con un deslizador y guardarlas directamente en una carpeta de tu ordenador, sueltas, sin tener que descomprimir nada.',
+      cut_f1: '<b>Imágenes</b> — PNG, JPG, WEBP, AVIF, BMP y GIF',
+      cut_f2: '<b>Fondo transparente o de color</b> — salida en PNG o WEBP, al tamaño original',
+      cut_f3: '<b>Por lotes, sin límite de cantidad</b> — guarda en una carpeta de tu disco o descarga un ZIP',
+      cut_f4: '<b>100% privado</b> — se procesa en tu navegador, no se sube nada',
+      cut_f5: '<b>No es un recorte perfecto</b> — el pelo suelto, el humo, el cristal y los fondos del mismo color que el objeto salen con el borde imperfecto. Compara el antes y el después antes de descargar, y usa los ajustes del borde si hace falta.',
+      cut_f6: '<b>Va a la velocidad de tu ordenador</b> — la primera vez carga 44 MB y luego tarda unos segundos por imagen. En equipos más justos elige sola una versión ligera. No hace falta instalar nada ni registrarse.',
+      pricing_title: 'Un pago, todas las herramientas',
+      pricing_desc: 'Elige un plan para ir directa al pago.',
+      plan_monthly: 'MENSUAL', plan_popular: 'POPULAR', plan_best: 'MEJOR',
+      per_month: '/ mes', per_3months: '/ 3 meses', per_year: '/ año',
+      subscribe_btn: 'Suscribirme',
+      contact_title: '¿Algo no funciona?',
+      contact_text: 'Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.',
+      contact_btn: 'Escríbeme un mensaje',
+      faq_title: 'Preguntas frecuentes',
+      faq_q1: '¿Una suscripción sirve para todas las herramientas?',
+      faq_a1: 'Sí. Con un solo pago y un solo email se activan todas las herramientas a la vez, incluidas las que se añadan más adelante.',
+      cancel_link: 'Cancelar mi suscripción',
+      faq_q2: '¿Puedo cancelar cuando quiera?',
+      faq_a2: 'Sí, no hay permanencia. Lo cancelas tú desde <a href="https://payhip.com/NeekoStudio/users/login" target="_blank" rel="noopener">tu cuenta de Payhip</a>, y sigues teniendo acceso hasta que acabe el período que ya has pagado.',
+      faq_q3: '¿Necesito cuentas de Pexels o Pixabay?',
+      faq_a3: 'Solo para BuscaStock Pro, y son gratuitas: te llevamos paso a paso para crearlas la primera vez.',
+      faq_q4: '¿Qué pasa si olvido con qué email compré?',
+      faq_a4: 'Escríbeme un mensaje desde esta página y te lo confirmo enseguida.',
+      modal_title: 'Envíame un mensaje',
+      modal_sub: 'Te leo y te respondo en cuanto pueda.',
+      modal_email_ph: 'tu@email.com',
+      modal_msg_ph: 'Cuéntame qué ha pasado...',
+      modal_cancel: 'Cancelar',
+      modal_send: 'Enviar',
+      footer_text: 'Neeko Studio',
+    },
+    en: {
+            brand_sub: 'Every tool &middot; one subscription',
+      support_btn: 'Support',
+      changelog_btn: 'Changelog',
+      changelog_title: 'Changelog',
+      changelog_intro: 'Everything that has been added and improved, newest first.',
+      changelog_ok: 'Great!',
+      chg_latest: 'Latest',
+      chg_1_date: 'October 2026',
+      chg_1_text: 'New free tool: <b>VoiceFrame</b>, which strips background noise from your audio and gives it podcast sound, without leaving your browser.',
+      chg_nr_text: 'New paid tool: <b>Niche Radar</b>, which finds brand-new YouTube channels that are already taking off.',
+      chg_2_text: 'New free tool: <b>CutFrame</b>, which removes the background from images and leaves them transparent, in batches and inside your browser.',
+      chg_2_date: 'September 2026',
+      chg_3_date: 'August 2026',
+      chg_3_text: 'First free tool: <b>CleanFrame</b>, which removes the watermarks from Gemini and Veo images and videos.',
+      check_label: 'Already a customer? Check your subscription',
+      check_btn: 'Check',
+      r_estado: 'Status', r_plan: 'Plan', r_renueva: 'Renews',
+      check_hint: 'Type the email you purchased with (or plan to).',
+      ext_title: 'Included tools',
+      ext1_desc: 'Download royalty-free images and videos from Pexels and Pixabay, in bulk.',
+      ext2_desc: 'Download videos, transcripts and thumbnails from any YouTube channel, in bulk.',
+      
+      ext3_desc: 'Search daily news by account or keyword, and schedule it to repeat on its own.',
+      ext4_desc: 'Automate ChatGPT in batches: text, images, merging, editing and <b>LOGOS</b>.',
+      ext5_desc: 'Automate Grok in batches: video, image creation and image editing.',
+      ext6_desc: 'Find brand-new YouTube channels that are already taking off, before the niche fills up.',
+      soon: 'Soon',
+      install: 'Install',
+      ext_browsers: 'They work on Chrome, Edge, Brave and Opera.',
+      tool_title: 'Free tools',
+      tool_badge: 'FREE',
+      tool_open: 'Open',
+      tool_more: 'More information',
+      tool_desc_short: 'Removes the watermarks from your Gemini and Veo images and videos.',
+      tool_desc_long: 'Drop your files and CleanFrame finds the watermark on its own and erases it by rebuilding what was underneath. It does not cover it or blur it: it undoes the blend it was applied with, so only that area is touched. Results depend on each file: on flat backgrounds the mark usually disappears completely, on others a faint trace can remain. You can drop several files at once, compare before and after with a slider and download them one by one or all together in a ZIP.',
+      tool_f1: '<b>Images and videos</b> — PNG, JPG, WEBP, MP4, WEBM and MOV',
+      tool_f2: '<b>Keeps the format</b> — same resolution, same FPS and the original audio of the file',
+      tool_f3: '<b>Batch mode</b> — several files at once and ZIP download',
+      tool_f4: '<b>100% private</b> — processed in your browser, nothing is uploaded',
+      tool_f5: '<b>A faint trace may remain</b> — on dark or highly detailed backgrounds a light mark is sometimes visible where the logo was. Compare before and after before downloading.',
+      tool_f6: 'No install, no sign-up. Desktop Chrome and Edge.',
+      cut_desc_short: 'Removes the background from your images and leaves them transparent, in batches.',
+      voz_desc_short: 'Cleans up your voice: removes background noise and sets the exact loudness for YouTube.',
+      voz_desc_long: 'Drop in your audio and VoiceFrame removes the background noise, evens out loud and quiet, and sets the exact loudness each platform asks for. You can hear the before and after side by side before downloading.',
+      voz_f1: '<b>Audio</b> — MP3, WAV, M4A, OGG, FLAC and WEBM. Output in MP3 or WAV.',
+      voz_f2: '<b>Publish-ready loudness</b> — leaves the audio at −14 LUFS for YouTube, −16 for podcasts or −13 for social, measured to the same standard the platforms use.',
+      voz_f3: '<b>The EQ is measured, not guessed</b> — the curve was worked out by comparing the spectrum against Adobe Podcast band by band.',
+      voz_f4: '<b>100% private</b> — everything runs in your browser, nothing is uploaded.',
+      voz_f5: '<b>It is not magic</b> — it removes steady background noise, but not the echo of an empty room, and it cannot rescue a clipped take.',
+      voz_f6: '<b>In batches</b> — several files in a row, with a ZIP download. Nothing to install, no sign-up.',
+      cut_desc_long: 'Drop your photos, or a whole folder, and CutFrame separates the subject from the background and hands it back with a transparent background. You can drop as many images as you want, compare before and after with a slider and save them straight into a folder on your computer, as loose files, with nothing to unzip.',
+      cut_f1: '<b>Images</b> — PNG, JPG, WEBP, AVIF, BMP and GIF',
+      cut_f2: '<b>Transparent or solid background</b> — PNG or WEBP output, at the original size',
+      cut_f3: '<b>Batch mode, no limit</b> — save to a folder on your disk or download a ZIP',
+      cut_f4: '<b>100% private</b> — processed in your browser, nothing is uploaded',
+      cut_f5: '<b>Not a perfect cutout</b> — loose hair, smoke, glass and backgrounds the same colour as the subject come out with an imperfect edge. Compare before and after before downloading, and use the edge settings if needed.',
+      cut_f6: '<b>It runs at the speed of your computer</b> — it loads 44 MB the first time and then takes a few seconds per image. On weaker machines it picks a lighter version on its own. No install, no sign-up.',
+      pricing_title: 'One payment, every tool',
+      pricing_desc: 'Choose a plan to go straight to checkout.',
+      plan_monthly: 'MONTHLY', plan_popular: 'POPULAR', plan_best: 'BEST',
+      per_month: '/ mo', per_3months: '/ 3 mo', per_year: '/ yr',
+      subscribe_btn: 'Subscribe',
+      contact_title: 'Something not working?',
+      contact_text: "If the product isn't working as expected or you find bugs, let me know and I'll fix it right away.",
+      contact_btn: 'Send me a message',
+      faq_title: 'Frequently asked questions',
+      faq_q1: 'Does one subscription cover every tool?',
+      faq_a1: 'Yes. One payment and one email activate every tool at once, including the ones added later.',
+      cancel_link: 'Cancel my subscription',
+      faq_q2: 'Can I cancel anytime?',
+      faq_a2: "Yes, no commitment. You cancel it yourself from <a href='https://payhip.com/NeekoStudio/users/login' target='_blank' rel='noopener'>your Payhip account</a>, and you keep access until the period you already paid for ends.",
       faq_q3: 'Do I need Pexels or Pixabay accounts?',
       faq_a3: 'Only for BuscaStock Pro, and they are free: we guide you step by step the first time.',
       faq_q4: 'What if I forget which email I purchased with?',
