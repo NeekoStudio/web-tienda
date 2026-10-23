@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Niche Radar · Encuentra nichos de YouTube antes que nadie</title>
+<meta name="description" content="Niche Radar te enseña canales de YouTube recién nacidos que ya están funcionando: cuántos suscriptores tienen, cuánto publican y qué ingresos estiman. Descubre el nicho antes de que se llene.">
+<meta property="og:title" content="Niche Radar · Encuentra nichos de YouTube antes que nadie">
+<meta property="og:description" content="Canales nuevos, reales y ya analizados. Pon tus condiciones y mira qué está despegando ahora mismo.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="../icons/nicheradar.png">
+<link rel="apple-touch-icon" href="../icons/nicheradar.png">
+<meta property="og:image" content="https://neekostudio.app/icons/nicheradar.png">
+<style>
+  :root{
+    --bg:#0c0913; --bg2:#120e1c; --card:#171223; --card2:#1e1830; --line:#2a2340;
+    --text:#ece9f5; --muted:#9b93b5; --rosa:#EF4D8F; --morado:#8B5CF6;
+    --verde:#2fbf7d; --amarillo:#e8b93a; --radio:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+       font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--rosa);text-decoration:none}
+  button{font-family:inherit;font-size:inherit;cursor:pointer}
+  input,select{font-family:inherit;font-size:inherit}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(12,9,19,.96);
+         border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+  .cab{max-width:1400px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .marca{display:flex;align-items:center;gap:10px;font-weight:700}
+  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--morado),var(--rosa));
+        display:grid;place-items:center;font-size:15px;font-weight:800;color:#fff;overflow:hidden;flex-shrink:0}
+  .logo img{width:100%;height:100%;object-fit:cover;display:block}
+  .marca small{display:block;font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.4px}
+  .cab-der{margin-left:auto;font-size:12px;color:var(--muted)}
+  .cab-der b{color:var(--text)}
+
+  .zona{max-width:1400px;margin:0 auto;padding:22px 20px 60px}
+  .intro{margin-bottom:18px}
+  .intro h1{margin:0 0 4px;font-size:27px}
+  .intro p{margin:0;color:var(--muted);font-size:14px;max-width:640px}
+  .intro h1{background:linear-gradient(100deg,var(--text) 30%,#e6b9ff);-webkit-background-clip:text;
+    background-clip:text;-webkit-text-fill-color:transparent}
+  .pasos{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .paso{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);
+    background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:6px 13px 6px 6px}
+  .paso span{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--morado),var(--rosa));
+    color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
+
+  .btn{background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 14px;transition:.15s}
+  .btn:hover{border-color:var(--morado);background:#251d3b}
+  .btn.principal{background:linear-gradient(135deg,var(--morado),var(--rosa));border:0;font-weight:600;color:#fff}
+  .btn.mini{padding:6px 10px;font-size:13px;border-radius:8px}
+
+  .buscador{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .campo{flex:1;min-width:250px;position:relative}
+  .campo input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--text);
+               border-radius:12px;padding:14px 16px 14px 42px;outline:none}
+  .campo input:focus{border-color:var(--morado);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+  .campo .lupa{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--muted)}
+
+  /* ---------- candado de suscripción ---------- */
+  .velo{position:fixed;inset:0;z-index:90;background:var(--bg);display:grid;place-items:center;padding:20px}
+  .velo.oculto{display:none}
+  .acceso{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:26px}
+  .acceso .logo{width:44px;height:44px;border-radius:13px;font-size:21px;margin-bottom:16px}
+  .acceso h1{margin:0 0 6px;font-size:21px}
+  .acceso p{margin:0 0 18px;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .acceso label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .acceso input{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--text);
+    border-radius:11px;padding:13px 15px;outline:none}
+  .acceso input:focus{border-color:var(--morado);box-shadow:0 0 0 3px rgba(139,92,246,.15)}
+  .acceso .btn{width:100%;margin-top:12px;padding:13px}
+  .acceso .pie{margin:16px 0 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .recado{margin-top:14px;border-radius:11px;padding:12px 14px;font-size:13px;line-height:1.55;display:none}
+  .recado.malo{background:rgba(239,77,143,.09);border:1px solid rgba(239,77,143,.35);color:#ffc2da}
+  .recado.ojo{background:rgba(232,185,58,.08);border:1px solid rgba(232,185,58,.35);color:#f0d692}
+  .planes{display:grid;gap:8px;margin-top:14px}
+  .plan{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg2);
+    border:1px solid var(--line);border-radius:12px;padding:12px 14px;transition:.15s}
+  .plan:hover{border-color:var(--morado)}
+  .plan b{display:block;font-size:14px;color:var(--text)}
+  .plan small{color:var(--muted);font-size:12px}
+  .plan .precio{font-weight:700;color:var(--rosa);white-space:nowrap}
+  .cuenta{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)}
+  .cuenta .btn{padding:4px 9px;font-size:12px;border-radius:7px}
+
+  .filtros{background:var(--card);border:1px solid var(--line);border-radius:var(--radio);padding:16px;margin-bottom:16px}
+  .filtros h3{margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600}
+  .rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+  .campo-f label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+  .campo-f input,.campo-f select{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--text);
+                                 border-radius:9px;padding:9px 10px;outline:none}
+  .doble{display:flex;gap:6px;align-items:center}
+  .doble span{color:var(--muted);font-size:12px}
+  .check{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;padding-top:26px}
+  .check input{width:auto;accent-color:var(--rosa)}
+
+  .barra-res{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 14px}
+  .barra-res h2{margin:0;font-size:18px}
+  .barra-res .cuenta{color:var(--muted);font-size:14px}
+  .barra-res .acciones{margin-left:auto;display:flex;gap:8px;align-items:center}
+
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+  .tj{background:var(--card);border:1px solid var(--line);border-radius:var(--radio);
+      overflow:hidden;display:flex;flex-direction:column;transition:.18s}
+  .tj:hover{border-color:var(--morado);transform:translateY(-2px)}
+  .tj .mini{position:relative;aspect-ratio:16/9;background:var(--bg2);overflow:hidden}
+  .tj .mini img{width:100%;height:100%;object-fit:cover;display:block}
+  .tj .mini .dur{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.85);border-radius:5px;padding:2px 7px;font-size:12px;font-weight:600}
+  .tj .mini .vis{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.85);border-radius:5px;padding:2px 7px;font-size:12px}
+  .tj .cuerpo{padding:14px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .canal{display:flex;align-items:center;gap:10px}
+  .canal img{width:38px;height:38px;border-radius:50%;background:var(--bg2);flex-shrink:0}
+  .canal .nom{font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .canal .sub{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .met{background:var(--bg2);border-radius:9px;padding:8px 4px;text-align:center}
+  .met .v{font-weight:700;font-size:14px;line-height:1.2}
+  .met .e{font-size:10px;color:var(--muted);margin-top:2px}
+  .dinero{background:rgba(47,191,125,.09);border:1px solid rgba(47,191,125,.28);border-radius:10px;padding:10px 12px}
+  .dinero .cifra{font-weight:700;color:var(--verde);font-size:16px}
+  .dinero .det{font-size:11px;color:var(--muted);margin-top:3px}
+  .etqs{display:flex;flex-wrap:wrap;gap:6px}
+  .etq{font-size:11px;border-radius:999px;padding:3px 10px;background:var(--card2);border:1px solid var(--line);color:var(--muted)}
+  .etq.oro{border-color:rgba(232,185,58,.45);color:var(--amarillo)}
+  .etq.ok{border-color:rgba(47,191,125,.45);color:var(--verde)}
+  .pie-tj{display:flex;gap:8px;margin-top:auto}
+  .pie-tj .btn{flex:1;text-align:center;font-size:13px;padding:8px}
+  .pie-tj .btn.guardado{background:rgba(239,77,143,.18);border-color:var(--rosa);color:#ffb4d2}
+
+  .vacio{text-align:center;padding:60px 20px;color:var(--muted)}
+  .vacio .ico{font-size:42px;margin-bottom:12px;opacity:.5}
+  .aviso{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--morado);
+         border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:14px}
+  .cargador{text-align:center;padding:50px 20px}
+  .cargador h2{margin:0 0 6px;font-size:20px}
+  .cargador p{color:var(--muted);font-size:14px;max-width:520px;margin:0 auto 18px}
+
+  .legal{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);line-height:1.65}
+  .legal p{margin:0 0 7px}
+  .legal a{color:#c9a7ff}
+  footer{max-width:1400px;margin:0 auto;padding:26px 20px 40px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+  @media(max-width:600px){ .metricas{grid-template-columns:repeat(2,1fr)} .cab,.zona{padding-left:14px;padding-right:14px} }
+</style>
+</head>
+<body>
+
+<!-- Candado: tapa la página entera hasta que el correo tenga suscripción. -->
+<div class="velo" id="velo">
+  <div class="acceso">
+    <div class="logo"><img src="../icons/nicheradar.png" alt="Niche Radar"
+         onerror="this.parentNode.textContent='◎'"></div>
+    <h1>Niche Radar</h1>
+    <p id="accesoTexto">Escribe el correo con el que te suscribiste a Neeko Studio. Nada más: ni contraseñas ni registro.</p>
+
+    <div id="accesoFormulario">
+      <label for="correo">Tu correo</label>
+      <input type="email" id="correo" placeholder="tu@correo.com" autocomplete="email" spellcheck="false">
+      <button class="btn principal" id="btnEntrar">Entrar</button>
+    </div>
+
+    <div class="recado" id="recado"></div>
+    <div class="planes" id="planes"></div>
+
+    <p class="pie">¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de
+      <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.</p>
+  </div>
+</div>
+
+<header>
+  <div class="cab">
+    <div class="marca">
+      <div class="logo"><img src="../icons/nicheradar.png" alt="Niche Radar"
+           onerror="this.parentNode.textContent='◎'"></div>
+      <div>Niche Radar<small>POR NEEKO STUDIO</small></div>
+    </div>
+    <div class="cab-der" id="sello"></div>
+    <div class="cuenta" id="cuenta" style="display:none">
+      <span id="cuentaCorreo"></span>
+      <button class="btn" id="btnSalir">Salir</button>
+    </div>
+  </div>
+</header>
+
+<div class="zona">
+  <div class="intro">
+    <h1>El nicho, antes de que se llene</h1>
+    <p>Canales de YouTube recién nacidos que ya están funcionando. Reales, rastreados a mano y
+      analizados uno a uno. Pon tus condiciones y mira qué está despegando ahora mismo.</p>
+    <div class="pasos">
+      <div class="paso"><span>1</span> Dices qué buscas: idioma, tamaño, cuánto llevan publicando.</div>
+      <div class="paso"><span>2</span> Te salen los canales que lo cumplen, con sus números.</div>
+      <div class="paso"><span>3</span> Guardas los que te interesen y te los llevas.</div>
+    </div>
+  </div>
+
+  <div id="contenido"></div>
+</div>
+
+<footer>
+  <b>Niche Radar</b> · una herramienta de Neeko Studio.<br>
+  Los ingresos son una <b>estimación</b> con rangos de RPM por temática y país; no son datos reales del canal.
+  «Cumple los mínimos» quiere decir que pasa de 1.000 suscriptores y 4.000 horas estimadas al año; no confirma que el canal esté monetizado.
+
+  <div class="legal">
+    <p><b>Datos de YouTube.</b> Los datos de canales y vídeos que ves aquí proceden de
+      <b>YouTube</b>, obtenidos mediante los YouTube API Services. Esta herramienta no está
+      afiliada a YouTube ni a Google.</p>
+    <p>Al usar esta herramienta aceptas quedar vinculado por los
+      <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">Términos del Servicio de YouTube</a>.
+      El tratamiento de datos por parte de Google se rige por la
+      <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</p>
+    <p>Los datos de YouTube que se guardan se refrescan o se eliminan como máximo a los
+      <b>30 días</b>, conforme a las políticas para desarrolladores de los YouTube API Services.
+      Si quieres que eliminemos datos tuyos, escríbenos y lo haremos en un plazo máximo de 7 días.</p>
+  </div>
+</footer>
+
+<input type="file" id="ficheroBase" accept=".json" style="display:none">
+
+<script>
+let BASE = [];
+let FAVORITOS = [];
+try{ FAVORITOS = JSON.parse(localStorage.getItem('neeko_pub_fav')||'[]'); }catch(e){ FAVORITOS = []; }
+
+const NOMBRE_CATEGORIA = {
+  1:'Cine y animación', 2:'Motor', 10:'Música', 15:'Animales', 17:'Deportes',
+  19:'Viajes', 20:'Videojuegos', 22:'Gente y blogs', 23:'Humor', 24:'Entretenimiento',
+  25:'Noticias', 26:'Tutoriales y estilo', 27:'Educación', 28:'Ciencia y tecnología', 29:'Solidario'
+};
+
+function corto(n){
+  if(!isFinite(n)) return '—';
+  if(n>=1e9) return (n/1e9).toFixed(1).replace('.0','')+'B';
+  if(n>=1e6) return (n/1e6).toFixed(1).replace('.0','')+'M';
+  if(n>=1e3) return (n/1e3).toFixed(1).replace('.0','')+'K';
+  return String(Math.round(n));
+}
+function reloj(seg){
+  seg = seg||0;
+  const h=Math.floor(seg/3600), m=Math.floor((seg%3600)/60), s=seg%60;
+  const dd=x=>String(x).padStart(2,'0');
+  return h? h+':'+dd(m)+':'+dd(s) : m+':'+dd(s);
+}
+/** Recalcula los días desde la fecha guardada, para que el dato no envejezca mal. */
+function diasPub(c){
+  if(c.primeraSubida){
+    const t = new Date(c.primeraSubida).getTime();
+    if(isFinite(t)) return Math.max(0, Math.floor((Date.now()-t)/86400000));
+  }
+  return c.diasPublicando !== undefined ? c.diasPublicando : (c.antiguedadDias||0);
+}
+
+function textoAnt(d){
+  if(d===undefined||d===null) return '—';
+  if(d<14) return d+' días';
+  if(d<60) return Math.round(d/7)+' sem.';
+  if(d<730) return Math.round(d/30)+' meses';
+  return (d/365).toFixed(1).replace('.0','')+' años';
+}
+function escapar(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ---------- de dónde salen los datos ----------
+// Pon aquí la dirección donde publicas la base desde tu panel. Si la dejas
+// vacía, la página busca un fichero base.json que esté a su lado.
+// Ejemplos válidos:
+//   'https://raw.githubusercontent.com/usuario/repo/main/base.json'
+//   'https://tu-almacen.example.com/base.json'
+const ORIGEN_BASE = '';
+
+async function arrancar(){
+  const fuentes = [ORIGEN_BASE, 'base.json'].filter(Boolean);
+  let d = null;
+  for(const url of fuentes){
+    try{
+      const r = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {cache:'no-store'});
+      if(!r.ok) continue;
+      d = await r.json();
+      break;
+    }catch(e){ /* se prueba la siguiente */ }
+  }
+  try{
+    if(!d) throw new Error('sin base');
+    BASE = Array.isArray(d) ? d : (d.canales||[]);
+    const idiomas = new Set(BASE.map(c=>c.idiomaCanal).filter(Boolean)).size;
+    document.getElementById('sello').innerHTML =
+      '<b>'+BASE.length.toLocaleString('es-ES')+'</b> canales' +
+      (idiomas>1 ? ' · '+idiomas+' idiomas' : '') +
+      (d.actualizado ? ' · al día el '+new Date(d.actualizado).toLocaleDateString('es-ES') : '');
+    montarBuscador();
+  }catch(e){
+    montarCargador();
+  }
+}
+
+function montarCargador(){
+  // Lo que ve un cliente si la base todavía no está subida: un mensaje digno,
+  // no un cacharro de pruebas. El cargador queda discreto abajo, para Aida.
+  document.getElementById('contenido').innerHTML =
+    '<div class="cargador"><div class="vacio" style="padding:20px"><div class="ico">◎</div></div>'+
+    '<h2>Estamos rastreando</h2>'+
+    '<p>Niche Radar se actualiza con canales nuevos cada semana. La tanda de esta semana está en marcha; '+
+    'vuelve en un rato y tendrás la lista al día.</p>'+
+    '<button class="btn mini" id="btnCargar" style="margin-top:6px;opacity:.5">Cargar una base a mano</button></div>';
+  document.getElementById('btnCargar').onclick = () => document.getElementById('ficheroBase').click();
+}
+
+document.getElementById('ficheroBase').onchange = function(){
+  const f = this.files && this.files[0];
+  if(!f) return;
+  const lector = new FileReader();
+  lector.onload = () => {
+    try{
+      const d = JSON.parse(lector.result);
+      BASE = Array.isArray(d) ? d : (d.canales||[]);
+      if(!BASE.length){ alert('Ese fichero no tiene canales dentro.'); return; }
+      document.getElementById('sello').innerHTML = '<b>'+BASE.length+'</b> canales · vista previa';
+      montarBuscador();
+    }catch(e){ alert('No he podido leer el fichero: '+e.message); }
+  };
+  lector.readAsText(f);
+  this.value='';
+};
+
+// Los desplegables se construyen con lo que HAY en los datos, no con una lista
+// fija. Si no se han rastreado canales en japonés, el japonés no aparece: así
+// nadie elige una opción que no le va a devolver nada.
+const NOMBRE_IDIOMA = {es:'Español', en:'Inglés', pt:'Portugués', fr:'Francés', de:'Alemán',
+  it:'Italiano', nl:'Neerlandés', pl:'Polaco', ru:'Ruso', ja:'Japonés', ko:'Coreano',
+  zh:'Chino', ar:'Árabe', hi:'Hindi', id:'Indonesio', tr:'Turco', vi:'Vietnamita',
+  th:'Tailandés', sv:'Sueco', ro:'Rumano', da:'Danés', no:'Noruego', fi:'Finés',
+  cs:'Checo', hr:'Croata', el:'Griego', he:'Hebreo', uk:'Ucraniano', hu:'Húngaro',
+  bn:'Bengalí', fa:'Persa', ms:'Malayo', ta:'Tamil', ur:'Urdu'};
+
+/** Cuenta cuántos canales hay por cada valor y devuelve las opciones ordenadas
+ *  de más a menos, con el número al lado. Lo que no existe, no sale. */
+function opcionesDe(lista, sacar, nombrar){
+  const cuenta = {};
+  lista.forEach(c => { const v = sacar(c); if(v) cuenta[v] = (cuenta[v]||0) + 1; });
+  return Object.entries(cuenta)
+    .sort((a,b) => b[1]-a[1])
+    .map(([v,n]) => '<option value="'+escapar(v)+'">'+
+         escapar(nombrar ? nombrar(v) : v)+' ('+n.toLocaleString('es-ES')+')</option>')
+    .join('');
+}
+
+function montarBuscador(){
+  document.getElementById('contenido').innerHTML = `
+    <div class="buscador">
+      <div class="campo"><span class="lupa">⌕</span>
+        <input id="q" placeholder="Busca por nombre de canal o por tema: misterio, historia, animales…" autocomplete="off">
+      </div>
+    </div>
+    <div class="filtros">
+      <h3>Filtros</h3>
+      <div class="rejilla">
+        <div class="campo-f"><label>Suscriptores</label>
+          <div class="doble"><input type="number" id="subsMin" placeholder="Mínimo"><span>a</span><input type="number" id="subsMax" placeholder="Máximo"></div>
+        </div>
+        <div class="campo-f"><label>Primera subida del canal</label>
+          <select id="primera">
+            <option value="0">Cualquiera</option>
+            <option value="30">Hace menos de 1 mes</option>
+            <option value="60">Hace menos de 2 meses</option>
+            <option value="103">Hace menos de 3 meses</option>
+            <option value="180">Hace menos de 6 meses</option>
+            <option value="365">Hace menos de 1 año</option>
+          </select>
+        </div>
+        <div class="campo-f"><label>Ingresos mínimos al mes ($)</label><input type="number" id="ingMin" placeholder="0"></div>
+        <div class="campo-f"><label>Vistas por suscriptor (mín.)</label><input type="number" id="vpsMin" step="0.1" placeholder="0"></div>
+        <div class="campo-f"><label>Temática</label>
+          <select id="tema"><option value="">Todas</option>${opcionesDe(BASE, c=>c.tema)}</select>
+        </div>
+        <div class="campo-f"><label>País</label>
+          <select id="pais"><option value="">Cualquiera</option>${opcionesDe(BASE, c=>c.pais)}</select>
+        </div>
+        <div class="campo-f"><label>Idioma</label>
+          <select id="idioma"><option value="">Todos los que hay</option>${opcionesDe(BASE, c=>c.idiomaCanal, v=>NOMBRE_IDIOMA[v]||v.toUpperCase())}</select>
+        </div>
+        <div class="campo-f"><label>Ordenar por</label>
+          <select id="orden">
+            <option value="ingresos">Ingresos estimados</option>
+            <option value="vps">Vistas por suscriptor</option>
+            <option value="vistas">Vistas típicas</option>
+            <option value="nuevo">Empezó hace menos</option>
+            <option value="subs">Suscriptores</option>
+          </select>
+        </div>
+        <div class="campo-f"><label class="check"><input type="checkbox" id="soloYPP"> Solo los que cumplen los mínimos del programa</label></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+      <button class="btn principal" id="btnBuscar" style="padding:12px 28px;font-size:16px">Buscar nichos</button>
+      <button class="btn" id="btnLimpiar">Limpiar filtros</button>
+    </div>
+    <div class="barra-res" id="barraRes" style="display:none">
+      <h2 id="titulo">Canales</h2>
+      <span class="cuenta" id="cuenta"></span>
+      <div class="acciones">
+        <button class="btn mini" id="btnFav">Ver solo mis guardados</button>
+      </div>
+    </div>
+    <div id="lista"><div class="vacio"><div class="ico">◎</div>
+      <div>Pon tus condiciones arriba y pulsa <b>Buscar nichos</b>.</div>
+      <div style="margin-top:6px;font-size:13px">Hay ${BASE.length.toLocaleString('es-ES')} canales esperando.</div></div></div>`;
+
+  // Solo se busca cuando el usuario lo pide; después, cambiar un filtro sí refresca.
+  let buscado = false;
+  const refrescar = () => { if(buscado) pintar(); };
+  ['q','subsMin','subsMax','ingMin','vpsMin'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', refrescar);
+  });
+  ['primera','tema','pais','idioma','orden'].forEach(id=>{
+    document.getElementById(id).addEventListener('change', refrescar);
+  });
+  document.getElementById('soloYPP').addEventListener('change', refrescar);
+  document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter'){ buscado=true; pintar(); } });
+  document.getElementById('btnBuscar').onclick = () => { buscado = true; pintar(); };
+  document.getElementById('btnLimpiar').onclick = () => {
+    ['q','subsMin','subsMax','ingMin','vpsMin'].forEach(id=>document.getElementById(id).value='');
+    ['primera','tema','pais','idioma'].forEach(id=>document.getElementById(id).selectedIndex=0);
+    document.getElementById('soloYPP').checked = false;
+    refrescar();
+  };
+  document.getElementById('btnFav').onclick = function(){
+    this.dataset.on = this.dataset.on==='1' ? '' : '1';
+    this.textContent = this.dataset.on==='1' ? 'Ver todos' : 'Ver solo mis guardados';
+    pintar();
+  };
+}
+
+function filtrar(){
+  const v = id => { const x = parseFloat(document.getElementById(id).value); return isFinite(x)?x:0; };
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const subsMin=v('subsMin'), subsMax=v('subsMax'), ingMin=v('ingMin'), vpsMin=v('vpsMin');
+  const primera = parseInt(document.getElementById('primera').value,10)||0;
+  const tema = document.getElementById('tema').value;
+  const pais = document.getElementById('pais').value;
+  const idioma = document.getElementById('idioma').value;
+  const soloYPP = document.getElementById('soloYPP').checked;
+  const soloFav = document.getElementById('btnFav').dataset.on==='1';
+
+  return BASE.filter(c=>{
+    if(soloFav && !FAVORITOS.includes(c.id)) return false;
+    if(q){
+      const texto = ((c.nombre||'')+' '+(c.tema||'')+' '+(c.consulta||'')+' '+(c.handle||'')).toLowerCase();
+      if(!texto.includes(q)) return false;
+    }
+    if(subsMin && c.subs < subsMin) return false;
+    if(subsMax && c.subs > subsMax) return false;
+    if(ingMin && (!c.ingresos || c.ingresos.max < ingMin)) return false;
+    if(vpsMin && c.vps < vpsMin) return false;
+    if(primera && !(diasPub(c) <= primera)) return false;
+    if(tema && c.tema !== tema) return false;
+    if(pais && c.pais !== pais) return false;
+    if(idioma && c.idiomaCanal !== idioma) return false;
+    if(soloYPP && !c.monetizable) return false;
+    return true;
+  });
+}
+
+function pintar(){
+  const lista = filtrar();
+  const modo = document.getElementById('orden').value;
+  const ord = {
+    ingresos:(a,b)=>(b.ingresos?b.ingresos.max:0)-(a.ingresos?a.ingresos.max:0),
+    vps:(a,b)=>b.vps-a.vps,
+    vistas:(a,b)=>b.vistasTip-a.vistasTip,
+    nuevo:(a,b)=>diasPub(a)-diasPub(b),
+    subs:(a,b)=>b.subs-a.subs
+  }[modo];
+  if(ord) lista.sort(ord);
+
+  document.getElementById('barraRes').style.display = 'flex';
+  document.getElementById('cuenta').textContent = lista.length + ' de ' + BASE.length + ' canales';
+  const cont = document.getElementById('lista');
+  if(!lista.length){
+    cont.innerHTML = '<div class="vacio"><div class="ico">◎</div><div>Ningún canal cumple esas condiciones.</div>'+
+      '<div style="margin-top:6px;font-size:13px">Prueba a aflojar los filtros.</div></div>';
+    return;
+  }
+  cont.innerHTML = '<div class="tarjetas">'+lista.slice(0,300).map(tarjeta).join('')+'</div>' +
+    (lista.length>300 ? '<div class="vacio" style="padding:24px">Se muestran los 300 primeros de '+lista.length+'. Afina los filtros para ver el resto.</div>' : '');
+  cont.querySelectorAll('[data-fav]').forEach(b=>{
+    b.onclick = () => {
+      const id = b.getAttribute('data-fav');
+      const i = FAVORITOS.indexOf(id);
+      if(i>=0){ FAVORITOS.splice(i,1); b.textContent='Guardar'; b.classList.remove('guardado'); }
+      else{ FAVORITOS.push(id); b.textContent='Guardado'; b.classList.add('guardado'); }
+      try{ localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS)); }catch(e){}
+    };
+  });
+}
+
+function tarjeta(c){
+  const d = c.destacado||{};
+  const fav = FAVORITOS.includes(c.id);
+  const cat = NOMBRE_CATEGORIA[c.categoria] ? '<span class="etq">'+NOMBRE_CATEGORIA[c.categoria]+'</span>' : '';
+  const dias = diasPub(c);
+  const joven = dias<=180 ? '<span class="etq oro">Canal nuevo</span>' : '';
+  const mon = c.monetizable ? '<span class="etq ok" title="Pasa de 1.000 suscriptores y sus horas estimadas llegan a 4.000. No confirma que esté monetizado.">Cumple los mínimos</span>' : '';
+  const pais = c.pais ? '<span class="etq">'+escapar(c.pais)+'</span>' : '';
+  const ing = c.ingresos || {min:0,max:0,vistasMes:0};
+  const rpm = c.rpm || [0,0];
+  return `
+  <div class="tj">
+    <div class="mini">
+      ${d.miniatura?'<img loading="lazy" src="'+escapar(d.miniatura)+'" alt="">':''}
+      <span class="vis">${corto(d.vistas||0)} visualizaciones</span>
+      <span class="dur">${reloj(d.duracion)}</span>
+    </div>
+    <div class="cuerpo">
+      <div class="canal">
+        ${c.avatar?'<img src="'+escapar(c.avatar)+'" alt="">':'<img alt="">'}
+        <div style="min-width:0">
+          <div class="nom">${escapar(c.nombre||'')}</div>
+          <div class="sub">${escapar(c.handle||'')} · ${c.vps} vistas por suscriptor</div>
+        </div>
+      </div>
+      <div class="metricas">
+        <div class="met"><div class="v">${corto(c.subs)}</div><div class="e">Subs</div></div>
+        <div class="met"><div class="v">${corto(c.vistasTip)}</div><div class="e">Vistas típicas</div></div>
+        <div class="met"><div class="v">${corto(c.totalVideos)}</div><div class="e">Vídeos</div></div>
+        <div class="met"><div class="v">${textoAnt(dias)}</div><div class="e">Publicando desde</div></div>
+      </div>
+      <div class="dinero">
+        <div class="cifra">$${(ing.min||0).toLocaleString('es-ES')} – $${(ing.max||0).toLocaleString('es-ES')} al mes</div>
+        <div class="det">RPM $${rpm[0]}–$${rpm[1]} · ${corto(ing.vistasMes||0)} vistas/mes · ${c.ritmo} vídeos/mes</div>
+      </div>
+      <div class="etqs">${cat}${mon}${joven}${pais}</div>
+      <div class="pie-tj">
+        <a class="btn mini" href="https://www.youtube.com/channel/${escapar(c.id)}" target="_blank" rel="noopener">Ver canal</a>
+        <button class="btn mini ${fav?'guardado':''}" data-fav="${escapar(c.id)}">${fav?'Guardado':'Guardar'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ===================== CANDADO DE SUSCRIPCIÓN =====================
+ *
+ *  Cómo funciona, en corto: se pide el correo con el que la persona se
+ *  suscribió y se le pregunta al servidor de licencias si ese correo tiene
+ *  la suscripción activa. Si la tiene, se abre la página y el correo se
+ *  guarda en ESTE navegador, así que no se vuelve a pedir.
+ *
+ *  Por qué vale aunque el código de la página esté a la vista: lo que se
+ *  vende no es la página, son los canales. Y los canales viven en base.json,
+ *  que solo se descarga después de que el servidor diga que sí.
+ *
+ *  Si el servidor no contesta (se cae, o está dormido), a quien ya había
+ *  entrado antes se le deja pasar durante unos días. Un cliente que paga no
+ *  se puede quedar fuera porque se caiga un servidor.
+ */
+const SERVIDOR = 'https://servidor-licencias-production.up.railway.app/verificar-licencia';
+const DIAS_DE_GRACIA = 7;        // si el servidor no contesta
+const PLANES = [
+  {nombre:'Mensual',     precio:'3 €/mes',  nota:'Cancela cuando quieras',  url:'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK'},
+  {nombre:'Trimestral',  precio:'7 €',       nota:'Tres meses, sale a 2,33 €/mes', url:'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv'},
+  {nombre:'Anual',       precio:'25 €',      nota:'Un año, sale a 2,08 €/mes',  url:'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gq'}
+];
+
+const G = id => document.getElementById(id);
+
+function cuentaGuardada(){
+  try{ return JSON.parse(localStorage.getItem('nr_cuenta') || 'null'); }catch(e){ return null; }
+}
+function guardarCuenta(c){
+  try{ localStorage.setItem('nr_cuenta', JSON.stringify(c)); }catch(e){}
+}
+function olvidarCuenta(){
+  try{ localStorage.removeItem('nr_cuenta'); }catch(e){}
+}
+
+/** Un correo bien escrito, en minúsculas y sin espacios de más. */
+function limpiarCorreo(t){ return String(t||'').trim().toLowerCase(); }
+function correoValido(t){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(t); }
+
+function diasDesde(cuando){
+  if(!cuando) return Infinity;
+  return (Date.now() - cuando) / 86400000;
+}
+
+/** Le pregunta al servidor si ese correo paga. Devuelve
+ *  {ok:true, activa, plan} o {ok:false} si no se ha podido preguntar. */
+async function preguntarPorElCorreo(correo){
+  try{
+    const r = await fetch(SERVIDOR + '?email=' + encodeURIComponent(correo), {cache:'no-store'});
+    if(!r.ok) return {ok:false};
+    const j = await r.json();
+    return {ok:true, activa: !!j.activa, plan: j.plan || '', estado: j.estado || ''};
+  }catch(e){ return {ok:false}; }
+}
+
+function pintarRecado(texto, tipo){
+  const c = G('recado');
+  c.className = 'recado ' + (tipo || 'malo');
+  c.innerHTML = texto;
+  c.style.display = texto ? 'block' : 'none';
+}
+
+function pintarPlanes(mostrar){
+  const c = G('planes');
+  if(!mostrar){ c.innerHTML = ''; return; }
+  c.innerHTML = PLANES.map(p =>
+    '<a class="plan" href="' + p.url + '" target="_blank" rel="noopener">' +
+      '<span><b>' + p.nombre + '</b><small>' + p.nota + '</small></span>' +
+      '<span class="precio">' + p.precio + '</span>' +
+    '</a>').join('');
+}
+
+function abrirLaPagina(cuenta, aviso){
+  G('velo').classList.add('oculto');
+  G('cuenta').style.display = 'flex';
+  G('cuentaCorreo').textContent = cuenta.correo;
+  if(aviso) pintarRecado('', 'ojo');
+  arrancar();
+}
+
+function cerrarSesion(){
+  olvidarCuenta();
+  G('velo').classList.remove('oculto');
+  G('cuenta').style.display = 'none';
+  G('correo').value = '';
+  pintarRecado('', 'malo');
+  pintarPlanes(false);
+}
+
+async function intentarEntrar(correo, silencioso){
+  const btn = G('btnEntrar');
+  if(!silencioso){ btn.disabled = true; btn.textContent = 'Comprobando…'; }
+  const r = await preguntarPorElCorreo(correo);
+  if(!silencioso){ btn.disabled = false; btn.textContent = 'Entrar'; }
+
+  if(r.ok && r.activa){
+    guardarCuenta({correo, plan:r.plan, comprobado: Date.now()});
+    pintarPlanes(false);
+    abrirLaPagina({correo});
+    return true;
+  }
+
+  if(r.ok && !r.activa){
+    // El servidor ha contestado y dice que no. Fuera, aunque hubiera entrado antes.
+    olvidarCuenta();
+    pintarRecado('Ese correo no tiene una suscripción activa. Si acabas de pagar, dale un minuto y vuelve a probar; ' +
+      'si pagaste con otro correo, prueba con ese.', 'malo');
+    pintarPlanes(true);
+    return false;
+  }
+
+  // No se ha podido preguntar: servidor caído, dormido o sin internet.
+  const guardada = cuentaGuardada();
+  if(guardada && guardada.correo === correo && diasDesde(guardada.comprobado) < DIAS_DE_GRACIA){
+    abrirLaPagina(guardada, true);
+    return true;
+  }
+  pintarRecado('No he podido comprobar tu suscripción ahora mismo. No es cosa tuya: vuelve a intentarlo en un minuto.', 'ojo');
+  pintarPlanes(false);
+  return false;
+}
+
+G('btnEntrar').onclick = () => {
+  const correo = limpiarCorreo(G('correo').value);
+  if(!correoValido(correo)){
+    pintarRecado('Ese correo no parece estar bien escrito.', 'malo');
+    return;
+  }
+  intentarEntrar(correo, false);
+};
+G('correo').addEventListener('keydown', e => { if(e.key === 'Enter') G('btnEntrar').click(); });
+G('btnSalir').onclick = cerrarSesion;
+
+/* Arranque: si ya entró en este navegador, se comprueba por detrás y se le
+   abre la página sin hacerle escribir nada otra vez. */
+(function(){
+  const guardada = cuentaGuardada();
+  if(!guardada || !guardada.correo){
+    // Por si viene desde la web con el correo en la dirección: ?email=...
+    try{
+      const p = new URLSearchParams(location.search).get('email');
+      if(p) G('correo').value = limpiarCorreo(p);
+    }catch(e){}
+    return;
+  }
+  G('correo').value = guardada.correo;
+  if(diasDesde(guardada.comprobado) < 1){
+    // Comprobado hace menos de un día: se abre ya y se revisa por detrás.
+    abrirLaPagina(guardada);
+    preguntarPorElCorreo(guardada.correo).then(r => {
+      if(r.ok && !r.activa) cerrarSesion();
+      else if(r.ok && r.activa) guardarCuenta({correo:guardada.correo, plan:r.plan, comprobado:Date.now()});
+    });
+  }else{
+    intentarEntrar(guardada.correo, true);
+  }
+})();
+</script>
+</body>
+</html>
