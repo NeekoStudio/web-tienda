@@ -34,6 +34,15 @@
   .logo img{width:100%;height:100%;object-fit:cover;display:block}
   .marca small{display:block;font-weight:400;font-size:11px;color:var(--muted);letter-spacing:.4px}
   .cab-der{margin-left:auto;font-size:12px;color:var(--muted)}
+  .sel-idioma{display:inline-flex;align-items:center;gap:6px;background:var(--bg2);
+    border:1px solid var(--line);color:var(--text);padding:6px 10px;border-radius:999px;cursor:pointer}
+  .sel-idioma:hover,.sel-idioma:focus-within{border-color:var(--morado)}
+  .sel-idioma svg{width:15px;height:15px;flex:none;color:var(--rosa)}
+  .sel-idioma select{appearance:none;-webkit-appearance:none;background:transparent;border:none;
+    outline:none;color:inherit;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+  .sel-idioma select option{background:var(--card);color:var(--text)}
+  .acceso .sel-idioma{position:absolute;top:14px;right:14px}
+  .acceso{position:relative}
   .cab-der b{color:var(--text)}
 
   .zona{max-width:1400px;margin:0 auto;padding:22px 20px 60px}
@@ -156,23 +165,23 @@
 <!-- Candado: tapa la página entera hasta que el correo tenga suscripción. -->
 <div class="velo" id="velo">
   <div class="acceso">
+    <label class="sel-idioma" title="Idioma / Language"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><select class="elegirIdioma" id="idiomaAcceso" aria-label="Idioma / Language"><option value="es">Español</option><option value="en">English</option></select></label>
     <div class="logo"><img src="../icons/nicheradar.png" alt="Niche Radar"
          onerror="this.parentNode.textContent='◎'"></div>
     <h1>Niche Radar</h1>
-    <p id="accesoTexto">Escribe el correo con el que te suscribiste a Neeko Studio. Nada más: ni contraseñas ni registro.</p>
+    <p id="accesoTexto" data-i18n="acc_texto">Escribe el correo con el que te suscribiste a Neeko Studio. Nada más: ni contraseñas ni registro.</p>
 
     <div id="accesoFormulario">
-      <label for="correo">Tu correo</label>
-      <input type="email" id="correo" placeholder="tu@correo.com" autocomplete="email" spellcheck="false">
-      <button class="btn principal" id="btnEntrar">Entrar</button>
+      <label for="correo" data-i18n="acc_label">Tu correo</label>
+      <input type="email" id="correo" placeholder="tu@correo.com" data-i18n-ph="acc_ph" autocomplete="email" spellcheck="false">
+      <button class="btn principal" id="btnEntrar" data-i18n="acc_entrar">Entrar</button>
     </div>
 
     <div class="recado" id="recado"></div>
     <div class="planes" id="planes"></div>
 
-    <p class="pie" style="margin-top:14px">Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.</p>
-    <p class="pie">¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de
-      <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.</p>
+    <p class="pie" style="margin-top:14px" data-i18n="nota_sel">Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.</p>
+    <p class="pie" data-i18n="acc_pie">¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.</p>
   </div>
 </div>
 
@@ -181,26 +190,26 @@
     <div class="marca">
       <div class="logo"><img src="../icons/nicheradar.png" alt="Niche Radar"
            onerror="this.parentNode.textContent='◎'"></div>
-      <div>Niche Radar<small>POR NEEKO STUDIO</small></div>
+      <div>Niche Radar<small data-i18n="por_neeko">POR NEEKO STUDIO</small></div>
     </div>
     <div class="cab-der" id="sello"></div>
+    <label class="sel-idioma" title="Idioma / Language"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><select class="elegirIdioma" id="idiomaCab" aria-label="Idioma / Language"><option value="es">Español</option><option value="en">English</option></select></label>
     <div class="cuenta" id="cuenta" style="display:none">
-      <button class="btn" id="btnMisFav" title="Los canales que has guardado, siempre a mano.">★ Mis guardados</button>
+      <button class="btn" id="btnMisFav" data-i18n-title="fav_title" title="Los canales que has guardado. Van con tu cuenta: los tienes también en el móvil.">★ Mis guardados</button>
       <span id="cuentaCorreo"></span>
-      <button class="btn" id="btnSalir">Salir</button>
+      <button class="btn" id="btnSalir" data-i18n="salir">Salir</button>
     </div>
   </div>
 </header>
 
 <div class="zona">
   <div class="intro">
-    <h1>El nicho, antes de que se llene</h1>
-    <p>Canales de YouTube recién nacidos que ya están funcionando. Reales, revisados individualmente y
-      analizados con datos. Pon tus condiciones y mira qué está despegando ahora mismo.</p>
+    <h1 data-i18n="hero_h1">El nicho, antes de que se llene</h1>
+    <p data-i18n="hero_p">Canales de YouTube recién nacidos que ya están funcionando. Reales, revisados individualmente y analizados con datos. Pon tus condiciones y mira qué está despegando ahora mismo.</p>
     <div class="pasos">
-      <div class="paso"><span>1</span> Dices qué buscas: idioma, tamaño, cuánto llevan publicando.</div>
-      <div class="paso"><span>2</span> Te salen los canales que lo cumplen, con sus números.</div>
-      <div class="paso"><span>3</span> Guardas los que te interesen y te los llevas.</div>
+      <div class="paso"><span>1</span> <span data-i18n="paso1">Dices qué buscas: tamaño, cuánto llevan publicando e idioma.</span></div>
+      <div class="paso"><span>2</span> <span data-i18n="paso2">Te salen los canales que lo cumplen, con sus números.</span></div>
+      <div class="paso"><span>3</span> <span data-i18n="paso3">Guardas los que te interesen y te los llevas.</span></div>
     </div>
   </div>
 
@@ -208,27 +217,159 @@
 </div>
 
 <footer>
-  <b>Niche Radar</b> · una herramienta de Neeko Studio.<br>
+  <span data-i18n="pie_1"><b>Niche Radar</b> · una herramienta de Neeko Studio.<br>
   Los ingresos son una <b>estimación</b> con rangos de RPM por temática y país; no son datos reales del canal.
-  «Cumple los mínimos» quiere decir que pasa de 1.000 suscriptores y 4.000 horas estimadas al año; no confirma que el canal esté monetizado.
+  «Cumple los mínimos» quiere decir que pasa de 1.000 suscriptores y 4.000 horas estimadas al año; no confirma que el canal esté monetizado.</span>
 
   <div class="legal">
-    <p><b>Datos de YouTube.</b> Los datos de canales y vídeos que ves aquí proceden de
-      <b>YouTube</b>, obtenidos mediante los YouTube API Services. Esta herramienta no está
-      afiliada a YouTube ni a Google.</p>
-    <p>Al usar esta herramienta aceptas quedar vinculado por los
-      <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">Términos del Servicio de YouTube</a>.
-      El tratamiento de datos por parte de Google se rige por la
-      <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</p>
-    <p>Los datos de YouTube que se guardan se refrescan o se eliminan como máximo a los
-      <b>30 días</b>, conforme a las políticas para desarrolladores de los YouTube API Services.
-      Si quieres que eliminemos datos tuyos, escríbenos y lo haremos en un plazo máximo de 7 días.</p>
+    <p data-i18n="legal_1"><b>Datos de YouTube.</b> Los datos de canales y vídeos que ves aquí proceden de <b>YouTube</b>, obtenidos mediante los YouTube API Services. Esta herramienta no está afiliada a YouTube ni a Google.</p>
+    <p data-i18n="legal_2">Al usar esta herramienta aceptas quedar vinculado por los <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">Términos del Servicio de YouTube</a>. El tratamiento de datos por parte de Google se rige por la <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.</p>
+    <p data-i18n="legal_3">Los datos de YouTube que se guardan se refrescan o se eliminan como máximo a los <b>30 días</b>, conforme a las políticas para desarrolladores de los YouTube API Services. Si quieres que eliminemos datos tuyos, escríbenos y lo haremos en un plazo máximo de 7 días.</p>
   </div>
 </footer>
 
 <input type="file" id="ficheroBase" accept=".json" style="display:none">
 
 <script>
+/* ===================== DOS IDIOMAS =====================
+ *
+ *  Todo el texto que lee el cliente vive aquí, en español y en inglés. El
+ *  texto fijo de la página lleva data-i18n y se cambia solo; el que se
+ *  genera con código pide su frase con t('clave').
+ *
+ *  Al entrar se usa el idioma del navegador, y si la persona elige otro se
+ *  recuerda en este navegador para la próxima vez.
+ */
+const T = {
+  es: {
+    acc_texto:'Escribe el correo con el que te suscribiste a Neeko Studio. Nada más: ni contraseñas ni registro.',
+    acc_label:'Tu correo', acc_ph:'tu@correo.com', acc_entrar:'Entrar', acc_comprobando:'Comprobando…',
+    acc_pie:'¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.',
+    nota_sel:'Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.',
+    por_neeko:'POR NEEKO STUDIO', salir:'Salir',
+    fav_title:'Los canales que has guardado. Van con tu cuenta: los tienes también en el móvil.',
+    fav_btn:'★ Mis guardados', fav_titulo:'Mis guardados',
+    fav_vacio:'Todavía no has guardado ningún canal.',
+    fav_vacio_2:'Cuando encuentres uno que te interese, dale a <b>Guardar</b> y lo tendrás siempre aquí.',
+    hero_h1:'El nicho, antes de que se llene',
+    hero_p:'Canales de YouTube recién nacidos que ya están funcionando. Reales, revisados individualmente y analizados con datos. Pon tus condiciones y mira qué está despegando ahora mismo.',
+    paso1:'Dices qué buscas: tamaño, cuánto llevan publicando e idioma.',
+    paso2:'Te salen los canales que lo cumplen, con sus números.',
+    paso3:'Guardas los que te interesen y te los llevas.',
+    f_titulo:'FILTROS', f_subs:'Suscriptores', f_min:'Mínimo', f_max:'Máximo',
+    f_primera:'Primera subida del canal', f_cualquiera:'Cualquiera',
+    f_1mes:'Hace menos de 1 mes', f_2meses:'Hace menos de 2 meses', f_3meses:'Hace menos de 3 meses',
+    f_6meses:'Hace menos de 6 meses', f_1ano:'Hace menos de 1 año',
+    f_idioma:'Idioma', f_todos_idiomas:'Todos los que hay',
+    f_orden:'Ordenar por',
+    o_tiempo_asc:'Menos tiempo publicando', o_tiempo_desc:'Más tiempo publicando',
+    o_subs_asc:'Menos suscriptores', o_subs_desc:'Más suscriptores',
+    o_vistas_asc:'Menos visitas al mes', o_vistas_desc:'Más visitas al mes',
+    btn_buscar:'Buscar nichos', btn_limpiar:'Limpiar filtros',
+    res_titulo:'Canales', res_vacio:'Ningún canal cumple esas condiciones.',
+    res_vacio_2:'Prueba a aflojar los filtros.',
+    inicio_1:'Pon tus condiciones arriba y pulsa <b>Buscar nichos</b>.',
+    inicio_2:'Hay {n} canales esperando.',
+    tope:'Se muestran los 300 primeros de {n}. Afina los filtros para ver el resto.',
+    canales:'canales', idiomas:'idiomas', al_dia_el:'al día el', vista_previa:'vista previa',
+    cuenta_de:'{a} de {b} canales', cuenta_fav_1:'{n} canal guardado', cuenta_fav:'{n} canales guardados',
+    cargando_h:'Estamos rastreando',
+    cargando_p:'Niche Radar se actualiza con canales nuevos cada semana. La tanda de esta semana está en marcha; vuelve en un rato y tendrás la lista al día.',
+    cargar_mano:'Cargar una base a mano',
+    tj_vis:'visualizaciones', tj_vps:'vistas por suscriptor', tj_subs:'Subs',
+    tj_vistas:'Vistas típicas', tj_videos:'Vídeos', tj_desde:'Publicando desde',
+    tj_al_mes:'al mes', tj_vistas_mes:'vistas/mes', tj_videos_mes:'vídeos/mes',
+    tj_nuevo:'Canal nuevo', tj_minimos:'Cumple los mínimos',
+    tj_minimos_t:'Pasa de 1.000 suscriptores y sus horas estimadas llegan a 4.000. No confirma que esté monetizado.',
+    tj_ver:'Ver canal', tj_guardar:'Guardar', tj_guardado:'Guardado',
+    ant_dias:'días', ant_sem:'sem.', ant_meses:'meses', ant_anos:'años',
+    err_mal_correo:'Ese correo no parece estar bien escrito.',
+    err_sin_sus:'Ese correo no tiene una suscripción activa. Si acabas de pagar, dale un minuto y vuelve a probar; si pagaste con otro correo, prueba con ese.',
+    err_servidor:'No he podido comprobar tu suscripción ahora mismo. No es cosa tuya: vuelve a intentarlo en un minuto.',
+    err_fichero:'Ese fichero no tiene canales dentro.', err_leer:'No he podido leer el fichero: ',
+    plan_mes:'Mensual', plan_mes_n:'Cancela cuando quieras',
+    plan_tri:'Trimestral', plan_tri_n:'Tres meses, sale a 2,33 €/mes',
+    plan_ano:'Anual', plan_ano_n:'Un año, sale a 2,08 €/mes',
+    pie_1:'<b>Niche Radar</b> · una herramienta de Neeko Studio.<br>Los ingresos son una <b>estimación</b> con rangos de RPM por temática y país; no son datos reales del canal. «Cumple los mínimos» quiere decir que pasa de 1.000 suscriptores y 4.000 horas estimadas al año; no confirma que el canal esté monetizado.',
+    legal_1:'<b>Datos de YouTube.</b> Los datos de canales y vídeos que ves aquí proceden de <b>YouTube</b>, obtenidos mediante los YouTube API Services. Esta herramienta no está afiliada a YouTube ni a Google.',
+    legal_2:'Al usar esta herramienta aceptas quedar vinculado por los <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">Términos del Servicio de YouTube</a>. El tratamiento de datos por parte de Google se rige por la <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.',
+    legal_3:'Los datos de YouTube que se guardan se refrescan o se eliminan como máximo a los <b>30 días</b>, conforme a las políticas para desarrolladores de los YouTube API Services. Si quieres que eliminemos datos tuyos, escríbenos y lo haremos en un plazo máximo de 7 días.'
+  },
+  en: {
+    acc_texto:'Enter the email you subscribed to Neeko Studio with. Nothing else: no passwords, no sign-up.',
+    acc_label:'Your email', acc_ph:'you@email.com', acc_entrar:'Enter', acc_comprobando:'Checking…',
+    acc_pie:'Not subscribed yet? One subscription covers every tool at <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.',
+    nota_sel:'Every channel is reviewed individually and has to pass specific filters before it makes the list. That is why Niche Radar does not cover all of YouTube and does not fill up automatically: it grows every day, in small amounts.',
+    por_neeko:'BY NEEKO STUDIO', salir:'Sign out',
+    fav_title:'The channels you saved. They travel with your account, so you have them on your phone too.',
+    fav_btn:'★ My saved', fav_titulo:'My saved channels',
+    fav_vacio:'You have not saved any channel yet.',
+    fav_vacio_2:'When you find one you like, hit <b>Save</b> and it will always be here.',
+    hero_h1:'The niche, before it fills up',
+    hero_p:'Brand-new YouTube channels that are already working. Real ones, reviewed individually and analysed with data. Set your conditions and see what is taking off right now.',
+    paso1:'You say what you want: size, how long they have been publishing, language.',
+    paso2:'You get the channels that match, with their numbers.',
+    paso3:'You save the ones you like and take them with you.',
+    f_titulo:'FILTERS', f_subs:'Subscribers', f_min:'Minimum', f_max:'Maximum',
+    f_primera:'First upload of the channel', f_cualquiera:'Any',
+    f_1mes:'Less than 1 month ago', f_2meses:'Less than 2 months ago', f_3meses:'Less than 3 months ago',
+    f_6meses:'Less than 6 months ago', f_1ano:'Less than 1 year ago',
+    f_idioma:'Language', f_todos_idiomas:'All available',
+    f_orden:'Sort by',
+    o_tiempo_asc:'Publishing for less time', o_tiempo_desc:'Publishing for longer',
+    o_subs_asc:'Fewer subscribers', o_subs_desc:'More subscribers',
+    o_vistas_asc:'Fewer views per month', o_vistas_desc:'More views per month',
+    btn_buscar:'Find niches', btn_limpiar:'Clear filters',
+    res_titulo:'Channels', res_vacio:'No channel matches those conditions.',
+    res_vacio_2:'Try loosening the filters.',
+    inicio_1:'Set your conditions above and hit <b>Find niches</b>.',
+    inicio_2:'{n} channels are waiting.',
+    tope:'Showing the first 300 of {n}. Narrow the filters to see the rest.',
+    canales:'channels', idiomas:'languages', al_dia_el:'updated', vista_previa:'preview',
+    cuenta_de:'{a} of {b} channels', cuenta_fav_1:'{n} saved channel', cuenta_fav:'{n} saved channels',
+    cargando_h:'We are scouting',
+    cargando_p:'Niche Radar gets new channels every week. This week\u2019s batch is on its way; come back in a while and the list will be up to date.',
+    cargar_mano:'Load a file manually',
+    tj_vis:'views', tj_vps:'views per subscriber', tj_subs:'Subs',
+    tj_vistas:'Typical views', tj_videos:'Videos', tj_desde:'Publishing for',
+    tj_al_mes:'per month', tj_vistas_mes:'views/mo', tj_videos_mes:'videos/mo',
+    tj_nuevo:'New channel', tj_minimos:'Meets the minimums',
+    tj_minimos_t:'Over 1,000 subscribers and estimated watch hours reaching 4,000. It does not confirm the channel is monetised.',
+    tj_ver:'View channel', tj_guardar:'Save', tj_guardado:'Saved',
+    ant_dias:'days', ant_sem:'wks', ant_meses:'months', ant_anos:'years',
+    err_mal_correo:'That email does not look right.',
+    err_sin_sus:'That email has no active subscription. If you just paid, give it a minute and try again; if you paid with a different email, try that one.',
+    err_servidor:'I could not check your subscription right now. It is not you: try again in a minute.',
+    err_fichero:'That file has no channels in it.', err_leer:'I could not read the file: ',
+    plan_mes:'Monthly', plan_mes_n:'Cancel anytime',
+    plan_tri:'Quarterly', plan_tri_n:'Three months, works out at 2.33 €/mo',
+    plan_ano:'Yearly', plan_ano_n:'One year, works out at 2.08 €/mo',
+    pie_1:'<b>Niche Radar</b> · a Neeko Studio tool.<br>Earnings are an <b>estimate</b> based on RPM ranges by topic and country; they are not the channel\u2019s real figures. \u201CMeets the minimums\u201D means it is over 1,000 subscribers and 4,000 estimated watch hours a year; it does not confirm the channel is monetised.',
+    legal_1:'<b>YouTube data.</b> The channel and video data you see here comes from <b>YouTube</b>, obtained through the YouTube API Services. This tool is not affiliated with YouTube or Google.',
+    legal_2:'By using this tool you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a>. Google\u2019s handling of data is governed by the <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.',
+    legal_3:'Stored YouTube data is refreshed or deleted within <b>30 days</b> at most, in line with the YouTube API Services Developer Policies. If you want your data removed, write to us and we will do it within 7 days.'
+  }
+};
+
+function idiomaDeSalida(){
+  try{
+    const guardado = localStorage.getItem('nr_idioma');
+    if(guardado && T[guardado]) return guardado;
+  }catch(e){}
+  return (navigator.language||'es').toLowerCase().startsWith('en') ? 'en' : 'es';
+}
+let IDIOMA = idiomaDeSalida();
+
+/** Una frase. {n}, {a} y {b} se sustituyen por lo que se le pase. */
+function t(clave, datos){
+  let frase = (T[IDIOMA] && T[IDIOMA][clave] !== undefined) ? T[IDIOMA][clave] : (T.es[clave] || clave);
+  if(datos) for(const k in datos) frase = frase.split('{'+k+'}').join(datos[k]);
+  return frase;
+}
+/** El formato de números y fechas de cada idioma. */
+function local(){ return IDIOMA === 'en' ? 'en-US' : 'es-ES'; }
+function num(n){ return Number(n||0).toLocaleString(local()); }
+
 let BASE = [];
 /* El rincón de guardados. Cuando está encendido se enseñan SOLO los canales
    guardados, sin que los filtros de arriba los escondan. */
@@ -236,11 +377,25 @@ let MODO_FAV = false;
 let FAVORITOS = [];
 try{ FAVORITOS = JSON.parse(localStorage.getItem('neeko_pub_fav')||'[]'); }catch(e){ FAVORITOS = []; }
 
-const NOMBRE_CATEGORIA = {
-  1:'Cine y animación', 2:'Motor', 10:'Música', 15:'Animales', 17:'Deportes',
-  19:'Viajes', 20:'Videojuegos', 22:'Gente y blogs', 23:'Humor', 24:'Entretenimiento',
-  25:'Noticias', 26:'Tutoriales y estilo', 27:'Educación', 28:'Ciencia y tecnología', 29:'Solidario'
+/* Los guardados viven en dos sitios a la vez: en este navegador, para que
+   la pantalla responda al instante y siga funcionando sin conexión, y en
+   la cuenta del cliente en el servidor, para que los tenga también en el
+   móvil y no los pierda si limpia el navegador. Esta función escribe en
+   los dos. */
+function guardarFavoritos(){
+  try{ localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS)); }catch(e){}
+  if(typeof subirFavoritos === 'function') subirFavoritos();
+}
+
+const CATEGORIAS = {
+  es:{ 1:'Cine y animación', 2:'Motor', 10:'Música', 15:'Animales', 17:'Deportes',
+    19:'Viajes', 20:'Videojuegos', 22:'Gente y blogs', 23:'Humor', 24:'Entretenimiento',
+    25:'Noticias', 26:'Tutoriales y estilo', 27:'Educación', 28:'Ciencia y tecnología', 29:'Solidario' },
+  en:{ 1:'Film & animation', 2:'Autos', 10:'Music', 15:'Pets & animals', 17:'Sports',
+    19:'Travel', 20:'Gaming', 22:'People & blogs', 23:'Comedy', 24:'Entertainment',
+    25:'News', 26:'Howto & style', 27:'Education', 28:'Science & tech', 29:'Nonprofits' }
 };
+function nombreCategoria(id){ return (CATEGORIAS[IDIOMA]||CATEGORIAS.es)[id]; }
 
 function corto(n){
   if(!isFinite(n)) return '—';
@@ -266,10 +421,10 @@ function diasPub(c){
 
 function textoAnt(d){
   if(d===undefined||d===null) return '—';
-  if(d<14) return d+' días';
-  if(d<60) return Math.round(d/7)+' sem.';
-  if(d<730) return Math.round(d/30)+' meses';
-  return (d/365).toFixed(1).replace('.0','')+' años';
+  if(d<14) return d+' '+t('ant_dias');
+  if(d<60) return Math.round(d/7)+' '+t('ant_sem');
+  if(d<730) return Math.round(d/30)+' '+t('ant_meses');
+  return (d/365).toFixed(1).replace('.0','')+' '+t('ant_anos');
 }
 function escapar(s){
   return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -297,15 +452,24 @@ async function arrancar(){
   try{
     if(!d) throw new Error('sin base');
     BASE = Array.isArray(d) ? d : (d.canales||[]);
-    const idiomas = new Set(BASE.map(c=>c.idiomaCanal).filter(Boolean)).size;
-    document.getElementById('sello').innerHTML =
-      '<b>'+BASE.length.toLocaleString('es-ES')+'</b> canales' +
-      (idiomas>1 ? ' · '+idiomas+' idiomas' : '') +
-      (d.actualizado ? ' · al día el '+new Date(d.actualizado).toLocaleDateString('es-ES') : '');
+    META = { total: BASE.length, idiomas: new Set(BASE.map(c=>c.idiomaCanal).filter(Boolean)).size,
+             actualizado: d.actualizado || '', previa: false };
+    pintarSello();
     montarBuscador();
   }catch(e){
     montarCargador();
   }
+}
+
+let META = { total:0, idiomas:0, actualizado:'', previa:false };
+function pintarSello(){
+  const sello = document.getElementById('sello');
+  if(!sello) return;
+  if(!META.total){ sello.innerHTML = ''; return; }
+  sello.innerHTML = '<b>'+num(META.total)+'</b> '+t('canales') +
+    (META.previa ? ' · '+t('vista_previa') : '') +
+    (META.idiomas>1 ? ' · '+META.idiomas+' '+t('idiomas') : '') +
+    (META.actualizado ? ' · '+t('al_dia_el')+' '+new Date(META.actualizado).toLocaleDateString(local()) : '');
 }
 
 function montarCargador(){
@@ -313,10 +477,9 @@ function montarCargador(){
   // no un cacharro de pruebas. El cargador queda discreto abajo, para Aida.
   document.getElementById('contenido').innerHTML =
     '<div class="cargador"><div class="vacio" style="padding:20px"><div class="ico">◎</div></div>'+
-    '<h2>Estamos rastreando</h2>'+
-    '<p>Niche Radar se actualiza con canales nuevos cada semana. La tanda de esta semana está en marcha; '+
-    'vuelve en un rato y tendrás la lista al día.</p>'+
-    '<button class="btn mini" id="btnCargar" style="margin-top:6px;opacity:.5">Cargar una base a mano</button></div>';
+    '<h2 data-i18n="cargando_h">'+t('cargando_h')+'</h2>'+
+    '<p data-i18n="cargando_p">'+t('cargando_p')+'</p>'+
+    '<button class="btn mini" id="btnCargar" data-i18n="cargar_mano" style="margin-top:6px;opacity:.5">'+t('cargar_mano')+'</button></div>';
   document.getElementById('btnCargar').onclick = () => document.getElementById('ficheroBase').click();
 }
 
@@ -328,10 +491,11 @@ document.getElementById('ficheroBase').onchange = function(){
     try{
       const d = JSON.parse(lector.result);
       BASE = Array.isArray(d) ? d : (d.canales||[]);
-      if(!BASE.length){ alert('Ese fichero no tiene canales dentro.'); return; }
-      document.getElementById('sello').innerHTML = '<b>'+BASE.length+'</b> canales · vista previa';
+      if(!BASE.length){ alert(t('err_fichero')); return; }
+      META = { total: BASE.length, idiomas:0, actualizado:'', previa:true };
+      pintarSello();
       montarBuscador();
-    }catch(e){ alert('No he podido leer el fichero: '+e.message); }
+    }catch(e){ alert(t('err_leer')+e.message); }
   };
   lector.readAsText(f);
   this.value='';
@@ -340,6 +504,13 @@ document.getElementById('ficheroBase').onchange = function(){
 // Los desplegables se construyen con lo que HAY en los datos, no con una lista
 // fija. Si no se han rastreado canales en japonés, el japonés no aparece: así
 // nadie elige una opción que no le va a devolver nada.
+const IDIOMAS_EN = {es:'Spanish', en:'English', pt:'Portuguese', fr:'French', de:'German',
+  it:'Italian', nl:'Dutch', pl:'Polish', ru:'Russian', ja:'Japanese', ko:'Korean',
+  zh:'Chinese', ar:'Arabic', hi:'Hindi', id:'Indonesian', tr:'Turkish', vi:'Vietnamese',
+  th:'Thai', sv:'Swedish', ro:'Romanian', da:'Danish', no:'Norwegian', fi:'Finnish',
+  cs:'Czech', hr:'Croatian', el:'Greek', he:'Hebrew', uk:'Ukrainian', hu:'Hungarian',
+  bn:'Bengali', fa:'Persian', ms:'Malay', ta:'Tamil', ur:'Urdu'};
+
 const NOMBRE_IDIOMA = {es:'Español', en:'Inglés', pt:'Portugués', fr:'Francés', de:'Alemán',
   it:'Italiano', nl:'Neerlandés', pl:'Polaco', ru:'Ruso', ja:'Japonés', ko:'Coreano',
   zh:'Chino', ar:'Árabe', hi:'Hindi', id:'Indonesio', tr:'Turco', vi:'Vietnamita',
@@ -359,75 +530,81 @@ function opcionesDe(lista, sacar, nombrar){
     .join('');
 }
 
+/** El desplegable de idiomas se construye con lo que hay en los datos, y sus
+ *  nombres cambian con el idioma de la página. Se conserva lo que tuviera
+ *  elegido para no deshacerle la búsqueda. */
+function rellenarIdiomas(){
+  const sel = document.getElementById('idioma');
+  if(!sel) return;
+  const antes = sel.value;
+  const nombre = v => (IDIOMA === 'en' ? (IDIOMAS_EN[v] || v.toUpperCase())
+                                       : (NOMBRE_IDIOMA[v] || v.toUpperCase()));
+  sel.innerHTML = '<option value="">'+t('f_todos_idiomas')+'</option>' +
+    opcionesDe(BASE, c=>c.idiomaCanal, nombre);
+  sel.value = antes;
+}
+
 function montarBuscador(){
   document.getElementById('contenido').innerHTML = `
-    <div class="nota-sel">Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.</div>
+    <div class="nota-sel" data-i18n="nota_sel">${t('nota_sel')}</div>
     <div class="filtros">
-      <h3>Filtros</h3>
+      <h3 data-i18n="f_titulo">${t('f_titulo')}</h3>
       <div class="rejilla">
-        <div class="campo-f"><label>Suscriptores</label>
-          <div class="doble"><input type="number" id="subsMin" placeholder="Mínimo"><span>a</span><input type="number" id="subsMax" placeholder="Máximo"></div>
+        <div class="campo-f"><label data-i18n="f_subs">${t('f_subs')}</label>
+          <div class="doble"><input type="number" id="subsMin" data-i18n-ph="f_min" placeholder="${t('f_min')}"><span>a</span><input type="number" id="subsMax" data-i18n-ph="f_max" placeholder="${t('f_max')}"></div>
         </div>
-        <div class="campo-f"><label>Primera subida del canal</label>
+        <div class="campo-f"><label data-i18n="f_primera">${t('f_primera')}</label>
           <select id="primera">
-            <option value="0">Cualquiera</option>
-            <option value="30">Hace menos de 1 mes</option>
-            <option value="60">Hace menos de 2 meses</option>
-            <option value="103">Hace menos de 3 meses</option>
-            <option value="180">Hace menos de 6 meses</option>
-            <option value="365">Hace menos de 1 año</option>
+            <option value="0" data-i18n="f_cualquiera">${t('f_cualquiera')}</option>
+            <option value="30" data-i18n="f_1mes">${t('f_1mes')}</option>
+            <option value="60" data-i18n="f_2meses">${t('f_2meses')}</option>
+            <option value="103" data-i18n="f_3meses">${t('f_3meses')}</option>
+            <option value="180" data-i18n="f_6meses">${t('f_6meses')}</option>
+            <option value="365" data-i18n="f_1ano">${t('f_1ano')}</option>
           </select>
         </div>
-        <div class="campo-f"><label>Ingresos mínimos al mes ($)</label><input type="number" id="ingMin" placeholder="0"></div>
-        <div class="campo-f"><label>Vistas por suscriptor (mín.)</label><input type="number" id="vpsMin" step="0.1" placeholder="0"></div>
-        <div class="campo-f"><label>Temática</label>
-          <select id="tema"><option value="">Todas</option>${opcionesDe(BASE, c=>c.tema)}</select>
+        <div class="campo-f"><label data-i18n="f_idioma">${t('f_idioma')}</label>
+          <select id="idioma"></select>
         </div>
-        <div class="campo-f"><label>País</label>
-          <select id="pais"><option value="">Cualquiera</option>${opcionesDe(BASE, c=>c.pais)}</select>
-        </div>
-        <div class="campo-f"><label>Idioma</label>
-          <select id="idioma"><option value="">Todos los que hay</option>${opcionesDe(BASE, c=>c.idiomaCanal, v=>NOMBRE_IDIOMA[v]||v.toUpperCase())}</select>
-        </div>
-        <div class="campo-f"><label>Ordenar por</label>
+        <div class="campo-f"><label data-i18n="f_orden">${t('f_orden')}</label>
           <select id="orden">
-            <option value="ingresos">Ingresos estimados</option>
-            <option value="vps">Vistas por suscriptor</option>
-            <option value="vistas">Vistas típicas</option>
-            <option value="nuevo">Empezó hace menos</option>
-            <option value="subs">Suscriptores</option>
+            <option value="tiempo_asc" selected data-i18n="o_tiempo_asc">${t('o_tiempo_asc')}</option>
+            <option value="tiempo_desc" data-i18n="o_tiempo_desc">${t('o_tiempo_desc')}</option>
+            <option value="subs_asc" data-i18n="o_subs_asc">${t('o_subs_asc')}</option>
+            <option value="subs_desc" data-i18n="o_subs_desc">${t('o_subs_desc')}</option>
+            <option value="vistas_asc" data-i18n="o_vistas_asc">${t('o_vistas_asc')}</option>
+            <option value="vistas_desc" data-i18n="o_vistas_desc">${t('o_vistas_desc')}</option>
           </select>
         </div>
-        <div class="campo-f"><label class="check"><input type="checkbox" id="soloYPP"> Solo los que cumplen los mínimos del programa</label></div>
       </div>
     </div>
     <div id="accionesBusqueda" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-      <button class="btn principal" id="btnBuscar" style="padding:12px 28px;font-size:16px">Buscar nichos</button>
-      <button class="btn" id="btnLimpiar">Limpiar filtros</button>
+      <button class="btn principal" id="btnBuscar" data-i18n="btn_buscar" style="padding:12px 28px;font-size:16px">${t('btn_buscar')}</button>
+      <button class="btn" id="btnLimpiar" data-i18n="btn_limpiar">${t('btn_limpiar')}</button>
     </div>
     <div class="barra-res" id="barraRes" style="display:none">
-      <h2 id="titulo">Canales</h2>
+      <h2 id="titulo">${t('res_titulo')}</h2>
       <span class="cuenta" id="cuentaRes"></span>
     </div>
     <div id="lista"><div class="vacio"><div class="ico">◎</div>
-      <div>Pon tus condiciones arriba y pulsa <b>Buscar nichos</b>.</div>
-      <div style="margin-top:6px;font-size:13px">Hay ${BASE.length.toLocaleString('es-ES')} canales esperando.</div></div></div>`;
+      <div data-i18n="inicio_1">${t('inicio_1')}</div>
+      <div style="margin-top:6px;font-size:13px" data-i18n-n="inicio_2">${t('inicio_2',{n:num(BASE.length)})}</div></div></div>`;
+
+  rellenarIdiomas();
 
   // Solo se busca cuando el usuario lo pide; después, cambiar un filtro sí refresca.
   let buscado = false;
   const refrescar = () => { if(buscado) pintar(); };
-  ['subsMin','subsMax','ingMin','vpsMin'].forEach(id=>{
+  ['subsMin','subsMax'].forEach(id=>{
     document.getElementById(id).addEventListener('input', refrescar);
   });
-  ['primera','tema','pais','idioma','orden'].forEach(id=>{
+  ['primera','idioma','orden'].forEach(id=>{
     document.getElementById(id).addEventListener('change', refrescar);
   });
-  document.getElementById('soloYPP').addEventListener('change', refrescar);
   document.getElementById('btnBuscar').onclick = () => { buscado = true; pintar(); };
   document.getElementById('btnLimpiar').onclick = () => {
-    ['subsMin','subsMax','ingMin','vpsMin'].forEach(id=>document.getElementById(id).value='');
-    ['primera','tema','pais','idioma'].forEach(id=>document.getElementById(id).selectedIndex=0);
-    document.getElementById('soloYPP').checked = false;
+    ['subsMin','subsMax'].forEach(id=>document.getElementById(id).value='');
+    ['primera','idioma'].forEach(id=>document.getElementById(id).selectedIndex=0);
     refrescar();
   };
 }
@@ -436,23 +613,15 @@ function filtrar(){
   // En el rincón de guardados no manda ningún filtro: salen todos los suyos.
   if(MODO_FAV) return BASE.filter(c => FAVORITOS.includes(c.id));
   const v = id => { const x = parseFloat(document.getElementById(id).value); return isFinite(x)?x:0; };
-  const subsMin=v('subsMin'), subsMax=v('subsMax'), ingMin=v('ingMin'), vpsMin=v('vpsMin');
+  const subsMin=v('subsMin'), subsMax=v('subsMax');
   const primera = parseInt(document.getElementById('primera').value,10)||0;
-  const tema = document.getElementById('tema').value;
-  const pais = document.getElementById('pais').value;
   const idioma = document.getElementById('idioma').value;
-  const soloYPP = document.getElementById('soloYPP').checked;
 
   return BASE.filter(c=>{
     if(subsMin && c.subs < subsMin) return false;
     if(subsMax && c.subs > subsMax) return false;
-    if(ingMin && (!c.ingresos || c.ingresos.max < ingMin)) return false;
-    if(vpsMin && c.vps < vpsMin) return false;
     if(primera && !(diasPub(c) <= primera)) return false;
-    if(tema && c.tema !== tema) return false;
-    if(pais && c.pais !== pais) return false;
     if(idioma && c.idiomaCanal !== idioma) return false;
-    if(soloYPP && !c.monetizable) return false;
     return true;
   });
 }
@@ -461,7 +630,7 @@ function filtrar(){
 function pintarCuentaFav(){
   const b = document.getElementById('btnMisFav');
   if(!b) return;
-  b.textContent = FAVORITOS.length ? '★ Mis guardados (' + FAVORITOS.length + ')' : '★ Mis guardados';
+  b.textContent = FAVORITOS.length ? t('fav_btn') + ' (' + FAVORITOS.length + ')' : t('fav_btn');
   b.classList.toggle('encendido', MODO_FAV);
 }
 
@@ -485,39 +654,40 @@ function verGuardados(){
 function pintar(){
   const lista = filtrar();
   const modo = document.getElementById('orden').value;
+  const vistasMes = c => (c.ingresos && c.ingresos.vistasMes) || 0;
   const ord = {
-    ingresos:(a,b)=>(b.ingresos?b.ingresos.max:0)-(a.ingresos?a.ingresos.max:0),
-    vps:(a,b)=>b.vps-a.vps,
-    vistas:(a,b)=>b.vistasTip-a.vistasTip,
-    nuevo:(a,b)=>diasPub(a)-diasPub(b),
-    subs:(a,b)=>b.subs-a.subs
+    tiempo_asc:(a,b)=>diasPub(a)-diasPub(b),
+    tiempo_desc:(a,b)=>diasPub(b)-diasPub(a),
+    subs_asc:(a,b)=>a.subs-b.subs,
+    subs_desc:(a,b)=>b.subs-a.subs,
+    vistas_asc:(a,b)=>vistasMes(a)-vistasMes(b),
+    vistas_desc:(a,b)=>vistasMes(b)-vistasMes(a)
   }[modo];
   if(ord) lista.sort(ord);
 
   document.getElementById('barraRes').style.display = 'flex';
-  document.getElementById('titulo').textContent = MODO_FAV ? 'Mis guardados' : 'Canales';
+  document.getElementById('titulo').textContent = MODO_FAV ? t('fav_titulo') : t('res_titulo');
   document.getElementById('cuentaRes').textContent = MODO_FAV
-    ? lista.length + (lista.length === 1 ? ' canal guardado' : ' canales guardados')
-    : lista.length + ' de ' + BASE.length + ' canales';
+    ? t(lista.length === 1 ? 'cuenta_fav_1' : 'cuenta_fav', {n: num(lista.length)})
+    : t('cuenta_de', {a: num(lista.length), b: num(BASE.length)});
   const cont = document.getElementById('lista');
   if(!lista.length){
     cont.innerHTML = MODO_FAV
-      ? '<div class="vacio"><div class="ico">★</div><div>Todavía no has guardado ningún canal.</div>'+
-        '<div style="margin-top:6px;font-size:13px">Cuando encuentres uno que te interese, dale a '+
-        '<b>Guardar</b> y lo tendrás siempre aquí.</div></div>'
-      : '<div class="vacio"><div class="ico">◎</div><div>Ningún canal cumple esas condiciones.</div>'+
-        '<div style="margin-top:6px;font-size:13px">Prueba a aflojar los filtros.</div></div>';
+      ? '<div class="vacio"><div class="ico">★</div><div>'+t('fav_vacio')+'</div>'+
+        '<div style="margin-top:6px;font-size:13px">'+t('fav_vacio_2')+'</div></div>'
+      : '<div class="vacio"><div class="ico">◎</div><div>'+t('res_vacio')+'</div>'+
+        '<div style="margin-top:6px;font-size:13px">'+t('res_vacio_2')+'</div></div>';
     return;
   }
   cont.innerHTML = '<div class="tarjetas">'+lista.slice(0,300).map(tarjeta).join('')+'</div>' +
-    (lista.length>300 ? '<div class="vacio" style="padding:24px">Se muestran los 300 primeros de '+lista.length+'. Afina los filtros para ver el resto.</div>' : '');
+    (lista.length>300 ? '<div class="vacio" style="padding:24px">'+t('tope',{n:num(lista.length)})+'</div>' : '');
   cont.querySelectorAll('[data-fav]').forEach(b=>{
     b.onclick = () => {
       const id = b.getAttribute('data-fav');
       const i = FAVORITOS.indexOf(id);
-      if(i>=0){ FAVORITOS.splice(i,1); b.textContent='Guardar'; b.classList.remove('guardado'); }
-      else{ FAVORITOS.push(id); b.textContent='Guardado'; b.classList.add('guardado'); }
-      try{ localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS)); }catch(e){}
+      if(i>=0){ FAVORITOS.splice(i,1); b.textContent=t('tj_guardar'); b.classList.remove('guardado'); }
+      else{ FAVORITOS.push(id); b.textContent=t('tj_guardado'); b.classList.add('guardado'); }
+      guardarFavoritos();
       pintarCuentaFav();
     };
   });
@@ -526,10 +696,10 @@ function pintar(){
 function tarjeta(c){
   const d = c.destacado||{};
   const fav = FAVORITOS.includes(c.id);
-  const cat = NOMBRE_CATEGORIA[c.categoria] ? '<span class="etq">'+NOMBRE_CATEGORIA[c.categoria]+'</span>' : '';
+  const cat = nombreCategoria(c.categoria) ? '<span class="etq">'+nombreCategoria(c.categoria)+'</span>' : '';
   const dias = diasPub(c);
-  const joven = dias<=180 ? '<span class="etq oro">Canal nuevo</span>' : '';
-  const mon = c.monetizable ? '<span class="etq ok" title="Pasa de 1.000 suscriptores y sus horas estimadas llegan a 4.000. No confirma que esté monetizado.">Cumple los mínimos</span>' : '';
+  const joven = dias<=180 ? '<span class="etq oro">'+t('tj_nuevo')+'</span>' : '';
+  const mon = c.monetizable ? '<span class="etq ok" title="'+t('tj_minimos_t')+'">'+t('tj_minimos')+'</span>' : '';
   const pais = c.pais ? '<span class="etq">'+escapar(c.pais)+'</span>' : '';
   const ing = c.ingresos || {min:0,max:0,vistasMes:0};
   const rpm = c.rpm || [0,0];
@@ -537,7 +707,7 @@ function tarjeta(c){
   <div class="tj">
     <div class="mini">
       ${d.miniatura?'<img loading="lazy" src="'+escapar(d.miniatura)+'" alt="">':''}
-      <span class="vis">${corto(d.vistas||0)} visualizaciones</span>
+      <span class="vis">${corto(d.vistas||0)} ${t('tj_vis')}</span>
       <span class="dur">${reloj(d.duracion)}</span>
     </div>
     <div class="cuerpo">
@@ -545,23 +715,23 @@ function tarjeta(c){
         ${c.avatar?'<img src="'+escapar(c.avatar)+'" alt="">':'<img alt="">'}
         <div style="min-width:0">
           <div class="nom">${escapar(c.nombre||'')}</div>
-          <div class="sub">${escapar(c.handle||'')} · ${c.vps} vistas por suscriptor</div>
+          <div class="sub">${escapar(c.handle||'')} · ${c.vps} ${t('tj_vps')}</div>
         </div>
       </div>
       <div class="metricas">
-        <div class="met"><div class="v">${corto(c.subs)}</div><div class="e">Subs</div></div>
-        <div class="met"><div class="v">${corto(c.vistasTip)}</div><div class="e">Vistas típicas</div></div>
-        <div class="met"><div class="v">${corto(c.totalVideos)}</div><div class="e">Vídeos</div></div>
-        <div class="met"><div class="v">${textoAnt(dias)}</div><div class="e">Publicando desde</div></div>
+        <div class="met"><div class="v">${corto(c.subs)}</div><div class="e">${t('tj_subs')}</div></div>
+        <div class="met"><div class="v">${corto(c.vistasTip)}</div><div class="e">${t('tj_vistas')}</div></div>
+        <div class="met"><div class="v">${corto(c.totalVideos)}</div><div class="e">${t('tj_videos')}</div></div>
+        <div class="met"><div class="v">${textoAnt(dias)}</div><div class="e">${t('tj_desde')}</div></div>
       </div>
       <div class="dinero">
-        <div class="cifra">$${(ing.min||0).toLocaleString('es-ES')} – $${(ing.max||0).toLocaleString('es-ES')} al mes</div>
-        <div class="det">RPM $${rpm[0]}–$${rpm[1]} · ${corto(ing.vistasMes||0)} vistas/mes · ${c.ritmo} vídeos/mes</div>
+        <div class="cifra">$${num(ing.min||0)} – $${num(ing.max||0)} ${t('tj_al_mes')}</div>
+        <div class="det">RPM $${rpm[0]}–$${rpm[1]} · ${corto(ing.vistasMes||0)} ${t('tj_vistas_mes')} · ${c.ritmo} ${t('tj_videos_mes')}</div>
       </div>
       <div class="etqs">${cat}${mon}${joven}${pais}</div>
       <div class="pie-tj">
-        <a class="btn mini" href="https://www.youtube.com/channel/${escapar(c.id)}" target="_blank" rel="noopener">Ver canal</a>
-        <button class="btn mini ${fav?'guardado':''}" data-fav="${escapar(c.id)}">${fav?'Guardado':'Guardar'}</button>
+        <a class="btn mini" href="https://www.youtube.com/channel/${escapar(c.id)}" target="_blank" rel="noopener">${t('tj_ver')}</a>
+        <button class="btn mini ${fav?'guardado':''}" data-fav="${escapar(c.id)}">${fav?t('tj_guardado'):t('tj_guardar')}</button>
       </div>
     </div>
   </div>`;
@@ -585,12 +755,72 @@ function tarjeta(c){
 const SERVIDOR = 'https://servidor-licencias-production.up.railway.app/verificar-licencia';
 const DIAS_DE_GRACIA = 7;        // si el servidor no contesta
 const PLANES = [
-  {nombre:'Mensual',     precio:'3 €/mes',  nota:'Cancela cuando quieras',  url:'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK'},
-  {nombre:'Trimestral',  precio:'7 €',       nota:'Tres meses, sale a 2,33 €/mes', url:'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv'},
-  {nombre:'Anual',       precio:'25 €',      nota:'Un año, sale a 2,08 €/mes',  url:'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gq'}
+  {clave:'mes', precio:'3 €/mes', url:'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK'},
+  {clave:'tri', precio:'7 €',     url:'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv'},
+  {clave:'ano', precio:'25 €',    url:'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gq'}
 ];
 
 const G = id => document.getElementById(id);
+
+/* ---------- los guardados, en la cuenta de cada cliente ----------
+ *
+ *  El servidor de licencias ya sabe quién es cada uno por su correo, así
+ *  que es el sitio natural para guardar su lista. Aquí no hay nada crítico:
+ *  si el servidor no contesta, la persona sigue guardando canales en su
+ *  navegador y la próxima vez que haya conexión se suben.
+ */
+const SERVIDOR_FAV = SERVIDOR.replace(/\/verificar-licencia$/, '') + '/favoritos';
+let CORREO_ACTUAL = '';
+let subidaPendiente = null;
+
+/** Se espera un momento antes de subir: si marca cinco canales seguidos,
+ *  se manda una vez, no cinco. */
+function subirFavoritos(){
+  if(!CORREO_ACTUAL) return;
+  clearTimeout(subidaPendiente);
+  subidaPendiente = setTimeout(() => {
+    // Texto plano a propósito: así el navegador no pide permiso previo al
+    // servidor (preflight), que solo admite GET.
+    fetch(SERVIDOR_FAV, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify({email: CORREO_ACTUAL, favoritos: FAVORITOS})
+    }).catch(() => {});   // si falla, se queda lo de este navegador
+  }, 800);
+}
+
+/** Al entrar, se junta lo que tenía en este navegador con lo que hay en su
+ *  cuenta. La primera vez se suman los dos, para que nadie pierda lo que ya
+ *  tenía guardado antes de que esto existiera; a partir de ahí manda la
+ *  cuenta, para que quitar un canal en el móvil lo quite de verdad. */
+async function traerFavoritos(correo){
+  if(!correo) return;
+  let delServidor = null;
+  try{
+    const r = await fetch(SERVIDOR_FAV + '?email=' + encodeURIComponent(correo) + '&t=' + Date.now(), {cache:'no-store'});
+    if(r.ok) delServidor = (await r.json()).favoritos || [];
+  }catch(e){ return; }        // sin conexión: se queda con los de este navegador
+  if(delServidor === null) return;
+
+  let fusionado;
+  try{ fusionado = localStorage.getItem('neeko_fav_fusionado') === '1'; }catch(e){ fusionado = false; }
+
+  if(fusionado){
+    FAVORITOS = delServidor;
+    try{ localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS)); }catch(e){}
+  }else{
+    const union = [...new Set([...FAVORITOS, ...delServidor])];
+    const cambia = union.length !== delServidor.length;
+    FAVORITOS = union;
+    try{
+      localStorage.setItem('neeko_pub_fav', JSON.stringify(FAVORITOS));
+      localStorage.setItem('neeko_fav_fusionado', '1');
+    }catch(e){}
+    if(cambia) subirFavoritos();
+  }
+  pintarCuentaFav();
+  if(MODO_FAV && document.getElementById('lista')) pintar();
+}
 
 function cuentaGuardada(){
   try{ return JSON.parse(localStorage.getItem('nr_cuenta') || 'null'); }catch(e){ return null; }
@@ -634,7 +864,7 @@ function pintarPlanes(mostrar){
   if(!mostrar){ c.innerHTML = ''; return; }
   c.innerHTML = PLANES.map(p =>
     '<a class="plan" href="' + p.url + '" target="_blank" rel="noopener">' +
-      '<span><b>' + p.nombre + '</b><small>' + p.nota + '</small></span>' +
+      '<span><b>' + t('plan_' + p.clave) + '</b><small>' + t('plan_' + p.clave + '_n') + '</small></span>' +
       '<span class="precio">' + p.precio + '</span>' +
     '</a>').join('');
 }
@@ -643,12 +873,15 @@ function abrirLaPagina(cuenta, aviso){
   G('velo').classList.add('oculto');
   G('cuenta').style.display = 'flex';
   G('cuentaCorreo').textContent = cuenta.correo;
+  CORREO_ACTUAL = cuenta.correo;
+  traerFavoritos(cuenta.correo);
   if(aviso) pintarRecado('', 'ojo');
   arrancar();
 }
 
 function cerrarSesion(){
   olvidarCuenta();
+  CORREO_ACTUAL = '';
   G('velo').classList.remove('oculto');
   G('cuenta').style.display = 'none';
   G('correo').value = '';
@@ -658,9 +891,9 @@ function cerrarSesion(){
 
 async function intentarEntrar(correo, silencioso){
   const btn = G('btnEntrar');
-  if(!silencioso){ btn.disabled = true; btn.textContent = 'Comprobando…'; }
+  if(!silencioso){ btn.disabled = true; btn.textContent = t('acc_comprobando'); }
   const r = await preguntarPorElCorreo(correo);
-  if(!silencioso){ btn.disabled = false; btn.textContent = 'Entrar'; }
+  if(!silencioso){ btn.disabled = false; btn.textContent = t('acc_entrar'); }
 
   if(r.ok && r.activa){
     guardarCuenta({correo, plan:r.plan, comprobado: Date.now()});
@@ -672,8 +905,7 @@ async function intentarEntrar(correo, silencioso){
   if(r.ok && !r.activa){
     // El servidor ha contestado y dice que no. Fuera, aunque hubiera entrado antes.
     olvidarCuenta();
-    pintarRecado('Ese correo no tiene una suscripción activa. Si acabas de pagar, dale un minuto y vuelve a probar; ' +
-      'si pagaste con otro correo, prueba con ese.', 'malo');
+    pintarRecado(t('err_sin_sus'), 'malo');
     pintarPlanes(true);
     return false;
   }
@@ -684,7 +916,7 @@ async function intentarEntrar(correo, silencioso){
     abrirLaPagina(guardada, true);
     return true;
   }
-  pintarRecado('No he podido comprobar tu suscripción ahora mismo. No es cosa tuya: vuelve a intentarlo en un minuto.', 'ojo');
+  pintarRecado(t('err_servidor'), 'ojo');
   pintarPlanes(false);
   return false;
 }
@@ -692,7 +924,7 @@ async function intentarEntrar(correo, silencioso){
 G('btnEntrar').onclick = () => {
   const correo = limpiarCorreo(G('correo').value);
   if(!correoValido(correo)){
-    pintarRecado('Ese correo no parece estar bien escrito.', 'malo');
+    pintarRecado(t('err_mal_correo'), 'malo');
     return;
   }
   intentarEntrar(correo, false);
@@ -700,7 +932,44 @@ G('btnEntrar').onclick = () => {
 G('correo').addEventListener('keydown', e => { if(e.key === 'Enter') G('btnEntrar').click(); });
 G('btnSalir').onclick = cerrarSesion;
 G('btnMisFav').onclick = verGuardados;
-pintarCuentaFav();
+
+/* ---------- cambiar de idioma ----------
+   Se recorre todo lo que lleva data-i18n y se repinta lo que genera el
+   código. No se vuelve a montar el buscador, así que lo que la persona
+   tuviera escrito en los filtros no se pierde. */
+function aplicarIdioma(){
+  document.documentElement.lang = IDIOMA;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if(T[IDIOMA] && T[IDIOMA][k] !== undefined) el.innerHTML = T[IDIOMA][k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const k = el.getAttribute('data-i18n-ph');
+    if(T[IDIOMA] && T[IDIOMA][k] !== undefined) el.placeholder = T[IDIOMA][k];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const k = el.getAttribute('data-i18n-title');
+    if(T[IDIOMA] && T[IDIOMA][k] !== undefined) el.title = T[IDIOMA][k];
+  });
+  const esperando = document.querySelector('[data-i18n-n="inicio_2"]');
+  if(esperando) esperando.innerHTML = t('inicio_2', {n: num(BASE.length)});
+  document.querySelectorAll('.elegirIdioma').forEach(sel => { sel.value = IDIOMA; });
+  rellenarIdiomas();
+  pintarSello();
+  pintarCuentaFav();
+  if(document.getElementById('titulo') && document.querySelector('.tj')) pintar();
+  if(G('planes').innerHTML) pintarPlanes(true);
+}
+
+document.querySelectorAll('.elegirIdioma').forEach(sel => {
+  sel.value = IDIOMA;
+  sel.addEventListener('change', e => {
+    IDIOMA = e.target.value;
+    try{ localStorage.setItem('nr_idioma', IDIOMA); }catch(err){}
+    aplicarIdioma();
+  });
+});
+aplicarIdioma();
 
 /* Arranque: si ya entró en este navegador, se comprueba por detrás y se le
    abre la página sin hacerle escribir nada otra vez. */
