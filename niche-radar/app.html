@@ -143,6 +143,12 @@
   .etq.ok{border-color:rgba(47,191,125,.45);color:var(--verde)}
   /* Los botones van a su tamaño, no estirados: antes se hinchaban hasta
      rellenar el hueco que dejaba una tarjeta más corta que sus vecinas. */
+  /* La silueta de la cuenta. El correo NO se enseña: con el correo se entra
+     en la página, así que enseñarlo en pantalla es como enseñar la llave. */
+  .avatar{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+    background:var(--card2);border:1px solid var(--line);color:var(--muted)}
+  .avatar svg{width:18px;height:18px}
+
   .pie-tj{display:flex;align-items:stretch;gap:10px;margin-top:auto;padding-top:8px}
   .pie-tj .btn.mini{flex:1 1 0;display:inline-flex;align-items:center;justify-content:center;
     line-height:1.25;text-align:center;font-size:14px;font-weight:600;padding:12px 8px;border-radius:11px}
@@ -201,7 +207,7 @@
     <label class="sel-idioma" title="Idioma / Language"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><select class="elegirIdioma" id="idiomaCab" aria-label="Idioma / Language"><option value="es">Español</option><option value="en">English</option></select></label>
     <div class="cuenta" id="cuenta" style="display:none">
       <button class="btn" id="btnMisFav" data-i18n-title="fav_title" title="Los canales que has guardado. Van con tu cuenta: los tienes también en el móvil.">★ Mis guardados</button>
-      <span id="cuentaCorreo"></span>
+      <span class="avatar" id="cuentaCorreo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.5" r="3.6" stroke="currentColor" stroke-width="1.7"/><path d="M4.8 19.5c0-3.3 3.2-5.6 7.2-5.6s7.2 2.3 7.2 5.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
       <button class="btn" id="btnSalir" data-i18n="salir">Salir</button>
     </div>
   </div>
@@ -252,6 +258,7 @@ const T = {
     acc_pie:'¿Aún no tienes suscripción? Con una sola pagas todas las herramientas de <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.',
     nota_sel:'Los canales se revisan individualmente y pasan por filtros concretos antes de entrar en la lista. Por eso Niche Radar no incluye todo YouTube ni se llena en automático: crece cada día, en cantidades pequeñas.',
     por_neeko:'POR NEEKO STUDIO', salir:'Salir',
+    cuenta_de_quien:'Tu cuenta ({correo})',
     fav_title:'Los canales que has guardado. Van con tu cuenta: los tienes también en el móvil.',
     fav_btn:'★ Mis guardados', fav_titulo:'Mis guardados',
     fav_vacio:'Todavía no has guardado ningún canal.',
@@ -309,6 +316,7 @@ const T = {
     acc_pie:'Not subscribed yet? One subscription covers every tool at <a href="/" target="_blank" rel="noopener">Neeko Studio</a>.',
     nota_sel:'Every channel is reviewed individually and has to pass specific filters before it makes the list. That is why Niche Radar does not cover all of YouTube and does not fill up automatically: it grows every day, in small amounts.',
     por_neeko:'BY NEEKO STUDIO', salir:'Sign out',
+    cuenta_de_quien:'Your account ({correo})',
     fav_title:'The channels you saved. They travel with your account, so you have them on your phone too.',
     fav_btn:'★ My saved', fav_titulo:'My saved channels',
     fav_vacio:'You have not saved any channel yet.',
@@ -869,6 +877,17 @@ function olvidarCuenta(){
   try{ localStorage.removeItem('nr_cuenta'); }catch(e){}
 }
 
+/** Deja el correo en algo reconocible para su dueño pero inservible para
+ *  quien lo lea por encima del hombro: «so***@hotmail.com». */
+function taparCorreo(correo){
+  const txt = String(correo||'');
+  const arroba = txt.indexOf('@');
+  if(arroba < 1) return '···';
+  const antes = txt.slice(0, arroba);
+  const visto = antes.slice(0, Math.min(2, antes.length));
+  return visto + '···' + txt.slice(arroba);
+}
+
 /** Un correo bien escrito, en minúsculas y sin espacios de más. */
 function limpiarCorreo(t){ return String(t||'').trim().toLowerCase(); }
 function correoValido(t){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(t); }
@@ -909,7 +928,11 @@ function pintarPlanes(mostrar){
 function abrirLaPagina(cuenta, aviso){
   G('velo').classList.add('oculto');
   G('cuenta').style.display = 'flex';
-  G('cuentaCorreo').textContent = cuenta.correo;
+  // El correo ya no se pinta en ningún sitio: en esta página el correo ES la
+  // llave de entrada, así que basta con que alguien mire la pantalla por
+  // encima del hombro para quedárselo. En la silueta se pone, solo al pasar
+  // el ratón, una versión tapada que no sirve para entrar.
+  G('cuentaCorreo').title = t('cuenta_de_quien', {correo: taparCorreo(cuenta.correo)});
   CORREO_ACTUAL = cuenta.correo;
   traerFavoritos(cuenta.correo);
   if(aviso) pintarRecado('', 'ojo');
@@ -919,6 +942,7 @@ function abrirLaPagina(cuenta, aviso){
 function cerrarSesion(){
   olvidarCuenta();
   CORREO_ACTUAL = '';
+  G('cuentaCorreo').title = '';
   G('velo').classList.remove('oculto');
   G('cuenta').style.display = 'none';
   G('correo').value = '';
