@@ -739,6 +739,7 @@
     { q: 'faq_q2', a: 'faq_a2' },
     { q: 'faq_q3', a: 'faq_a3' },
     { q: 'faq_q4', a: 'faq_a4' },
+  { q: 'faq_q5', a: 'faq_a5' },
   ];
   const faqList = document.getElementById('faqList');
   faqData.forEach((item, i) => {
@@ -833,6 +834,10 @@
       contact_text: 'Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.',
       contact_btn: 'Escríbeme un mensaje',
       faq_title: 'Preguntas frecuentes',
+      chat_titulo: '¿Alguna duda?',
+      chat_aviso: 'Asistente automático. Los cobros y las devoluciones los lleva una persona desde el formulario.',
+      chat_placeholder: 'Escribe tu pregunta...',
+      chat_enviar: 'Enviar',
       faq_q1: '¿Una suscripción sirve para todas las herramientas?',
       faq_a1: 'Sí. Con un solo pago y un solo email se activan todas las herramientas a la vez, incluidas las que se añadan más adelante.',
       cancel_link: 'Cancelar mi suscripción',
@@ -841,7 +846,9 @@
       faq_q3: '¿Necesito cuentas de Pexels o Pixabay?',
       faq_a3: 'Solo para BuscaStock Pro, y son gratuitas: te llevamos paso a paso para crearlas la primera vez.',
       faq_q4: '¿Qué pasa si olvido con qué email compré?',
-      faq_a4: 'Escríbeme un mensaje desde esta página y te lo confirmo enseguida.',
+      faq_a4: 'Escríbenos un mensaje desde esta página y te lo confirmamos enseguida.',
+      faq_q5: '¿Puedo pedir la devolución?',
+      faq_a5: 'Sí, dentro de los 14 días siguientes a la compra. Escríbenos y lo gestionamos.',
       modal_title: 'Envíame un mensaje',
       modal_sub: 'Te leo y te respondo en cuanto pueda.',
       modal_email_ph: 'tu@email.com',
@@ -918,6 +925,10 @@
       contact_text: "If the product isn't working as expected or you find bugs, let me know and I'll fix it right away.",
       contact_btn: 'Send me a message',
       faq_title: 'Frequently asked questions',
+      chat_titulo: 'Any questions?',
+      chat_aviso: 'Automated assistant. Payments and refunds are handled by a person through the form.',
+      chat_placeholder: 'Type your question...',
+      chat_enviar: 'Send',
       faq_q1: 'Does one subscription cover every tool?',
       faq_a1: 'Yes. One payment and one email activate every tool at once, including the ones added later.',
       cancel_link: 'Cancel my subscription',
@@ -926,7 +937,9 @@
       faq_q3: 'Do I need Pexels or Pixabay accounts?',
       faq_a3: 'Only for BuscaStock Pro, and they are free: we guide you step by step the first time.',
       faq_q4: 'What if I forget which email I purchased with?',
-      faq_a4: "Send me a message from this page and I'll confirm it right away.",
+      faq_a4: "Send us a message from this page and we'll confirm it right away.",
+      faq_q5: 'Can I ask for a refund?',
+      faq_a5: 'Yes, within 14 days of your purchase. Write to us and we will sort it out.',
       modal_title: 'Send me a message',
       modal_sub: "I'll read it and reply as soon as I can.",
       modal_email_ph: 'you@email.com',
@@ -1017,20 +1030,120 @@
     checkEmail(urlEmail.trim().toLowerCase());
   }
 </script>
+  <script src="conversor-moneda.js" defer></script>
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+<!-- Asistente de Neeko Studio -->
+<style>
+.chat-burbuja{position:fixed;right:18px;bottom:18px;z-index:9000;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:var(--fuchsia);color:#fff;font-size:23px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.45);}
+.chat-burbuja:hover{filter:brightness(1.08);}
+.chat-panel{position:fixed;right:18px;bottom:84px;z-index:9001;width:min(360px,calc(100vw - 36px));max-height:min(540px,calc(100vh - 120px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.55);}
+.chat-panel.open{display:flex;}
+.chat-cab{padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--card-border);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.chat-cerrar{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
+.chat-cuerpo{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{max-width:85%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.45;white-space:pre-wrap;}
+.chat-msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--card-border);}
+.chat-msg.yo{align-self:flex-end;background:var(--fuchsia-dim);border:1px solid var(--fuchsia);}
+.chat-pie{border-top:1px solid var(--card-border);padding:10px;display:flex;gap:8px;}
+.chat-pie input{flex:1;background:var(--surface);border:1px solid var(--card-border);border-radius:9px;padding:9px 11px;color:var(--text);font:inherit;font-size:14px;}
+.chat-pie button{background:var(--fuchsia);border:none;border-radius:9px;color:#fff;padding:0 14px;cursor:pointer;font:inherit;font-weight:600;}
+.chat-aviso{font-size:11.5px;color:var(--muted);padding:0 14px 10px;}
+@media (max-width:420px){.chat-panel{right:10px;left:10px;width:auto;bottom:78px;}}
+</style>
+
+<button class="chat-burbuja" id="chatBurbuja" aria-label="Chat">&#128172;</button>
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-cab"><span data-i18n="chat_titulo">&iquest;Alguna duda?</span><button class="chat-cerrar" id="chatCerrar" aria-label="Cerrar">&times;</button></div>
+  <div class="chat-cuerpo" id="chatCuerpo"></div>
+  <div class="chat-aviso" data-i18n="chat_aviso">Asistente autom&aacute;tico. Los cobros y las devoluciones los lleva una persona desde el formulario.</div>
+  <div class="chat-pie">
+    <input id="chatEntrada" data-i18n-placeholder="chat_placeholder" placeholder="Escribe tu pregunta...">
+    <button id="chatEnviar" data-i18n="chat_enviar">Enviar</button>
+  </div>
+</div>
+
+<script>
 (function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6a7addb545989d1d4159b2ea/1jvnv43pm';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
+  var SERVIDOR = 'https://servidor-licencias-production.up.railway.app/chat';
+  var burbuja=document.getElementById('chatBurbuja');
+  var panel=document.getElementById('chatPanel');
+  var cuerpo=document.getElementById('chatCuerpo');
+  var entrada=document.getElementById('chatEntrada');
+  var boton=document.getElementById('chatEnviar');
+  var cerrar=document.getElementById('chatCerrar');
+  var historial=[];
+  var email='';
+  try{ email=localStorage.getItem('neeko_chat_email')||''; }catch(e){}
+  var esperandoEmail=!email;
+  var ocupado=false;
+
+  function idioma(){ return document.documentElement.lang==='en'?'en':'es'; }
+  function t(es,en){ return idioma()==='en'?en:es; }
+
+  function pinta(texto,de){
+    var d=document.createElement('div');
+    d.className='chat-msg '+(de==='bot'?'bot':'yo');
+    d.textContent=texto;
+    cuerpo.appendChild(d);
+    cuerpo.scrollTop=cuerpo.scrollHeight;
+    return d;
+  }
+
+  function saluda(){
+    cuerpo.innerHTML='';
+    if(esperandoEmail){
+      pinta(t('Hola. Antes de empezar, \u00bfcu\u00e1l es tu email? As\u00ed puedo ayudarte mejor si ya eres cliente.','Hi. Before we start, what is your email? That way I can help you better if you are already a customer.'),'bot');
+    }else{
+      pinta(t('Hola, \u00bfen qu\u00e9 te ayudo?','Hi, how can I help?'),'bot');
+    }
+  }
+
+  burbuja.addEventListener('click',function(){
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')){ if(!cuerpo.children.length){ saluda(); } entrada.focus(); }
+  });
+  cerrar.addEventListener('click',function(){ panel.classList.remove('open'); });
+
+  function enviar(){
+    var texto=entrada.value.trim();
+    if(!texto||ocupado){ return; }
+    entrada.value='';
+    pinta(texto,'yo');
+
+    if(esperandoEmail){
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(texto)){
+        pinta(t('Eso no parece un email. \u00bfMe lo escribes otra vez?','That does not look like an email. Could you write it again?'),'bot');
+        return;
+      }
+      email=texto.toLowerCase();
+      try{ localStorage.setItem('neeko_chat_email',email); }catch(e){}
+      esperandoEmail=false;
+      pinta(t('Gracias. Ahora s\u00ed, \u00bfqu\u00e9 necesitas?','Thanks. Now then, what do you need?'),'bot');
+      return;
+    }
+
+    ocupado=true;
+    var cargando=pinta('\u2026','bot');
+    fetch(SERVIDOR,{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({mensaje:texto,email:email,idioma:idioma(),historial:historial.slice(-6)})
+    }).then(function(r){ return r.json().catch(function(){ return {}; }); })
+      .then(function(d){
+        var respuesta=d.respuesta||t('No he podido responder. Usa el formulario de contacto y te respondemos lo antes posible.','I could not answer. Please use the contact form and we will get back to you as soon as we can.');
+        cargando.textContent=respuesta;
+        historial.push({de:'usuario',texto:texto});
+        historial.push({de:'bot',texto:respuesta});
+      })
+      .catch(function(){
+        cargando.textContent=t('No hay conexi\u00f3n con el asistente. Usa el formulario de contacto.','The assistant is unreachable. Please use the contact form.');
+      })
+      .then(function(){ ocupado=false; cuerpo.scrollTop=cuerpo.scrollHeight; });
+  }
+
+  boton.addEventListener('click',enviar);
+  entrada.addEventListener('keydown',function(e){ if(e.key==='Enter'){ enviar(); } });
 })();
 </script>
-<!--End of Tawk.to Script-->
-  <script src="conversor-moneda.js" defer></script>
 </body>
 </html>
