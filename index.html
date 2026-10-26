@@ -837,7 +837,8 @@
       contact_text: 'Si el producto no funciona como esperas o encuentras errores, avísame y lo corregiré de inmediato.',
       contact_btn: 'Escríbeme un mensaje',
       faq_title: 'Preguntas frecuentes',
-      chat_titulo: '¿Alguna duda?',
+      chat_estado: 'Siempre disponible',
+      chat_globo: '¿Tienes alguna duda? Pregúntanos, respondemos al momento.',
       chat_aviso: 'Asistente automático. Los cobros y las devoluciones los lleva una persona desde el formulario.',
       chat_placeholder: 'Escribe tu pregunta...',
       chat_enviar: 'Enviar',
@@ -930,7 +931,8 @@
       contact_text: "If the product isn't working as expected or you find bugs, let me know and I'll fix it right away.",
       contact_btn: 'Send me a message',
       faq_title: 'Frequently asked questions',
-      chat_titulo: 'Any questions?',
+      chat_estado: 'Always here',
+      chat_globo: 'Any questions? Ask us, we answer right away.',
       chat_aviso: 'Automated assistant. Payments and refunds are handled by a person through the form.',
       chat_placeholder: 'Type your question...',
       chat_enviar: 'Send',
@@ -1039,27 +1041,54 @@
 
 <!-- Asistente de Neeko Studio -->
 <style>
-.chat-burbuja{position:fixed;right:18px;bottom:18px;z-index:9000;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:var(--fuchsia);color:#fff;font-size:23px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.45);}
-.chat-burbuja:hover{filter:brightness(1.08);}
-.chat-panel{position:fixed;right:18px;bottom:84px;z-index:9001;width:min(360px,calc(100vw - 36px));max-height:min(540px,calc(100vh - 120px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.55);}
+.chat-burbuja{position:fixed;right:18px;bottom:18px;z-index:9000;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;background:var(--fuchsia);color:#fff;font-size:25px;line-height:1;box-shadow:0 6px 24px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;transition:transform .18s;}
+.chat-burbuja:hover{filter:brightness(1.08);transform:scale(1.06);}
+.chat-burbuja .chat-punto{position:absolute;top:3px;right:3px;width:13px;height:13px;border-radius:50%;background:#2fd27a;border:2.5px solid var(--bg);}
+@keyframes neekoPulso{0%{box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 0 0 rgba(239,77,143,.5);}70%{box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 0 18px rgba(239,77,143,0);}100%{box-shadow:0 6px 24px rgba(0,0,0,.45),0 0 0 0 rgba(239,77,143,0);}}
+.chat-burbuja.pulsa{animation:neekoPulso 2.6s ease-out infinite;}
+.chat-globo{position:fixed;right:88px;bottom:32px;z-index:9000;max-width:210px;background:var(--card);border:1px solid var(--fuchsia);color:var(--text);border-radius:12px;padding:10px 32px 10px 13px;font-size:13px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.5);cursor:pointer;opacity:0;transform:translateX(10px);pointer-events:none;transition:opacity .3s,transform .3s;}
+.chat-globo.ver{opacity:1;transform:translateX(0);pointer-events:auto;}
+.chat-globo-x{position:absolute;top:4px;right:6px;background:none;border:none;color:var(--muted);font-size:16px;line-height:1;cursor:pointer;padding:2px 4px;}
+.chat-panel{position:fixed;right:18px;bottom:88px;z-index:9001;width:min(360px,calc(100vw - 36px));max-height:min(560px,calc(100vh - 120px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--card-border);border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.55);}
 .chat-panel.open{display:flex;}
-.chat-cab{padding:12px 14px;background:var(--surface);border-bottom:1px solid var(--card-border);font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;}
-.chat-cerrar{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
+.chat-cab{padding:11px 13px;background:var(--surface);border-bottom:1px solid var(--card-border);display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.chat-id{display:flex;align-items:center;gap:10px;min-width:0;}
+.chat-id img{width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid var(--card-border);}
+.chat-id b{display:block;font-size:14px;font-weight:700;line-height:1.3;}
+.chat-id span{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);line-height:1.3;}
+.chat-id span i{width:7px;height:7px;border-radius:50%;background:#2fd27a;display:inline-block;}
+.chat-cerrar{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;flex-shrink:0;}
 .chat-cuerpo{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
 .chat-msg{max-width:85%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.45;white-space:pre-wrap;}
 .chat-msg.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--card-border);}
 .chat-msg.yo{align-self:flex-end;background:var(--fuchsia-dim);border:1px solid var(--fuchsia);}
+.chat-sugs{display:flex;flex-wrap:wrap;gap:7px;padding:0 14px 12px;}
+.chat-sugs:empty{display:none;}
+.chat-sug{background:var(--surface);border:1px solid var(--card-border);color:var(--text);border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer;transition:border-color .15s,color .15s;}
+.chat-sug:hover{border-color:var(--fuchsia);color:var(--fuchsia);}
 .chat-pie{border-top:1px solid var(--card-border);padding:10px;display:flex;gap:8px;}
 .chat-pie input{flex:1;background:var(--surface);border:1px solid var(--card-border);border-radius:9px;padding:9px 11px;color:var(--text);font:inherit;font-size:14px;}
 .chat-pie button{background:var(--fuchsia);border:none;border-radius:9px;color:#fff;padding:0 14px;cursor:pointer;font:inherit;font-weight:600;}
 .chat-aviso{font-size:11.5px;color:var(--muted);padding:0 14px 10px;}
-@media (max-width:420px){.chat-panel{right:10px;left:10px;width:auto;bottom:78px;}}
+@media (max-width:420px){.chat-panel{right:10px;left:10px;width:auto;bottom:84px;}.chat-globo{display:none;}}
+@media (prefers-reduced-motion:reduce){.chat-burbuja.pulsa{animation:none;}.chat-globo{transition:none;}}
 </style>
 
-<button class="chat-burbuja" id="chatBurbuja" aria-label="Chat">&#128172;</button>
+<div class="chat-globo" id="chatGlobo"><span data-i18n="chat_globo">&iquest;Tienes alguna duda? Preg&uacute;ntanos, respondemos al momento.</span><button class="chat-globo-x" id="chatGloboX" aria-label="Cerrar">&times;</button></div>
+<button class="chat-burbuja" id="chatBurbuja" aria-label="Chat"><span>&#128172;</span><span class="chat-punto"></span></button>
 <div class="chat-panel" id="chatPanel">
-  <div class="chat-cab"><span data-i18n="chat_titulo">&iquest;Alguna duda?</span><button class="chat-cerrar" id="chatCerrar" aria-label="Cerrar">&times;</button></div>
+  <div class="chat-cab">
+    <div class="chat-id">
+      <img src="icons/perfil.png" alt="Neeko Studio">
+      <div>
+        <b>Neeko Studio</b>
+        <span><i></i><span data-i18n="chat_estado">Siempre disponible</span></span>
+      </div>
+    </div>
+    <button class="chat-cerrar" id="chatCerrar" aria-label="Cerrar">&times;</button>
+  </div>
   <div class="chat-cuerpo" id="chatCuerpo"></div>
+  <div class="chat-sugs" id="chatSugs"></div>
   <div class="chat-aviso" data-i18n="chat_aviso">Asistente autom&aacute;tico. Los cobros y las devoluciones los lleva una persona desde el formulario.</div>
   <div class="chat-pie">
     <input id="chatEntrada" data-i18n-placeholder="chat_placeholder" placeholder="Escribe tu pregunta...">
@@ -1071,8 +1100,11 @@
 (function(){
   var SERVIDOR = 'https://servidor-licencias-production.up.railway.app/chat';
   var burbuja=document.getElementById('chatBurbuja');
+  var globo=document.getElementById('chatGlobo');
+  var globoX=document.getElementById('chatGloboX');
   var panel=document.getElementById('chatPanel');
   var cuerpo=document.getElementById('chatCuerpo');
+  var sugs=document.getElementById('chatSugs');
   var entrada=document.getElementById('chatEntrada');
   var boton=document.getElementById('chatEnviar');
   var cerrar=document.getElementById('chatCerrar');
@@ -1081,6 +1113,8 @@
   try{ email=localStorage.getItem('neeko_chat_email')||''; }catch(e){}
   var esperandoEmail=!email;
   var ocupado=false;
+  var abiertoAlgunaVez=false;
+  try{ abiertoAlgunaVez=localStorage.getItem('neeko_chat_visto')==='1'; }catch(e){}
 
   function idioma(){ return document.documentElement.lang==='en'?'en':'es'; }
   function t(es,en){ return idioma()==='en'?en:es; }
@@ -1094,41 +1128,82 @@
     return d;
   }
 
+  function sugerencias(){
+    sugs.innerHTML='';
+    if(esperandoEmail){ return; }
+    var lista=idioma()==='en'
+      ? ['What is included in the subscription?','How do I activate my tools?','Can I cancel anytime?']
+      : ['¿Qué incluye la suscripción?','¿Cómo activo mis herramientas?','¿Puedo cancelar cuando quiera?'];
+    lista.forEach(function(p){
+      var b=document.createElement('button');
+      b.className='chat-sug';
+      b.type='button';
+      b.textContent=p;
+      b.addEventListener('click',function(){ entrada.value=p; enviar(); });
+      sugs.appendChild(b);
+    });
+  }
+
   function saluda(){
     cuerpo.innerHTML='';
     if(esperandoEmail){
-      pinta(t('Hola. Antes de empezar, \u00bfcu\u00e1l es tu email? As\u00ed puedo ayudarte mejor si ya eres cliente.','Hi. Before we start, what is your email? That way I can help you better if you are already a customer.'),'bot');
+      pinta(t('¡Hola! Soy el asistente de Neeko Studio y respondo a cualquier hora.','Hi! I am the Neeko Studio assistant and I answer at any time.'),'bot');
+      pinta(t('Para empezar, ¿me dejas tu email? Así puedo ayudarte mejor si ya eres cliente.','To get started, could you leave me your email? That way I can help you better if you are already a customer.'),'bot');
     }else{
-      pinta(t('Hola, \u00bfen qu\u00e9 te ayudo?','Hi, how can I help?'),'bot');
+      pinta(t('¡Hola de nuevo! Pregúntame lo que quieras sobre las herramientas, los precios o tu suscripción.','Hi again! Ask me anything about the tools, the pricing or your subscription.'),'bot');
     }
+    sugerencias();
+  }
+
+  function escondeGlobo(){
+    globo.classList.remove('ver');
+    burbuja.classList.remove('pulsa');
+    try{ localStorage.setItem('neeko_chat_visto','1'); }catch(e){}
+  }
+
+  function abre(){
+    panel.classList.add('open');
+    escondeGlobo();
+    if(!cuerpo.children.length){ saluda(); }
+    entrada.focus();
   }
 
   burbuja.addEventListener('click',function(){
-    panel.classList.toggle('open');
-    if(panel.classList.contains('open')){ if(!cuerpo.children.length){ saluda(); } entrada.focus(); }
+    if(panel.classList.contains('open')){ panel.classList.remove('open'); }
+    else{ abre(); }
   });
   cerrar.addEventListener('click',function(){ panel.classList.remove('open'); });
+  globo.addEventListener('click',function(e){ if(e.target!==globoX){ abre(); } });
+  globoX.addEventListener('click',function(e){ e.stopPropagation(); escondeGlobo(); });
+
+  if(!abiertoAlgunaVez){
+    burbuja.classList.add('pulsa');
+    setTimeout(function(){ if(!panel.classList.contains('open')){ globo.classList.add('ver'); } },3500);
+    setTimeout(function(){ globo.classList.remove('ver'); },16000);
+  }
 
   function enviar(){
     var texto=entrada.value.trim();
     if(!texto||ocupado){ return; }
     entrada.value='';
+    sugs.innerHTML='';
     pinta(texto,'yo');
 
     if(esperandoEmail){
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(texto)){
-        pinta(t('Eso no parece un email. \u00bfMe lo escribes otra vez?','That does not look like an email. Could you write it again?'),'bot');
+        pinta(t('Eso no parece un email. ¿Me lo escribes otra vez?','That does not look like an email. Could you write it again?'),'bot');
         return;
       }
       email=texto.toLowerCase();
       try{ localStorage.setItem('neeko_chat_email',email); }catch(e){}
       esperandoEmail=false;
-      pinta(t('Gracias. Ahora s\u00ed, \u00bfqu\u00e9 necesitas?','Thanks. Now then, what do you need?'),'bot');
+      pinta(t('Gracias. Ahora sí, ¿qué necesitas?','Thanks. Now then, what do you need?'),'bot');
+      sugerencias();
       return;
     }
 
     ocupado=true;
-    var cargando=pinta('\u2026','bot');
+    var cargando=pinta('…','bot');
     fetch(SERVIDOR,{
       method:'POST',
       headers:{'content-type':'application/json'},
@@ -1141,7 +1216,7 @@
         historial.push({de:'bot',texto:respuesta});
       })
       .catch(function(){
-        cargando.textContent=t('No hay conexi\u00f3n con el asistente. Usa el formulario de contacto.','The assistant is unreachable. Please use the contact form.');
+        cargando.textContent=t('No hay conexión con el asistente. Usa el formulario de contacto.','The assistant is unreachable. Please use the contact form.');
       })
       .then(function(){ ocupado=false; cuerpo.scrollTop=cuerpo.scrollHeight; });
   }
