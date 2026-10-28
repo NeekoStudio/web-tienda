@@ -23,6 +23,23 @@
     <meta name="twitter:card" content="summary" />
     <script src="./coi.js"></script>
     <title>Quitar el fondo de una imagen gratis y sin subirla | Neeko Studio</title>
+    <script>
+      // Mantiene el titulo bueno para Google: la aplicacion lo reescribe al arrancar.
+      (function () {
+        var seo = {
+          "CutFrame · Quita el fondo a tus imágenes · Neeko Studio":
+            "Quitar el fondo de una imagen gratis y sin subirla | Neeko Studio",
+          "CutFrame · Remove the background from your images · Neeko Studio":
+            "Remove the background from an image, free and without uploading it | Neeko Studio"
+        };
+        var el = document.querySelector("title");
+        if (!el || !window.MutationObserver) return;
+        new MutationObserver(function () {
+          var t = document.title;
+          if (seo[t]) document.title = seo[t];
+        }).observe(el, { childList: true });
+      })();
+    </script>
     <script type="module" crossorigin src="./assets/index-DK2cbNXj.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Buw-jlLU.css">
   </head>
