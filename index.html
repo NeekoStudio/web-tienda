@@ -312,7 +312,11 @@
   .faq-item.open .faq-a{max-height:200px;}
   .faq-a p{color:var(--muted); font-size:13px; padding:0 2px 14px; line-height:1.55;}
 
-  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:24px; opacity:0.7;}
+  .pago-ok{display:none; background:rgba(47,210,122,.08); border:1px solid #2fd27a; border-radius:12px; padding:13px 15px; margin-bottom:14px; font-size:14px; line-height:1.5;}
+.pago-ok b{display:block; color:#2fd27a; font-size:15px; margin-bottom:6px;}
+.pago-ok code{display:inline-block; background:var(--surface); border:1px solid var(--card-border); border-radius:7px; padding:3px 9px; margin:4px 0 7px; font-size:14px; color:var(--text); word-break:break-all;}
+.pago-ok span{display:block; color:var(--muted);}
+footer{text-align:center; color:var(--muted); font-size:12px; margin-top:24px; opacity:0.7;}
 footer a{color:var(--muted); text-decoration:underline;}
 footer a:hover{color:var(--fuchsia);}
 </style>
@@ -376,6 +380,11 @@ footer a:hover{color:var(--fuchsia);}
 
     <!-- Comprobar suscripción -->
     <div class="card check-card">
+      <div class="pago-ok" id="pagoOk">
+        <b data-i18n="pago_ok_titulo">&iexcl;Listo! Tu suscripci&oacute;n ya est&aacute; activa</b>
+        <code id="pagoOkEmail"></code>
+        <span data-i18n="pago_ok_texto">Escribe este mismo correo en tus herramientas para desbloquearlas. Si no es el que esperabas, es el que ha usado tu m&eacute;todo de pago: puedes cambiarlo desde tu p&aacute;gina de suscripci&oacute;n.</span>
+      </div>
       <label data-i18n="check_label">¿Ya eres cliente? Comprueba tu suscripción</label>
       <form id="checkForm">
         <input type="email" id="emailInput" placeholder="tu@email.com" required>
@@ -875,7 +884,9 @@ footer a:hover{color:var(--fuchsia);}
       per_month: '/ mes', per_3months: '/ 3 meses', per_year: '/ año',
       subscribe_btn: 'Suscribirme',
       tax_note: 'Impuestos incluidos. El precio que ves es el que pagas.',
-      pay_methods: 'Tarjeta, Apple&nbsp;Pay o Google&nbsp;Pay. Si cancelas, sigues teniendo acceso hasta la fecha de renovación.',
+      pay_methods: 'Tarjeta, Apple&nbsp;Pay, Google&nbsp;Pay o Link. Si cancelas, sigues teniendo acceso hasta la fecha de renovación.',
+      pago_ok_titulo: '¡Listo! Tu suscripción ya está activa',
+      pago_ok_texto: 'Escribe este mismo correo en tus herramientas para desbloquearlas. Si no es el que esperabas, es el que ha usado tu método de pago: puedes cambiarlo desde tu página de suscripción.',
       pago_abriendo: 'Abriendo el pago seguro...',
       pago_error: 'No hemos podido abrir el pago. Inténtalo de nuevo en un momento o escríbenos y lo resolvemos.',
       contact_title: '¿Algo no funciona?',
@@ -974,7 +985,9 @@ footer a:hover{color:var(--fuchsia);}
       per_month: '/ mo', per_3months: '/ 3 mo', per_year: '/ yr',
       subscribe_btn: 'Subscribe',
       tax_note: 'Taxes included. The price you see is the price you pay.',
-      pay_methods: 'Card, Apple&nbsp;Pay or Google&nbsp;Pay. If you cancel, you keep access until your renewal date.',
+      pay_methods: 'Card, Apple&nbsp;Pay, Google&nbsp;Pay or Link. If you cancel, you keep access until your renewal date.',
+      pago_ok_titulo: 'Done! Your subscription is active',
+      pago_ok_texto: 'Type this same email into your tools to unlock them. If it is not the one you expected, it is the one your payment method used: you can change it from your subscription page.',
       pago_abriendo: 'Opening secure checkout...',
       pago_error: "We couldn't open the checkout. Try again in a moment, or write to us and we'll sort it out.",
       contact_title: 'Something not working?',
@@ -1087,6 +1100,25 @@ footer a:hover{color:var(--fuchsia);}
   if (urlEmail) {
     emailInput.value = urlEmail;
     checkEmail(urlEmail.trim().toLowerCase());
+  }
+
+  /* Al volver del pago: decimos con que email ha quedado activada */
+  if (params.get('pago') === 'ok') {
+    const idSesion = params.get('sesion') || '';
+    const cajaOk = document.getElementById('pagoOk');
+    if (idSesion.indexOf('cs_') === 0) {
+      fetch(SERVER_URL + '/pagos/sesion?id=' + encodeURIComponent(idSesion))
+        .then((r) => r.json())
+        .then((d) => {
+          if (!d || !d.email) return;
+          document.getElementById('pagoOkEmail').textContent = d.email;
+          cajaOk.style.display = 'block';
+          emailInput.value = d.email;
+          checkEmail(d.email.trim().toLowerCase());
+          cajaOk.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        })
+        .catch(() => {});
+    }
   }
 
   /* Pago: abrimos la pagina de pago de Stripe */
