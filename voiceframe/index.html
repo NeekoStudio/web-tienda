@@ -11,10 +11,34 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./icons/favicon-180.png" />
     <meta
       name="description"
-      content="VoiceFrame limpia tus grabaciones de voz: quita el ruido de fondo, le da cuerpo, iguala lo fuerte y lo flojo y las deja al volumen exacto que pide YouTube. Todo en tu navegador — tus audios nunca salen de tu dispositivo."
+      content="Limpia tus grabaciones de voz: quita el ruido de fondo, iguala el volumen y las deja listas para YouTube. Gratis y sin subir nada: todo en tu navegador."
     />
+    <link rel="canonical" href="https://neekostudio.app/voiceframe/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Neeko Studio" />
+    <meta property="og:title" content="Quitar el ruido de fondo de un audio gratis" />
+    <meta property="og:description" content="Limpia tus grabaciones de voz: quita el ruido de fondo, iguala el volumen y las deja listas para YouTube. Gratis y sin subir nada: todo en tu navegador." />
+    <meta property="og:url" content="https://neekostudio.app/voiceframe/" />
+    <meta property="og:image" content="https://neekostudio.app/icons/favicon-180.png" />
+    <meta name="twitter:card" content="summary" />
     <script src="./coi.js"></script>
-    <title>VoiceFrame · Limpia tus voces · Neeko Studio</title>
+    <title>Quitar el ruido de fondo de un audio gratis | Neeko Studio</title>
+    <script>
+      // Mantiene el titulo bueno para Google: la aplicacion lo reescribe al arrancar.
+      (function () {
+        var seo = {
+          "VoiceFrame · Limpia tus voces · Neeko Studio": "Quitar el ruido de fondo de un audio gratis | Neeko Studio",
+          "VoiceFrame · Clean up your voice recordings · Neeko Studio":
+            "Remove background noise from audio, free | Neeko Studio"
+        };
+        var el = document.querySelector("title");
+        if (!el || !window.MutationObserver) return;
+        new MutationObserver(function () {
+          var t = document.title;
+          if (seo[t]) document.title = seo[t];
+        }).observe(el, { childList: true });
+      })();
+    </script>
     <script type="module" crossorigin src="./assets/index-BGvHN2yp.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-MArc-vS_.css">
   </head>
