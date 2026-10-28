@@ -130,7 +130,7 @@
       document.body.classList.toggle('en', l === 'en');
       document.documentElement.lang = l;
       bEs.classList.toggle('on', l !== 'en'); bEn.classList.toggle('on', l === 'en');
-      document.title = l === 'en' ? 'Privacy policy · Neeko Studio' : 'Política de privacidad · Neeko Studio';
+      document.title = l === 'en' ? 'Terms of service · Neeko Studio' : 'Condiciones de servicio · Neeko Studio';
       try { localStorage.setItem('neeko_lang', l); } catch (e) {}
     }
     bEs.onclick = function () { set('es'); }; bEn.onclick = function () { set('en'); };
