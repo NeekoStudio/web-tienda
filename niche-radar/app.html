@@ -303,8 +303,8 @@ const T = {
     err_servidor:'No he podido comprobar tu suscripción ahora mismo. No es cosa tuya: vuelve a intentarlo en un minuto.',
     err_fichero:'Ese fichero no tiene canales dentro.', err_leer:'No he podido leer el fichero: ',
     plan_mes:'Mensual', plan_mes_n:'Cancela cuando quieras',
-    plan_tri:'Trimestral', plan_tri_n:'Tres meses, sale a 2,33 €/mes',
-    plan_ano:'Anual', plan_ano_n:'Un año, sale a 2,08 €/mes',
+    plan_tri:'Trimestral', plan_tri_n:'Tres meses, sale a 7,30 €/mes',
+    plan_ano:'Anual', plan_ano_n:'Un año, sale a 6,66 €/mes',
     pie_1:'<b>Niche Radar</b> · una herramienta de Neeko Studio.<br>Los ingresos son una <b>estimación</b> con rangos de RPM por temática y país; no son datos reales del canal. «Cumple los mínimos» quiere decir que pasa de 1.000 suscriptores y 4.000 horas estimadas al año; no confirma que el canal esté monetizado.',
     legal_1:'<b>Datos de YouTube.</b> Los datos de canales y vídeos que ves aquí proceden de <b>YouTube</b>, obtenidos mediante los YouTube API Services. Esta herramienta no está afiliada a YouTube ni a Google.',
     legal_2:'Al usar esta herramienta aceptas quedar vinculado por los <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">Términos del Servicio de YouTube</a>. El tratamiento de datos por parte de Google se rige por la <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Política de Privacidad de Google</a>.',
@@ -361,8 +361,8 @@ const T = {
     err_servidor:'I could not check your subscription right now. It is not you: try again in a minute.',
     err_fichero:'That file has no channels in it.', err_leer:'I could not read the file: ',
     plan_mes:'Monthly', plan_mes_n:'Cancel anytime',
-    plan_tri:'Quarterly', plan_tri_n:'Three months, works out at 2.33 €/mo',
-    plan_ano:'Yearly', plan_ano_n:'One year, works out at 2.08 €/mo',
+    plan_tri:'Quarterly', plan_tri_n:'Three months, works out at 7.30 €/mo',
+    plan_ano:'Yearly', plan_ano_n:'One year, works out at 6.66 €/mo',
     pie_1:'<b>Niche Radar</b> · a Neeko Studio tool.<br>Earnings are an <b>estimate</b> based on RPM ranges by topic and country; they are not the channel\u2019s real figures. \u201CMeets the minimums\u201D means it is over 1,000 subscribers and 4,000 estimated watch hours a year; it does not confirm the channel is monetised.',
     legal_1:'<b>YouTube data.</b> The channel and video data you see here comes from <b>YouTube</b>, obtained through the YouTube API Services. This tool is not affiliated with YouTube or Google.',
     legal_2:'By using this tool you agree to be bound by the <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener">YouTube Terms of Service</a>. Google\u2019s handling of data is governed by the <a href="http://www.google.com/policies/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.',
@@ -450,23 +450,34 @@ function escapar(s){
 }
 
 // ---------- de dónde salen los datos ----------
-// Pon aquí la dirección donde publicas la base desde tu panel. Si la dejas
-// vacía, la página busca un fichero base.json que esté a su lado.
-// Ejemplos válidos:
-//   'https://raw.githubusercontent.com/usuario/repo/main/base.json'
-//   'https://tu-almacen.example.com/base.json'
-const ORIGEN_BASE = '';
+// La lista no viaja en un fichero suelto dentro de la web: la sirve el
+// servidor de licencias y solo contesta a un correo con suscripción activa.
+// Quien no paga recibe un 403 y ni un dato.
+//
+// Si el servidor no contesta (se cae, o está dormido), se usa la última
+// copia que quedó guardada en este navegador, igual que con los días de
+// gracia de la licencia: quien paga no se queda sin su lista porque se
+// caiga un servidor.
+const SERVIDOR_BASE = 'https://servidor-licencias-production.up.railway.app/nichos/base';
+const COPIA_BASE = 'neeko_nichos_copia';
+
+async function pedirBase(correo){
+  const r = await fetch(SERVIDOR_BASE + '?email=' + encodeURIComponent(correo), {cache:'no-store'});
+  if(!r.ok) throw new Error('sin base');
+  return r.json();
+}
 
 async function arrancar(){
-  const fuentes = [ORIGEN_BASE, 'base.json'].filter(Boolean);
   let d = null;
-  for(const url of fuentes){
+  const correo = String(CORREO_ACTUAL || '').trim().toLowerCase();
+  if(correo){
     try{
-      const r = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {cache:'no-store'});
-      if(!r.ok) continue;
-      d = await r.json();
-      break;
-    }catch(e){ /* se prueba la siguiente */ }
+      d = await pedirBase(correo);
+      try{ localStorage.setItem(COPIA_BASE, JSON.stringify(d)); }catch(e){}
+    }catch(e){
+      // sin conexión o servidor dormido: la última copia que haya
+      try{ const g = localStorage.getItem(COPIA_BASE); if(g) d = JSON.parse(g); }catch(e2){}
+    }
   }
   try{
     if(!d) throw new Error('sin base');
@@ -790,8 +801,8 @@ function tarjeta(c){
  *  guarda en ESTE navegador, así que no se vuelve a pedir.
  *
  *  Por qué vale aunque el código de la página esté a la vista: lo que se
- *  vende no es la página, son los canales. Y los canales viven en base.json,
- *  que solo se descarga después de que el servidor diga que sí.
+ *  vende no es la página, son los canales. Y los canales no están aquí: los
+ *  sirve el servidor, y solo a un correo con suscripción activa.
  *
  *  Si el servidor no contesta (se cae, o está dormido), a quien ya había
  *  entrado antes se le deja pasar durante unos días. Un cliente que paga no
@@ -800,9 +811,9 @@ function tarjeta(c){
 const SERVIDOR = 'https://servidor-licencias-production.up.railway.app/verificar-licencia';
 const DIAS_DE_GRACIA = 7;        // si el servidor no contesta
 const PLANES = [
-  {clave:'mes', precio:'3 €/mes', url:'https://payhip.com/order?link=wRUx3&pricing_plan=YLBN5ZE3zK'},
-  {clave:'tri', precio:'7 €',     url:'https://payhip.com/order?link=wRUx3&pricing_plan=PjWlKyY8Gv'},
-  {clave:'ano', precio:'25 €',    url:'https://payhip.com/order?link=wRUx3&pricing_plan=a6zY3rm8Gq'}
+  {clave:'mes', precio:'9,90 €/mes', url:'https://neekostudio.app/#precios'},
+  {clave:'tri', precio:'21,90 €',    url:'https://neekostudio.app/#precios'},
+  {clave:'ano', precio:'79,90 €',    url:'https://neekostudio.app/#precios'}
 ];
 
 const G = id => document.getElementById(id);
